@@ -62,9 +62,6 @@ def show(match, civs, my_id, readable_after):
     print('\n' + '=' * 64)
     print(f'{datetime.now():%H:%M:%S}  新對局 · {kind} · {len(match.players)} 人  '
           f'（開局後 {readable_after:.1f} 秒讀到）')
-    if match.hidden_civs:
-        print('\n這局開了「隱藏文明」，不顯示任何文明資訊。')
-        return
     me, allies, enemies = split_sides(match, my_id)
     names_by_civ = {}
     for player in enemies:
@@ -123,7 +120,7 @@ def try_parse(pending, civs, my_id, elo):
     created = getattr(stat, 'st_birthtime', stat.st_ctime)
     readable_after = parsed - match.timestamp
     show(match, civs, my_id, readable_after)
-    ratings = show_ratings(match, my_id) if elo and not match.hidden_civs else {}
+    ratings = show_ratings(match, my_id) if elo else {}
     log(dict(
         file=pending.path.name, ok=True, joined_late=pending.joined_late,
         game_start=iso(match.timestamp), created=iso(created),

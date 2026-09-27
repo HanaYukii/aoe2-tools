@@ -17,6 +17,7 @@ from history import recent_matches
 from ratings import RM_1V1, RM_TEAM, fetch_ratings
 from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
+from units import load_unique_units
 from watch import Pending, POLL_SECONDS, IN_PROGRESS_SECONDS, list_files, try_parse
 
 BG = '#10141e'
@@ -43,8 +44,10 @@ class Dashboard:
         self.font = 'Noto Sans TC' if 'Noto Sans TC' in families else 'Microsoft JhengHei UI'
         self.display_font = 'Noto Serif TC' if 'Noto Serif TC' in families else self.font
         self.civs, self.my_id = {}, None
+        self.units = {}
         self.match = None
         self.tabs = []
+        self.counter_texts = []
         self.history_window = None
         self.history_request = 0
         self.history_rows = []
@@ -126,7 +129,7 @@ class Dashboard:
 
     def resize(self, delta):
         self.font_size = max(11, min(24, self.font_size + delta))
-        for _, _, text in self.tabs:
+        for text in [text for _, _, text in self.tabs] + self.counter_texts:
             self.style_text(text)
 
     def style_text(self, text):
@@ -137,11 +140,14 @@ class Dashboard:
         text.tag_configure('team', foreground=ACCENT, font=(self.font, self.font_size, 'bold'), spacing1=14)
         text.tag_configure('intro', foreground=MUTED, spacing3=16)
         text.tag_configure('heading', foreground=ACCENT, font=(self.font, self.font_size + 1, 'bold'), spacing1=16)
+        text.tag_configure('good', foreground=ACCENT, font=(self.font, self.font_size, 'bold'))
+        text.tag_configure('bad', foreground=AMBER, font=(self.font, self.font_size, 'bold'))
 
     def monitor(self):
         try:
             self.civs = load_civs(self.args.game_dir, self.args.lang)
-            self.dirs = [Path(d) for d in self.args.dir] if self.args.dir else savegame_dirs()
+            self.units = load_unique_units(self.args.game_dir, self.args.lang)
+            self.dirs =[Path(d) for d in self.args.dir] if self.args.dir else savegame_dirs()
             if not self.dirs or any(not d.is_dir() for d in self.dirs):
                 raise ValueError('找不到錄影資料夾，請用 --dir 指定 savegame 資料夾。')
             self.my_id = self.args.profile_id or infer_my_profile_id(self.dirs)
@@ -309,6 +315,8 @@ class Dashboard:
         for tab in self.book.tabs():
             self.book.nametowidget(tab).destroy()
         self.tabs = []
+        self.counter_texts = []
+        jumps = []
         me, allies, enemies = split_sides(match, self.my_id)
         kind = '排名' if match.rated else '多人' if match.multiplayer else '單機'
         self.status.configure(text=('歷史預覽' if preview else '已讀取新對局') + f' · {kind} · {len(match.players)} 人 · {datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}')
@@ -352,6 +360,10 @@ class Dashboard:
                         text.tag_add('number', f'{start}+{number.start()}c', f'{start}+{number.end()}c')
                 text.configure(state='disabled')
                 self.tabs.append((player, rating, text))
+                if players is enemies and player.civ_id in self.units:
+                    jumps.append((player.civ_id, frame, body))
+            if players is enemies and jumps:
+                self.add_counters(jumps)
         if not self.args.no_elo:
             def lookup():
                 try:
@@ -361,6 +373,50 @@ class Dashboard:
                 except Exception:
                     self.events.put(('ratings', (generation, {}, '暫時無法取得積分')))
             self.pool.submit(lookup)
+
+    def add_counters(self, jumps):
+        """One tab with every enemy civ's unique units; each enemy's civ tab gets a button that jumps to its civ."""
+        frame = tk.Frame(self.book, bg=PANEL)
+        self.book.add(frame, text='兵種應對')
+        tk.Label(frame, text='特殊兵種怎麼打', font=(self.display_font, 22, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(24, 4))
+        tk.Label(frame, text='依對手文明列出，取自遊戲的兵種說明；不代表對手已經出這些兵。', font=(self.font, 10), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(0, 14))
+        body = tk.Frame(frame, bg=PANEL)
+        body.pack(fill='both', expand=True, padx=24, pady=(0, 20))
+        scrollbar = ttk.Scrollbar(body)
+        scrollbar.pack(side='right', fill='y')
+        text = tk.Text(body, bg=PANEL, fg=FG, relief='flat', wrap='word', padx=0, borderwidth=0, highlightthickness=0, yscrollcommand=scrollbar.set)
+        text.pack(fill='both', expand=True)
+        scrollbar.configure(command=text.yview)
+        self.style_text(text)
+        for civ_id in dict.fromkeys(civ_id for civ_id, _, _ in jumps):
+            civ = self.civs.get(civ_id)
+            text.mark_set(f'civ{civ_id}', 'end-1c')
+            text.mark_gravity(f'civ{civ_id}', 'left')
+            text.insert('end', (civ.name if civ else f'未知文明 #{civ_id}') + '\n', 'heading')
+            for unit in self.units[civ_id]:
+                text.insert('end', unit.name + '\n', 'unit')
+                if unit.summary:
+                    text.insert('end', unit.summary + '\n')
+                for label, items, tag in (('用這些打', unit.loses_to, 'good'), ('它特別克制', unit.beats_hard, 'bad'), ('它克制', unit.beats, 'bad')):
+                    if items:
+                        text.insert('end', label + '　', tag)
+                        text.insert('end', '、'.join(items) + '\n')
+                if unit.strong_in_numbers:
+                    text.insert('end', '數量多時很強\n', 'bad')
+                if not (unit.loses_to or unit.beats_hard or unit.beats or unit.strong_in_numbers):
+                    text.insert('end', '遊戲說明沒有列出克制關係\n', 'intro')
+                if unit.upgrades:
+                    text.insert('end', unit.upgrades + '\n', 'intro')
+        text.configure(state='disabled')
+        self.counter_texts.append(text)
+        for civ_id, civ_frame, civ_body in jumps:
+            tk.Button(civ_frame, text='看特殊兵種怎麼打　→', command=lambda c=civ_id: self.jump(frame, text, c),
+                      bg=SURFACE, fg=VIOLET, activeforeground=VIOLET, relief='flat', borderwidth=0, anchor='w',
+                      padx=14, pady=8, cursor='hand2', font=(self.font, 11, 'bold')).pack(fill='x', padx=24, pady=(0, 16), before=civ_body)
+
+    def jump(self, frame, text, civ_id):
+        self.book.select(frame)
+        self.root.after_idle(lambda: text.yview(f'civ{civ_id}'))
 
 
 def main():

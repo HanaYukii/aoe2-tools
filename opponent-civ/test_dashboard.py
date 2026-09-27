@@ -8,6 +8,7 @@ from unittest.mock import patch
 from civdata import Civ
 from dashboard import Dashboard
 from rec_header import Match, Player
+from units import UniqueUnit
 
 
 class DashboardTests(unittest.TestCase):
@@ -60,6 +61,19 @@ class DashboardTests(unittest.TestCase):
         self.app.events.put(('preview_match', (generation, (self.match, Path('old.aoe2record'), None, True))))
         self.app.drain()
         self.assertIn('新對局', self.app.status.cget('text'))
+
+    def test_counters_tab_and_jump(self):
+        self.app.units = {1: (UniqueUnit('長弓兵', '英國特殊步弓兵，擁有出色的射程。', ('騎兵', '矛兵'), ('步兵',), (),
+                                         False, '升級：攻擊 (兵工廠)。', ()),)}
+        self.app.show(self.match, Path('live.aoe2record'), 0.5, False)
+        book = self.app.book
+        self.assertEqual([book.tab(tab, 'text') for tab in book.tabs()], ['對手 · 不列顛人', '兵種應對', '你 · 不列顛人'])
+        enemy_tab = book.nametowidget(book.tabs()[0])
+        next(w for w in enemy_tab.winfo_children() if isinstance(w, tk.Button)).invoke()
+        self.assertEqual(book.index('current'), 1)
+        counters = self.app.counter_texts[0].get('1.0', 'end')
+        self.assertIn('用這些打　騎兵、矛兵', counters)
+        self.assertIn('它克制　步兵', counters)
 
 
 if __name__ == '__main__':

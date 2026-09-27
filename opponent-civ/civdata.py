@@ -45,8 +45,8 @@ def find_game_dir():
     return DEFAULT_GAME_DIR
 
 
-def load_strings(game_dir, lang):
-    path = game_dir / 'resources' / lang / 'strings' / 'key-value' / 'key-value-strings-utf8.txt'
+def load_strings(game_dir, lang, filename='key-value-strings-utf8.txt'):
+    path = game_dir / 'resources' / lang / 'strings' / 'key-value' / filename
     strings = {}
     with open(path, encoding='utf-8-sig') as handle:
         for line in handle:

@@ -2,17 +2,20 @@
 
 This is also the live check for the handoff's first unknown -- is the header
 readable the moment a match starts? Every new recording is appended to
-watch_log.jsonl with how many seconds after game start it became readable.
+%LOCALAPPDATA%\\aoe2-tools\\opponent-civ\\watch_log.jsonl with how many seconds
+after game start it became readable.
 
     python watch.py                # watch, text from the game in 繁中
     python watch.py --lang en      # any folder under the game's resources/
     python watch.py --no-elo       # stay offline: skip the ladder ratings
 """
 import argparse
+import ctypes
 import json
 import os
 import sys
 import time
+import traceback
 from datetime import datetime
 from pathlib import Path
 
@@ -24,7 +27,9 @@ from savegames import RECORDING_GLOB, infer_my_profile_id, recordings, savegame_
 POLL_SECONDS = 0.25
 GIVE_UP_SECONDS = 120
 IN_PROGRESS_SECONDS = 15   # a recording written this recently is a match in progress
-log_path = Path(__file__).with_name('watch_log.jsonl')
+TITLE = 'AoE2 對手文明'
+# Not next to the script: the packaged exe runs from a temp folder and lives on the desktop.
+log_path = Path(os.environ['LOCALAPPDATA']) / 'aoe2-tools' / 'opponent-civ' / 'watch_log.jsonl'
 
 
 class Pending:
@@ -50,6 +55,7 @@ def list_files(dirs):
 
 
 def log(entry):
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     with open(log_path, 'a', encoding='utf-8') as handle:
         handle.write(json.dumps(entry, ensure_ascii=False) + '\n')
 
@@ -143,10 +149,12 @@ def main():
     parser.add_argument('--game-dir', help='AoE2DE install folder (default: found via Steam)')
     parser.add_argument('--dir', action='append', help='folder to watch (default: every savegame folder)')
     parser.add_argument('--profile-id', type=int, help='your profile id (default: inferred from recordings)')
-    parser.add_argument('--log', help=f'timing log (default: {log_path.name} next to this script)')
+    parser.add_argument('--log', help=f'timing log (default: {log_path})')
     parser.add_argument('--no-elo', action='store_true', help='skip the ladder ratings (no network)')
     args = parser.parse_args()
-    if not sys.stdout.isatty():
+    if sys.stdout.isatty():
+        ctypes.windll.kernel32.SetConsoleTitleW(TITLE)
+    else:
         sys.stdout.reconfigure(encoding='utf-8')
     if args.log:
         log_path = Path(args.log)
@@ -183,4 +191,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:
+        traceback.print_exc()
+        if getattr(sys, 'frozen', False):  # the exe's console closes on exit; keep the error readable
+            input('\n出錯了，按 Enter 關閉視窗。')
+        sys.exit(1)

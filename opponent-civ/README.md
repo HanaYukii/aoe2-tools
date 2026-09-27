@@ -4,12 +4,21 @@
 
 ## 用法
 
-雙擊 `watch.cmd`（或 `python watch.py`），把視窗拖到第二螢幕，開一場對戰。文明特性一讀到就顯示，積分約 1 秒後補在下面。
+雙擊桌面上的「AoE2 對手文明」，把視窗拖到第二螢幕，開一場對戰。文明特性一讀到就顯示，積分約 1 秒後補在下面。沒有 EXE 時，雙擊 `watch.cmd` 或執行 `python watch.py` 效果一樣。
 
 - `--lang en`：改用英文，可用任何 `resources/` 底下的語言資料夾
 - `--no-elo`：不查積分，完全不連網
 - `--profile-id N`：指定你的 profile ID，預設從最近 20 個錄影檔推斷
-- 每場的時間紀錄寫進 `watch_log.jsonl`，`readable_after_start_s` 是開局後幾秒讀到
+- 每場的時間紀錄寫進 `%LOCALAPPDATA%\aoe2-tools\opponent-civ\watch_log.jsonl`，`readable_after_start_s` 是開局後幾秒讀到
+
+## 打包 EXE
+
+改完程式後重新打包，會覆蓋桌面上的 EXE（先把它關掉）。圖示是從遊戲安裝資料夾讀的科技樹按鈕：
+
+```
+python -m pip install pyinstaller
+python build_exe.py
+```
 
 自訂大廳的「隱藏文明」只在大廳裡藏，讀取畫面就會公開；錄影檔要等遊戲開始才建立，所以這種局照常顯示。只用 Python 標準函式庫，已在 Python 3.12 測過。
 
@@ -23,6 +32,7 @@
 | `savegames.py` | 找 savegame 資料夾，推斷你的 profile ID |
 | `watch.py` | 輪詢資料夾，新錄影檔一出現就重試解析直到成功，顯示對手文明與積分 |
 | `verify_offline.py` | 用這台電腦上所有錄影檔驗證解析器 |
+| `build_exe.py` | 用 PyInstaller 打包成單一 EXE，放到桌面 |
 
 ## 不用 mgz 的原因
 

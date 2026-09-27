@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
+build/
 
 # personal match logs: opponents' names and profile ids
 watch_log.jsonl

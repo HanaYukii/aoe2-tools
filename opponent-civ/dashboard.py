@@ -1,6 +1,8 @@
 """Second-screen desktop dashboard. Run with --no-elo for offline use."""
 import argparse
 import queue
+import re
+import tkinter.font as tkfont
 import threading
 import time
 import tkinter as tk
@@ -17,11 +19,16 @@ from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
 from watch import Pending, POLL_SECONDS, IN_PROGRESS_SECONDS, list_files, try_parse
 
-BG = '#f4f5f2'
-PANEL = '#ffffff'
-FG = '#202c29'
-MUTED = '#687670'
-ACCENT = '#24735b'
+BG = '#10141e'
+PANEL = '#1a2030'
+FG = '#e8edf7'
+MUTED = '#9caac2'
+ACCENT = '#65d9c2'
+VIOLET = '#b9a0ff'
+AMBER = '#f0bf79'
+BLUE = '#80b9fa'
+SURFACE = '#242e42'
+COLORS = (ACCENT, VIOLET, AMBER, BLUE)
 
 
 class Dashboard:
@@ -31,7 +38,10 @@ class Dashboard:
         self.stop = threading.Event()
         self.pool = ThreadPoolExecutor(max_workers=2)
         self.generation = 0
-        self.font_size = 15
+        self.font_size = 14
+        families = set(tkfont.families(root))
+        self.font = 'Noto Sans TC' if 'Noto Sans TC' in families else 'Microsoft JhengHei UI'
+        self.display_font = 'Noto Serif TC' if 'Noto Serif TC' in families else self.font
         self.civs, self.my_id = {}, None
         self.match = None
         self.tabs = []
@@ -42,20 +52,30 @@ class Dashboard:
         root.geometry('1220x860')
         root.minsize(960, 650)
         root.configure(bg=BG)
-        root.option_add('*Font', ('Microsoft JhengHei UI', 10))
+        root.option_add('*Font', (self.font, 10))
         style = ttk.Style(root)
         style.theme_use('clam')
-        style.configure('TNotebook', background=PANEL, borderwidth=0)
-        style.configure('TNotebook.Tab', background=BG, foreground=MUTED, padding=(12, 10), font=('Microsoft JhengHei UI', 10))
-        style.map('TNotebook.Tab', background=[('selected', PANEL)], foreground=[('selected', ACCENT)])
-        style.configure('TCombobox', fieldbackground=PANEL, padding=5)
+        style.configure('TNotebook', background=PANEL, borderwidth=0, bordercolor=PANEL, lightcolor=PANEL, darkcolor=PANEL)
+        style.layout('TNotebook', [('Notebook.client', {'sticky': 'nswe'})])
+        style.configure('TNotebook.Tab', borderwidth=0, bordercolor=PANEL, lightcolor=PANEL, darkcolor=PANEL, background=BG, foreground=MUTED, padding=(12, 10), font=(self.font, 10))
+        style.map('TNotebook.Tab', background=[('selected', SURFACE), ('active', SURFACE)], foreground=[('selected', ACCENT)])
+        style.configure('TCombobox', fieldbackground=SURFACE, background=SURFACE, foreground=FG, arrowcolor=ACCENT, bordercolor=SURFACE, lightcolor=SURFACE, darkcolor=SURFACE, padding=6)
+        style.map('TCombobox', fieldbackground=[('readonly', SURFACE)], foreground=[('readonly', FG)], selectbackground=[('readonly', SURFACE)], selectforeground=[('readonly', FG)])
+        style.configure('Vertical.TScrollbar', background=SURFACE, troughcolor=PANEL, arrowcolor=MUTED, bordercolor=PANEL, lightcolor=PANEL, darkcolor=PANEL, width=10)
+        style.map('Vertical.TScrollbar', background=[('active', '#3a4965')])
+        root.option_add('*TCombobox*Listbox.background', SURFACE)
+        root.option_add('*TCombobox*Listbox.foreground', FG)
+        root.option_add('*TCombobox*Listbox.selectBackground', '#344563')
+        root.option_add('*Button.activeBackground', SURFACE)
+        root.option_add('*Button.activeForeground', FG)
+        root.option_add('*Button.highlightThickness', 0)
         bar = tk.Frame(root, bg=BG)
         bar.pack(fill='x', padx=28, pady=(22, 18))
         tk.Label(bar, text='II', font=('Georgia', 30, 'bold'), bg=BG, fg=ACCENT).pack(side='left', padx=(0, 14))
         brand = tk.Frame(bar, bg=BG)
         brand.pack(side='left')
-        tk.Label(brand, text='對局筆記', font=('Microsoft JhengHei UI', 19, 'bold'), bg=BG, fg=FG, anchor='w').pack(anchor='w')
-        tk.Label(brand, text='AGE OF EMPIRES II   /   MATCH COMPANION', font=('Segoe UI', 8), bg=BG, fg=MUTED).pack(anchor='w')
+        tk.Label(brand, text='對局筆記', font=(self.display_font, 20, 'bold'), bg=BG, fg=FG, anchor='w').pack(anchor='w')
+        tk.Label(brand, text='AGE OF EMPIRES II   /   FIELD NOTES', font=('Segoe UI', 9), bg=BG, fg=MUTED).pack(anchor='w')
         self.pin = tk.BooleanVar()
         tk.Checkbutton(bar, text='保持置頂', variable=self.pin, command=lambda: root.attributes('-topmost', self.pin.get()), bg=BG, fg=MUTED, selectcolor=PANEL, activebackground=BG).pack(side='right', padx=(20, 0))
         for label, delta in [('＋', 1), ('－', -1)]:
@@ -72,7 +92,11 @@ class Dashboard:
         self.sidebar.pack_propagate(False)
         detail = tk.Frame(workspace, bg=PANEL)
         detail.pack(side='left', fill='both', expand=True)
-        self.status = tk.Label(detail, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=('Microsoft JhengHei UI', 11), wraplength=740, justify='left')
+        ribbon = tk.Frame(detail, bg=PANEL, height=3)
+        ribbon.pack(fill='x')
+        for color in COLORS:
+            tk.Frame(ribbon, bg=color, height=3).pack(side='left', fill='x', expand=True)
+        self.status = tk.Label(detail, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
         self.status.pack(fill='x', padx=28, pady=(22, 8))
         self.meta = tk.Label(detail, text='選一場對局，看看對手的文明。', anchor='w', bg=PANEL, fg=MUTED, wraplength=740, justify='left')
         self.meta.pack(fill='x', padx=28, pady=(0, 20))
@@ -81,8 +105,8 @@ class Dashboard:
         self.book.pack(fill='both', expand=True, padx=20, pady=(0, 16))
         self.empty = tk.Frame(self.book, bg=PANEL)
         self.book.add(self.empty, text='文明情報')
-        tk.Label(self.empty, text='下一場，知己知彼。', bg=PANEL, fg=FG, font=('Microsoft JhengHei UI', 23, 'bold')).pack(pady=(100, 20))
-        tk.Label(self.empty, text='左側回顧最近 10 場對局。\n新對局開始時，這裡會自動更新。', bg=PANEL, fg=MUTED, font=('Microsoft JhengHei UI', 13), justify='center').pack()
+        tk.Label(self.empty, text='下一場，知己知彼。', bg=PANEL, fg=FG, font=(self.font, 23, 'bold')).pack(pady=(100, 20))
+        tk.Label(self.empty, text='左側回顧最近 10 場對局。\n新對局開始時，這裡會自動更新。', bg=PANEL, fg=MUTED, font=(self.font, 13), justify='center').pack()
         self.preview = tk.Button(footer, text='最近一場', command=self.preview_latest, state='disabled', bg=BG, fg=MUTED, relief='flat')
         self.preview.pack(side='left', padx=20)
         self.open_history()
@@ -106,8 +130,13 @@ class Dashboard:
             self.style_text(text)
 
     def style_text(self, text):
-        text.configure(font=('Microsoft JhengHei UI', self.font_size), spacing1=4, spacing3=7)
-        text.tag_configure('heading', foreground=ACCENT, font=('Microsoft JhengHei UI', self.font_size + 1, 'bold'), spacing1=16)
+        text.configure(font=(self.font, self.font_size), spacing1=3, spacing3=5, selectbackground='#3c506a', selectforeground=FG)
+        text.tag_configure('number', foreground=AMBER)
+        text.tag_configure('unit', foreground=VIOLET, font=(self.font, self.font_size, 'bold'), spacing1=14)
+        text.tag_configure('tech', foreground=BLUE, font=(self.font, self.font_size, 'bold'), spacing1=14)
+        text.tag_configure('team', foreground=ACCENT, font=(self.font, self.font_size, 'bold'), spacing1=14)
+        text.tag_configure('intro', foreground=MUTED, spacing3=16)
+        text.tag_configure('heading', foreground=ACCENT, font=(self.font, self.font_size + 1, 'bold'), spacing1=16)
 
     def monitor(self):
         try:
@@ -161,7 +190,7 @@ class Dashboard:
         window = self.history_window = self.sidebar
         bar = tk.Frame(window, bg=BG)
         bar.pack(fill='x', pady=(0, 12))
-        tk.Label(bar, text='最近對局', bg=BG, fg=FG, font=('Microsoft JhengHei UI', 14, 'bold')).pack(side='left')
+        tk.Label(bar, text='最近對局', bg=BG, fg=FG, font=(self.font, 14, 'bold')).pack(side='left')
         self.history_mode = tk.StringVar(value='多人')
         mode = ttk.Combobox(bar, textvariable=self.history_mode, values=('多人', '排名', '全部'), state='readonly', width=6)
         mode.pack(side='right')
@@ -171,9 +200,11 @@ class Dashboard:
         body = tk.Frame(window, bg=BG)
         body.pack(fill='both', expand=True)
         style = ttk.Style(window)
-        style.configure('History.Treeview', background=BG, fieldbackground=BG, foreground=FG, rowheight=84, borderwidth=0, font=('Microsoft JhengHei UI', 10))
-        style.map('History.Treeview', background=[('selected', '#deebe3')], foreground=[('selected', '#174b3a')])
+        style.configure('History.Treeview', background=BG, fieldbackground=BG, foreground=FG, rowheight=84, borderwidth=0, bordercolor=BG, lightcolor=BG, darkcolor=BG, font=(self.font, 10))
+        style.map('History.Treeview', background=[('selected', '#293d50')], foreground=[('selected', '#a5f2df')])
         self.history_tree = ttk.Treeview(body, columns=('match',), show='', selectmode='browse', height=7, style='History.Treeview')
+        self.history_tree.tag_configure('even', background='#171e2d')
+        self.history_tree.tag_configure('odd', background=BG)
         self.history_tree.column('match', width=312, minwidth=260)
         vertical = ttk.Scrollbar(body, command=self.history_tree.yview)
         vertical.pack(side='right', fill='y')
@@ -183,7 +214,7 @@ class Dashboard:
         self.history_tree.bind('<Return>', lambda event: self.select_history())
         self.history_button = tk.Button(window, text='重新整理對局', command=self.refresh_history, state='disabled', bg=BG, fg=ACCENT, relief='flat', cursor='hand2', pady=10)
         self.history_button.pack(fill='x', pady=(10, 0))
-        tk.Label(window, text='錄影檔頭未含勝敗與時長', bg=BG, fg=MUTED, font=('Microsoft JhengHei UI', 9)).pack(anchor='w', pady=8)
+        tk.Label(window, text='錄影檔頭未含勝敗與時長', bg=BG, fg=MUTED, font=(self.font, 9)).pack(anchor='w', pady=8)
 
     def refresh_history(self):
         self.history_request += 1
@@ -218,7 +249,7 @@ class Dashboard:
             if len(opponent_label) > 22:
                 opponent_label = opponent_label[:21] + '…'
             mine = civ_name(me) if me else '身分不明'
-            self.history_tree.insert('', 'end', iid=str(index), values=(f'{stamp}   ·   {kind} {len(match.players)} 人\n{opponent_label}\n我的文明  /  {mine}',))
+            self.history_tree.insert('', 'end', iid=str(index), tags=('even' if index % 2 == 0 else 'odd',), values=(f'{stamp}   ·   {kind} {len(match.players)} 人\n{opponent_label}\n我的文明  /  {mine}',))
         summary = f'最近 {len(rows)} 場'
         if counts:
             summary += ' · 我的文明：' + '、'.join(f'{name} {count} 場' for name, count in counts.most_common())
@@ -288,10 +319,20 @@ class Dashboard:
                 name = civ.name if civ else f'未知文明 #{player.civ_id}'
                 frame = tk.Frame(self.book, bg=PANEL)
                 self.book.add(frame, text=f'{role} · {name}')
-                tk.Label(frame, text=name, font=('Microsoft JhengHei UI', 30, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(20, 2))
-                tk.Label(frame, text=player.name, font=('Microsoft JhengHei UI', 14), fg=FG, bg=PANEL, anchor='w').pack(fill='x', padx=24)
-                rating = tk.Label(frame, text='積分查詢已關閉' if self.args.no_elo else '正在查詢積分…', fg=MUTED, bg=PANEL, anchor='w')
-                rating.pack(fill='x', padx=24, pady=(8, 12))
+                color = COLORS[player.civ_id % len(COLORS)]
+                hero = tk.Frame(frame, bg=PANEL)
+                hero.pack(fill='x', padx=24, pady=(24, 16))
+                badge = tk.Canvas(hero, width=58, height=68, bg=PANEL, highlightthickness=0)
+                badge.pack(side='left', padx=(0, 18))
+                badge.create_polygon(4, 4, 54, 4, 54, 42, 29, 63, 4, 42, fill=SURFACE, outline=color, width=2)
+                badge.create_text(29, 28, text='II', font=('Georgia', 23, 'bold'), fill=color)
+                heading = tk.Frame(hero, bg=PANEL)
+                heading.pack(side='left', fill='x', expand=True)
+                tk.Label(heading, text=(civ.key.upper() if civ else 'UNKNOWN') + '  /  ' + role, font=('Segoe UI', 9), fg=color, bg=PANEL, anchor='w').pack(fill='x')
+                tk.Label(heading, text=name, font=(self.display_font, 28, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x')
+                tk.Label(heading, text=player.name, font=(self.font, 12), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x')
+                rating = tk.Label(frame, text='積分查詢已關閉' if self.args.no_elo else '正在查詢積分…', font=('Segoe UI', 12), fg=BLUE, bg=SURFACE, anchor='w', padx=14, pady=10)
+                rating.pack(fill='x', padx=24, pady=(0, 20))
                 body = tk.Frame(frame, bg=PANEL)
                 body.pack(fill='both', expand=True, padx=24, pady=(0, 20))
                 scrollbar = ttk.Scrollbar(body)
@@ -301,8 +342,14 @@ class Dashboard:
                 scrollbar.configure(command=text.yview)
                 self.style_text(text)
                 description = civ.description if civ else '此文明尚無官方說明，請確認遊戲資料版本。'
-                for line in description.splitlines():
-                    text.insert('end', line + '\n', 'heading' if line.strip().endswith(('：', ':')) else ())
+                for index, line in enumerate(description.splitlines()):
+                    tag = 'intro' if index == 0 else ''
+                    if line.strip().endswith(('：', ':')):
+                        tag = 'unit' if any(word in line for word in ('單位', 'Unit')) else 'tech' if any(word in line for word in ('科技', 'Tech')) else 'team'
+                    start = text.index('end-1c')
+                    text.insert('end', line + '\n', tag)
+                    for number in re.finditer(r'[+−-]?\d+(?:[./]\d+)*(?:%|％)?', line):
+                        text.tag_add('number', f'{start}+{number.start()}c', f'{start}+{number.end()}c')
                 text.configure(state='disabled')
                 self.tabs.append((player, rating, text))
         if not self.args.no_elo:

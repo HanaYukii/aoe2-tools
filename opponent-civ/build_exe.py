@@ -16,8 +16,8 @@ from civdata import find_game_dir
 
 HERE = Path(__file__).parent
 BUILD = HERE / 'build'
-EXE_NAME = 'aoe2-opponent-civ'
-DESKTOP_NAME = 'AoE2 對手文明.exe'
+EXE_NAME = 'aoe2-opponent-dashboard'
+DESKTOP_NAME = 'AoE2 對局筆記.exe'
 CSIDL_DESKTOPDIRECTORY = 0x10
 
 
@@ -41,10 +41,10 @@ def main():
     icon = BUILD / 'icon.ico'
     png_to_ico(find_game_dir() / 'widgetui' / 'textures' / 'ingame' / 'icons' / 'menu_techtree_normal.png', icon)
     subprocess.run([
-        sys.executable, '-m', 'PyInstaller', '--onefile', '--console', '--noconfirm',
+        sys.executable, '-m', 'PyInstaller', '--onefile', '--windowed', '--noconfirm',
         '--name', EXE_NAME, '--icon', str(icon),
         '--distpath', str(BUILD / 'dist'), '--workpath', str(BUILD / 'work'), '--specpath', str(BUILD),
-        str(HERE / 'watch.py'),
+        str(HERE / 'dashboard.py'),
     ], check=True)
     target = desktop_dir() / DESKTOP_NAME
     try:

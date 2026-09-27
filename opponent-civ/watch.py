@@ -107,7 +107,7 @@ def show_ratings(match, my_id):
     return ratings
 
 
-def try_parse(pending, civs, my_id, elo):
+def try_parse(pending, civs, my_id, elo, presenter=None):
     """True once the recording is handled (shown or given up)."""
     pending.attempts += 1
     try:
@@ -117,7 +117,8 @@ def try_parse(pending, civs, my_id, elo):
         pending.note(e)
         if time.time() - pending.detected < GIVE_UP_SECONDS:
             return False
-        print(f'\n放棄：{pending.path.name} 在 {GIVE_UP_SECONDS} 秒內都讀不到檔頭：{pending.errors}')
+        if not presenter:
+            print(f'\n放棄：{pending.path.name} 在 {GIVE_UP_SECONDS} 秒內都讀不到檔頭：{pending.errors}')
         log(dict(file=pending.path.name, ok=False, detected=iso(pending.detected),
                  attempts=pending.attempts, errors=pending.errors))
         return True
@@ -125,7 +126,10 @@ def try_parse(pending, civs, my_id, elo):
     parsed = time.time()
     created = getattr(stat, 'st_birthtime', stat.st_ctime)
     readable_after = parsed - match.timestamp
-    show(match, civs, my_id, readable_after)
+    if presenter:
+        presenter(match, pending.path, readable_after)
+    else:
+        show(match, civs, my_id, readable_after)
     ratings = show_ratings(match, my_id) if elo else {}
     log(dict(
         file=pending.path.name, ok=True, joined_late=pending.joined_late,

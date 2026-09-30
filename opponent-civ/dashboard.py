@@ -14,6 +14,7 @@ from tkinter import ttk
 from civdata import load_civs
 from collections import Counter
 from history import recent_matches
+from launcher import claim_single_instance, place, remember, start_game
 from ratings import RM_1V1, RM_TEAM, fetch_ratings
 from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
@@ -52,7 +53,7 @@ class Dashboard:
         self.history_request = 0
         self.history_rows = []
         root.title('AoE2 · 對局筆記')
-        root.geometry('1220x860')
+        place(root, 1220, 860)
         root.minsize(960, 650)
         root.configure(bg=BG)
         root.option_add('*Font', (self.font, 10))
@@ -120,6 +121,7 @@ class Dashboard:
     def close(self):
         self.stop.set()
         self.pool.shutdown(wait=False, cancel_futures=True)
+        remember(self.root)
         self.root.destroy()
 
     def reflow(self, event):
@@ -426,9 +428,15 @@ def main():
     parser.add_argument('--dir', action='append')
     parser.add_argument('--profile-id', type=int)
     parser.add_argument('--no-elo', action='store_true')
+    parser.add_argument('--with-game', action='store_true', help='also start the game through Steam')
     args = parser.parse_args()
+    if not claim_single_instance() and args.with_game:  # dashboard already open: just start the game
+        start_game()
+        return
     root = tk.Tk()
     Dashboard(root, args)
+    if args.with_game:
+        root.after(1000, start_game)  # after our window is up, so the game ends up in front
     root.mainloop()
 
 

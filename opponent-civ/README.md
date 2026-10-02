@@ -1,61 +1,54 @@
-# AoE2 對手文明特性
+# 開發與進階使用
 
-對戰開局時，在第二螢幕自動顯示對手的文明特性與積分，零點擊。文明文字是遊戲自己的官方繁中（從安裝資料夾讀）；積分查遊戲排行榜用的官方公開 API。只讀遊戲寫出的錄影檔檔頭，不碰記憶體、不注入。
+一般使用者請到 [首頁下載 EXE](../README.md)。原始碼使用 Python 3.12 與標準函式庫，打包才需要 PyInstaller。
 
-## 用法
+## 執行
 
-### 桌面介面（建議）
+從此資料夾執行 `python dashboard.py`，首次啟動會顯示設定。支援：
 
-雙擊 `dashboard.cmd`，或執行 `python dashboard.py`。深色雙欄介面：左側最近 10 場、右側文明詳情。每位對手、自己和隊友各有分頁，文明說明可捲動、選取複製；右上角可調整字級與置頂。積分在背景查詢，不影響監看與操作。優先使用本機思源黑體與思源宋體（未安裝時使用微軟正黑體）；特殊單位、科技、團隊加成以不同顏色區分，數值以琥珀色標示。
-
-遊戲全螢幕時無法 Alt+Tab 回桌面，所以用 `--with-game` 開啟：先開對局筆記，再請 Steam 開遊戲；如果對局筆記已經開著，就只開遊戲。這台電腦桌面上的「Age of Empires II Definitive Edition」圖示就是指向 `build\dist` 的 EXE 加上這個參數。視窗第一次會開在非主螢幕（遊戲在主螢幕全螢幕），之後記住關閉時的位置，存在 `%LOCALAPPDATA%\aoe2-tools\opponent-civ\window.json`；如果那個螢幕已經拔掉，就改開在副螢幕。
-
-每個對手的文明分頁有「看特殊兵種怎麼打」按鈕，點了會跳到「兵種應對」分頁中那個文明的段落，列出它的特殊兵種、用什麼打、它克制什麼。克制關係取自遊戲自己的兵種說明：清單以英文原文為準（句型固定），再換成遊戲內的繁中兵種名，例如 Skirmisher 在繁中版叫「矛兵」、Spearman 叫「長槍兵」。這是依文明列出的資料，不代表對手已經出這些兵。遊戲改版後可以執行 `python units.py`，逐一列出所有文明的特殊兵種，並回報還沒有中文對照的英文詞。
-
-啟動後自動載入最近 10 場多人錄影，點選清單即可查看歷史對局；可篩選多人、排名或全部，並查看這 10 場自己的文明使用次數。依檔頭開局時間排序，無法解析的錄影會略過並提示。歷史資料不包含勝敗、時長或當時積分；文明說明與查詢積分都是目前資料。新對局出現後會自動取代預覽。這個工具只偵測錄影檔建立，無法判斷對局是否結束，畫面會保留上一場直到下一場。
-
-支援 `--no-elo`、`--lang`、`--game-dir`、`--dir`、`--profile-id`。找不到資料夾時會在介面顯示錯誤。無法推斷身分時會顯示所有玩家，不會任意指定對手。
-
-### 原本的終端機版
-
-雙擊 `watch.cmd` 或執行 `python watch.py`，把視窗拖到第二螢幕，開一場對戰。文明特性一讀到就顯示，積分約 1 秒後補在下面。
-
-- `--lang en`：改用英文，可用任何 `resources/` 底下的語言資料夾
-- `--no-elo`：不查積分，完全不連網
-- `--profile-id N`：指定你的 profile ID，預設從最近 20 個錄影檔推斷
-- 每場的時間紀錄寫進 `%LOCALAPPDATA%\aoe2-tools\opponent-civ\watch_log.jsonl`，`readable_after_start_s` 是開局後幾秒讀到
-
-## 打包 EXE
-
-改完程式後重新打包，會覆蓋桌面上的「AoE2 對局筆記.exe」（先把它關掉）。圖示是從遊戲安裝資料夾讀的科技樹按鈕：
-
-```
-python -m pip install pyinstaller
-python build_exe.py
-```
-
-自訂大廳的「隱藏文明」只在大廳裡藏，讀取畫面就會公開；錄影檔要等遊戲開始才建立，所以這種局照常顯示。只用 Python 標準函式庫，已在 Python 3.12 測過。
-
-## 檔案
-
-| 檔案 | 做什麼 |
+| 參數 | 用途 |
 | --- | --- |
-| `history.py` | 讀取、篩選與排序最近 10 場本機錄影 |
-| `dashboard.py` | 第二螢幕桌面介面、歷史預覽、背景積分查詢 |
-| `rec_header.py` | 只解壓錄影檔檔頭最前面的大廳設定，讀出玩家、文明、隊伍、排名與隱藏文明旗標 |
-| `civdata.py` | 用遊戲的 `civilizations.json` 對應文明 ID，從語言檔取名稱與科技樹說明 |
-| `units.py` | 每個文明的特殊兵種：說明、用什麼打、它克制什麼（英文句型解析＋遊戲繁中兵種名） |
-| `launcher.py` | `--with-game` 啟動遊戲、只開一個視窗、視窗開在副螢幕並記住位置 |
-| `ratings.py` | 用 profile ID 向官方 API 查 1v1 與團戰的隨機地圖積分 |
-| `savegames.py` | 找 savegame 資料夾，推斷你的 profile ID |
-| `watch.py` | 輪詢資料夾，新錄影檔一出現就重試解析直到成功，顯示對手文明與積分 |
-| `verify_offline.py` | 用這台電腦上所有錄影檔驗證解析器 |
-| `build_exe.py` | 用 PyInstaller 打包成單一 EXE，放到桌面 |
+| `--setup` | 啟動前重新開啟設定 |
+| `--with-game` | 先開工具，再透過 Steam 啟動遊戲 |
+| `--no-elo` | 關閉連網積分查詢 |
+| `--game-dir PATH` | 覆寫遊戲安裝位置 |
+| `--dir PATH` | 覆寫錄影資料夾，可重複指定 |
+| `--profile-id N` | 覆寫自己的玩家 ID |
+| `--lang tw` | 資料語言：tw 繁中、en 英文、zh 簡中；介面仍以繁中為主 |
+| `--demo` | 虛構範例畫面，不監看個人錄影、不連網；仍需遊戲文字資料 |
 
-## 不用 mgz 的原因
+設定與視窗位置分別保存在 `%LOCALAPPDATA%\aoe2-tools\opponent-civ\settings.json` 與 `window.json`。首次嘗試放在副螢幕，之後記住視窗位置。不要將本機設定或錄影加入版本控制。
 
-`mgz` 1.8.51（2026-09 時 PyPI 最新版）讀不了存檔版本 67.2 以後的檔頭，也就是 2026 年 3 月之後的所有錄影檔。67.2 起每個玩家區塊尾端多了一個字串欄位（上游 PR #147 未合併）。這個工具只需要檔頭開頭約 400 bytes 的玩家區塊，所以自己解析，不依賴它。
+終端機版可執行 `python watch.py`，其設定透過參數指定，不讀取 GUI 設定。紀錄寫入上述 LOCALAPPDATA 資料夾的 `watch_log.jsonl`。
 
-錄影檔檔頭不存積分：舊版放 ELO 的欄位現在是讓分比例，所以積分一定要連網查。
+## 驗證與打包
 
-遊戲改版後如果解析失敗，先跑 `python verify_offline.py` 看是哪個存檔版本出錯。
+在 repository 根目錄執行：
+
+```powershell
+python -m unittest discover -s opponent-civ -p "test_*.py" -v
+python -m pip install pyinstaller==6.22.3
+python opponent-civ/build_exe.py
+```
+
+產物為 `opponent-civ/build/release/aoe2-opponent-dashboard.exe` 與 `SHA256SUMS.txt`。打包使用自製圖示，不需要安裝遊戲。加上 `--desktop` 才會另外複製 EXE 到本機桌面。
+
+推送 `v*` tag 會觸發 GitHub Actions：測試 → Windows x64 打包 → 建立 Release。也可手動執行 workflow 取得測試產物；手動執行不會建立 Release。
+
+## 主要模組
+
+| 檔案 | 功能 |
+| --- | --- |
+| `dashboard.py` | 深色介面、歷史對局、背景積分查詢 |
+| `settings.py` | 首次設定、本機設定保存、玩家選擇 |
+| `rec_header.py` | 解析錄影檔開頭的玩家與文明資料 |
+| `history.py` / `savegames.py` | 最近 10 場、錄影搜尋、玩家推斷 |
+| `civdata.py` / `units.py` | 遊戲文明文字、特殊兵種與克制說明 |
+| `ratings.py` | 官方排行榜目前積分 |
+| `launcher.py` | Steam 啟動與視窗位置 |
+| `demo.py` | 公開截圖用虛構對局 |
+| `verify_offline.py` | 驗證本機錄影的解析結果 |
+
+兵種克制關係以遊戲英文說明的固定句型解析，再對應繁中兵種名稱；沒有記載時不自行推論。`python units.py` 可列出資料與尚未對應的英文詞。
+
+解析器只處理所需的錄影檔頭欄位，不依賴完整對局解析套件。遊戲改版後若解析失敗，可執行 `python opponent-civ/verify_offline.py` 協助定位。

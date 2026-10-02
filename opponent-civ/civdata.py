@@ -62,8 +62,11 @@ def load_civs(game_dir=None, lang='tw'):
     game_dir = Path(game_dir) if game_dir else find_game_dir()
     listing = json.loads((game_dir / 'resources' / '_common' / 'dat' / 'civilizations.json')
                          .read_text(encoding='utf-8'))['civilization_list']
-    strings = load_strings(game_dir, lang)
-    english = strings if lang == 'en' else load_strings(game_dir, 'en')
+    english = load_strings(game_dir, 'en')
+    try:
+        strings = english if lang == 'en' else load_strings(game_dir, lang)
+    except FileNotFoundError:
+        strings = english
 
     def text(string_id):
         return strings.get(string_id) or english.get(string_id, '')

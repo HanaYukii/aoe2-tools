@@ -12,6 +12,7 @@ from pathlib import Path
 from tkinter import ttk
 
 from civdata import load_civs
+from settings import SetupDialog, read_settings, validate_settings
 from collections import Counter
 from history import recent_matches
 from launcher import claim_single_instance, place, remember, start_game
@@ -113,15 +114,22 @@ class Dashboard:
         tk.Label(self.empty, text='左側回顧最近 10 場對局。\n新對局開始時，這裡會自動更新。', bg=PANEL, fg=MUTED, font=(self.font, 13), justify='center').pack()
         self.preview = tk.Button(footer, text='最近一場', command=self.preview_latest, state='disabled', bg=BG, fg=MUTED, relief='flat')
         self.preview.pack(side='left', padx=20)
+        tk.Button(footer, text='設定', command=self.configure_app, bg=BG, fg=ACCENT, relief='flat').pack(side='right', padx=16)
         self.open_history()
         root.protocol('WM_DELETE_WINDOW', self.close)
-        threading.Thread(target=self.monitor, daemon=True).start()
+        if not getattr(args, 'demo', False):
+            threading.Thread(target=self.monitor, daemon=True).start()
         root.after(100, self.drain)
+
+    def configure_app(self):
+        data = read_settings()
+        SetupDialog(self.root, data)
 
     def close(self):
         self.stop.set()
         self.pool.shutdown(wait=False, cancel_futures=True)
-        remember(self.root)
+        if not getattr(self.args, 'demo', False):
+            remember(self.root)
         self.root.destroy()
 
     def reflow(self, event):
@@ -150,7 +158,7 @@ class Dashboard:
             self.civs = load_civs(self.args.game_dir, self.args.lang)
             self.units = load_unique_units(self.args.game_dir, self.args.lang)
             self.dirs =[Path(d) for d in self.args.dir] if self.args.dir else savegame_dirs()
-            if not self.dirs or any(not d.is_dir() for d in self.dirs):
+            if any(not d.is_dir() for d in self.dirs):
                 raise ValueError('找不到錄影資料夾，請用 --dir 指定 savegame 資料夾。')
             self.my_id = self.args.profile_id or infer_my_profile_id(self.dirs)
             seen = list_files(self.dirs)
@@ -160,6 +168,8 @@ class Dashboard:
                 pending[latest] = Pending(latest, joined_late=True)
             self.events.put(('ready', None))
             while not self.stop.is_set():
+                if not self.args.dir and not self.dirs:
+                    self.dirs = savegame_dirs()
                 current = list_files(self.dirs)
                 for path in sorted(current - seen):
                     if path.suffix.lower() == '.aoe2record':
@@ -423,19 +433,44 @@ class Dashboard:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--lang', default='tw')
+    parser.add_argument('--lang')
     parser.add_argument('--game-dir')
     parser.add_argument('--dir', action='append')
     parser.add_argument('--profile-id', type=int)
-    parser.add_argument('--no-elo', action='store_true')
+    parser.add_argument('--no-elo', action='store_true', default=None)
     parser.add_argument('--with-game', action='store_true', help='also start the game through Steam')
+    parser.add_argument('--setup', action='store_true', help='open settings before starting')
+    parser.add_argument('--demo', action='store_true', help='synthetic example; no monitoring or network')
     args = parser.parse_args()
-    if not claim_single_instance() and args.with_game:  # dashboard already open: just start the game
+    if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game
         start_game()
         return
     root = tk.Tk()
-    Dashboard(root, args)
-    if args.with_game:
+    if not args.demo:
+        root.withdraw()
+        config = read_settings()
+        try:
+            if config:
+                validate_settings(config)
+        except (OSError, ValueError, KeyError):
+            config = None
+        if config is None or args.setup:
+            config = SetupDialog(root, config, first_run=True).result
+            if config is None:
+                root.destroy()
+                return
+        for field, key in (('game_dir', 'game_dir'), ('dir', 'dirs'), ('profile_id', 'profile_id'), ('lang', 'lang'), ('no_elo', 'no_elo')):
+            if getattr(args, field) is None:
+                setattr(args, field, config.get(key))
+        root.deiconify()
+    else:
+        args.lang = args.lang or 'tw'
+        args.no_elo = True
+    app = Dashboard(root, args)
+    if args.demo:
+        from demo import populate
+        populate(app)
+    if args.with_game and not args.demo:
         root.after(1000, start_game)  # after our window is up, so the game ends up in front
     root.mainloop()
 

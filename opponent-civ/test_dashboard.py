@@ -1,5 +1,6 @@
 """Regression checks for match switching and the offline dashboard."""
 import argparse
+from dataclasses import replace
 from pathlib import Path
 import tkinter as tk
 import unittest
@@ -61,6 +62,11 @@ class DashboardTests(unittest.TestCase):
         self.app.events.put(('preview_match', (generation, (self.match, Path('old.aoe2record'), None, True))))
         self.app.drain()
         self.assertIn('新對局', self.app.status.cget('text'))
+
+    def test_status_names_the_map(self):
+        self.app.maps = {29: '競技場'}
+        self.app.show(replace(self.match, map_id=29), Path('live.aoe2record'), 0.5, False)
+        self.assertIn('競技場', self.app.status.cget('text'))
 
     def test_counters_tab_and_jump(self):
         self.app.units = {1: (UniqueUnit('長弓兵', '英國特殊步弓兵，擁有出色的射程。', ('騎兵', '矛兵'), ('步兵',), (),

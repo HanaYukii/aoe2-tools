@@ -58,19 +58,26 @@ def work_areas():
 
 
 def place(root, width, height, areas=None):
-    """Last closed spot if it is still on a screen, else a non-primary screen, else Tk's default."""
+    """Keep off the primary screen whenever there is another one, since the game covers it.
+
+    The last closed spot is reused if its screen is still there and is not the
+    primary while a second screen exists: a spot saved during a laptop-only
+    session would otherwise land under the game once the monitor is back.
+    """
     areas = work_areas() if areas is None else areas
+    others = [area for area in areas if not area[4]]
     try:
         state = json.loads(STATE_PATH.read_text(encoding='utf-8'))
         x, y = state['x'], state['y']
-        if any(left <= x + MARGIN < right and top <= y + MARGIN < bottom for left, top, right, bottom, _ in areas):
+        screen = next((area for area in areas if area[0] <= x + MARGIN < area[2] and area[1] <= y + MARGIN < area[3]), None)
+        if screen and (not others or not screen[4]):
             root.geometry(f"{state['width']}x{state['height']}+{x}+{y}")
             if state.get('zoomed'):
                 root.state('zoomed')
             return
     except (OSError, ValueError, KeyError, TypeError):
         pass
-    second = next((area for area in areas if not area[4]), None)
+    second = others[0] if others else None
     if second:
         left, top, right, bottom, _ = second
         width, height = min(width, right - left - 2 * MARGIN), min(height, bottom - top - 2 * MARGIN)

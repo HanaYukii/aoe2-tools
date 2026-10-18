@@ -19,6 +19,7 @@ from launcher import claim_single_instance, place, remember, start_game
 from ratings import RM_1V1, RM_TEAM, fetch_ratings
 from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
+from mapdata import load_map_names, map_label
 from units import load_unique_units
 from watch import Pending, POLL_SECONDS, IN_PROGRESS_SECONDS, list_files, try_parse
 
@@ -47,6 +48,7 @@ class Dashboard:
         self.display_font = 'Noto Serif TC' if 'Noto Serif TC' in families else self.font
         self.civs, self.my_id = {}, None
         self.units = {}
+        self.maps = {}
         self.match = None
         self.tabs = []
         self.counter_texts = []
@@ -152,11 +154,14 @@ class Dashboard:
         text.tag_configure('heading', foreground=ACCENT, font=(self.font, self.font_size + 1, 'bold'), spacing1=16)
         text.tag_configure('good', foreground=ACCENT, font=(self.font, self.font_size, 'bold'))
         text.tag_configure('bad', foreground=AMBER, font=(self.font, self.font_size, 'bold'))
+        text.tag_configure('meta', foreground=MUTED, font=(self.font, max(9, self.font_size - 2)))
+        text.tag_configure('group', foreground=BLUE, font=(self.font, self.font_size - 1, 'bold'), spacing1=18)
 
     def monitor(self):
         try:
             self.civs = load_civs(self.args.game_dir, self.args.lang)
             self.units = load_unique_units(self.args.game_dir, self.args.lang)
+            self.maps = load_map_names(self.args.game_dir, self.args.lang)
             self.dirs =[Path(d) for d in self.args.dir] if self.args.dir else savegame_dirs()
             if any(not d.is_dir() for d in self.dirs):
                 raise ValueError('找不到錄影資料夾，請用 --dir 指定 savegame 資料夾。')
@@ -267,7 +272,8 @@ class Dashboard:
             if len(opponent_label) > 22:
                 opponent_label = opponent_label[:21] + '…'
             mine = civ_name(me) if me else '身分不明'
-            self.history_tree.insert('', 'end', iid=str(index), tags=('even' if index % 2 == 0 else 'odd',), values=(f'{stamp}   ·   {kind} {len(match.players)} 人\n{opponent_label}\n我的文明  /  {mine}',))
+            place_name = map_label(match, self.maps)
+            self.history_tree.insert('', 'end', iid=str(index), tags=('even' if index % 2 == 0 else 'odd',), values=(f'{stamp}   ·   {kind} {len(match.players)} 人' + (f' · {place_name}' if place_name else '') + f'\n{opponent_label}\n我的文明  /  {mine}',))
         summary = f'最近 {len(rows)} 場'
         if counts:
             summary += ' · 我的文明：' + '、'.join(f'{name} {count} 場' for name, count in counts.most_common())
@@ -331,7 +337,8 @@ class Dashboard:
         jumps = []
         me, allies, enemies = split_sides(match, self.my_id)
         kind = '排名' if match.rated else '多人' if match.multiplayer else '單機'
-        self.status.configure(text=('歷史預覽' if preview else '已讀取新對局') + f' · {kind} · {len(match.players)} 人 · {datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}')
+        place_name = map_label(match, self.maps)
+        self.status.configure(text=('歷史預覽' if preview else '已讀取新對局') + f' · {kind}' + (f' · {place_name}' if place_name else '') + f' · {len(match.players)} 人 · {datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}')
         self.meta.configure(text=('歷史對局 · 文明說明與積分為目前資料' if preview else f'開局後 {delay:.1f} 秒讀到') + ' · 新對局將自動顯示')
         for role, players in [('對手' if me else '玩家', enemies), ('你', [me] if me else []), ('隊友', allies)]:
             for player in players:
@@ -391,7 +398,7 @@ class Dashboard:
         frame = tk.Frame(self.book, bg=PANEL)
         self.book.add(frame, text='兵種應對')
         tk.Label(frame, text='特殊兵種怎麼打', font=(self.display_font, 22, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(24, 4))
-        tk.Label(frame, text='依對手文明列出，取自遊戲的兵種說明；不代表對手已經出這些兵。', font=(self.font, 10), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(0, 14))
+        tk.Label(frame, text='依對手文明列出各建築的特殊兵種與地區兵種，取自遊戲的科技樹與兵種說明；不代表對手已經出這些兵。', font=(self.font, 10), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(0, 14))
         body = tk.Frame(frame, bg=PANEL)
         body.pack(fill='both', expand=True, padx=24, pady=(0, 20))
         scrollbar = ttk.Scrollbar(body)
@@ -405,8 +412,15 @@ class Dashboard:
             text.mark_set(f'civ{civ_id}', 'end-1c')
             text.mark_gravity(f'civ{civ_id}', 'left')
             text.insert('end', (civ.name if civ else f'未知文明 #{civ_id}') + '\n', 'heading')
+            regional_started = False
             for unit in self.units[civ_id]:
+                if unit.regional and not regional_started:
+                    regional_started = True
+                    text.insert('end', '地區兵種（少數文明共有）\n', 'group')
                 text.insert('end', unit.name + '\n', 'unit')
+                where = ' · '.join(filter(None, (unit.building, unit.age)))
+                if where:
+                    text.insert('end', where + '\n', 'meta')
                 if unit.summary:
                     text.insert('end', unit.summary + '\n')
                 for label, items, tag in (('用這些打', unit.loses_to, 'good'), ('它特別克制', unit.beats_hard, 'bad'), ('它克制', unit.beats, 'bad')):

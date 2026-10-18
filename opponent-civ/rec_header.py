@@ -56,6 +56,8 @@ class Match:
     rated: bool
     hidden_civs: bool
     players: tuple
+    map_id: int = -1     # maps.json storage_id; -3 for scenarios and campaigns
+    map_file: str = ''   # a mod's random map script, when the lobby used one
 
 
 class _Reader:
@@ -123,7 +125,9 @@ def _parse_de(r):
     build, timestamp = r.unpack('<II')
     r.skip(12)
     r.skip(4 * r.unpack('<I'))  # DLC ids
-    r.skip(4 + 4 + 4 + 4 + 4)   # ?, map size, ?, map id, ?
+    r.skip(4 + 4 + 4)           # ?, map size, ?
+    map_id = r.unpack('<i')
+    r.skip(4)
     r.skip(4 * 4)               # victory, resources, starting age, ending age
     r.skip(12)
     r.skip(4 + 4 + 4)           # speed, treaty length, population
@@ -163,7 +167,32 @@ def _parse_de(r):
     if len(players) != num_players:
         raise Unsupported(f'lobby says {num_players} players, found {len(players)} slots')
     return Match(save, build, timestamp, multiplayer == 1, rated == 1, hidden_civs == 1,
-                 tuple(sorted(players, key=lambda p: p.number)))
+                 tuple(sorted(players, key=lambda p: p.number)), map_id, _custom_map(r))
+
+
+def _custom_map(r):
+    """The mod map script in the lobby's string blocks, if any; '' when absent or unreadable."""
+    try:
+        r.skip(1 + 4 + 1)           # ?, spectator delay, ?
+        strings = _string_block(r)
+        r.skip(8)
+        for _ in range(20):
+            strings += _string_block(r)
+    except (NotReady, Unsupported):
+        return ''                   # only the custom map's name lives here; the players are already read
+    for parts in (s.split(':') for s in strings):
+        if parts[:2] == ['SUBSCRIBEDMODS', 'RANDOM_MAPS'] and len(parts) > 3:
+            return parts[3].split('_', 1)[-1]   # "<mod id>_<file name>"
+    return ''
+
+
+def _string_block(r):
+    strings = []
+    while True:
+        crc = r.unpack('<I')
+        if 0 < crc < 255:
+            return strings
+        strings.append(r.de_string())
 
 
 def split_sides(match, my_profile_id):

@@ -2,7 +2,7 @@
 import unittest
 
 from civdata import find_game_dir, load_civs
-from units import build_unit, english_items, load_unique_units, summary
+from units import build_unit, english_items, load_unique_units, one_line, summary
 
 IDS = {'name': 1, 'description': 2}
 # Strings as the game ships them (Longbowman).
@@ -41,6 +41,14 @@ class UnitTextTests(unittest.TestCase):
         self.assertEqual(summary(hero, 'tw'), hero)
         self.assertEqual(summary('Italian unique Foot Archer. Exceptionally strong vs. Cavalry. Weak vs. Archery Units.', 'en'),
                          'Italian unique Foot Archer.')
+        # the list after the first counter clause goes too, even past a comma
+        self.assertEqual(summary('緩慢而沉重的騎乘弓兵。擅長對付弓兵單位和步兵。不擅長對付長槍兵系，矛兵和駱駝騎兵。', 'tw'),
+                         '緩慢而沉重的騎乘弓兵。')
+
+    def test_tech_tree_names_lose_layout_breaks(self):
+        self.assertEqual(one_line('射箭場\n'), '射箭場')
+        self.assertEqual(one_line('裝甲戰象\n'), '裝甲戰象')
+        self.assertEqual(one_line('Champi\nWarrior'), 'Champi Warrior')
 
     def test_exceptional_numbers_and_unknown_terms(self):
         english = {1: 'X', 2: 'Create X\nA unit. Exceptionally strong vs. Infantry. Strong in high numbers. Weak vs. Dragons.\n'}
@@ -59,6 +67,20 @@ class InstalledGameTests(unittest.TestCase):
         self.assertEqual(set(units), set(civs))
         self.assertEqual({t for found in units.values() for unit in found for t in unit.unmapped}, set())
         self.assertTrue(all(unit.summary for found in units.values() for unit in found))
+
+    def test_units_beyond_the_castle(self):
+        civs = load_civs()
+        units = {civs[civ_id].key: {u.name: u for u in found} for civ_id, found in load_unique_units().items()}
+        vikings, bengalis, bohemians = units['Vikings'], units['Bengalis'], units['Bohemians']
+        self.assertTrue(vikings['瓦蘭吉衛隊'].regional)            # regional, from the barracks
+        self.assertEqual(vikings['瓦蘭吉衛隊'].building, '軍營')
+        self.assertIn('民兵系', vikings['瓦蘭吉衛隊'].loses_to)
+        self.assertTrue(bengalis['象弓騎兵'].regional)
+        self.assertFalse(bohemians['榴彈砲'].regional)              # unique, from the siege workshop
+        self.assertEqual(bohemians['榴彈砲'].age, '帝王時代')
+        self.assertEqual(units['Goths']['哥德衛隊'].building, '城堡、軍營')  # one entry, both buildings
+        self.assertIn('鷹勇士', units['Aztecs'])                  # its own line, not folded into the Eagle Scout
+        self.assertTrue(all(not name.startswith('菁英') for found in units.values() for name in found))
 
 
 if __name__ == '__main__':

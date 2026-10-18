@@ -17,7 +17,7 @@
 | `--lang tw` | 資料語言：tw 繁中、en 英文、zh 簡中；介面仍以繁中為主 |
 | `--demo` | 虛構範例畫面，不監看個人錄影、不連網；仍需遊戲文字資料 |
 
-設定與視窗位置分別保存在 `%LOCALAPPDATA%\aoe2-tools\opponent-civ\settings.json` 與 `window.json`。首次嘗試放在副螢幕，之後記住視窗位置。不要將本機設定或錄影加入版本控制。
+設定與視窗位置分別保存在 `%LOCALAPPDATA%\aoe2-tools\opponent-civ\settings.json` 與 `window.json`。首次嘗試放在副螢幕，之後記住視窗位置；只要有第二個螢幕，就不會開在遊戲所在的主螢幕上，即使上次是在只有一個螢幕時關掉的。不要將本機設定或錄影加入版本控制。
 
 終端機版可執行 `python watch.py`，其設定透過參數指定，不讀取 GUI 設定。紀錄寫入上述 LOCALAPPDATA 資料夾的 `watch_log.jsonl`。
 
@@ -41,7 +41,8 @@ python opponent-civ/build_exe.py
 | --- | --- |
 | `dashboard.py` | 深色介面、歷史對局、背景積分查詢 |
 | `settings.py` | 首次設定、本機設定保存、玩家選擇 |
-| `rec_header.py` | 解析錄影檔開頭的玩家與文明資料 |
+| `rec_header.py` | 解析錄影檔開頭的玩家、文明與地圖資料 |
+| `mapdata.py` | 地圖編號對應遊戲 `maps.json` 的地圖名稱；模組地圖顯示檔名，戰役顯示「劇本／戰役」 |
 | `history.py` / `savegames.py` | 最近 10 場、錄影搜尋、玩家推斷 |
 | `civdata.py` / `units.py` | 遊戲文明文字、特殊兵種與克制說明 |
 | `ratings.py` | 官方排行榜目前積分 |
@@ -49,6 +50,6 @@ python opponent-civ/build_exe.py
 | `demo.py` | 公開截圖用虛構對局 |
 | `verify_offline.py` | 驗證本機錄影的解析結果 |
 
-兵種克制關係以遊戲英文說明的固定句型解析，再對應繁中兵種名稱；沒有記載時不自行推論。`python units.py` 可列出資料與尚未對應的英文詞。
+兵種清單取自遊戲的文明科技樹（`CivTechTrees`）：各建築的特殊兵種（不只城堡，例如攻城器製造所的榴彈砲），以及少數文明共有的地區兵種（例如象弓騎兵、瓦蘭吉衛隊），菁英與重裝升級併入原兵種，並標示生產建築與開放時代。兵種克制關係以遊戲英文說明的固定句型解析，再對應繁中兵種名稱；沒有記載時不自行推論。`python units.py` 可列出資料與尚未對應的英文詞。
 
 解析器只處理所需的錄影檔頭欄位，不依賴完整對局解析套件。遊戲改版後若解析失敗，可執行 `python opponent-civ/verify_offline.py` 協助定位。

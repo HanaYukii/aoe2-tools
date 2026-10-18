@@ -45,6 +45,16 @@ class PlacementTests(unittest.TestCase):
         launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])
         self.assertEqual(self.geometry(), '1000x700+500+1800')
 
+    def test_spot_saved_on_the_primary_yields_to_a_second_screen(self):
+        self.state.write_text(json.dumps(dict(x=78, y=78, width=1000, height=700, zoomed=False)))
+        launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])     # saved while laptop-only
+        self.assertEqual(self.geometry(), '1220x860+426+1768')
+
+    def test_single_screen_reuses_its_spot(self):
+        self.state.write_text(json.dumps(dict(x=78, y=78, width=1000, height=700, zoomed=False)))
+        launcher.place(self.root, 1220, 860, [PRIMARY])
+        self.assertEqual(self.geometry(), '1000x700+78+78')
+
     def test_last_spot_on_an_unplugged_screen_falls_back(self):
         self.state.write_text(json.dumps(dict(x=-3000, y=100, width=1000, height=700, zoomed=False)))
         launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])

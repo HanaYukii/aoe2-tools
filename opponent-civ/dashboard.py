@@ -382,7 +382,7 @@ class Dashboard:
         self.status.configure(text=('歷史預覽' if preview else '已讀取新對局') + f' · {kind}' + (f' · {place_name}' if place_name else '') + f' · {len(match.players)} 人 · {datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}')
         self.meta.configure(text=('歷史對局 · 文明說明與積分為目前資料' if preview else f'開局後 {delay:.1f} 秒讀到') + ' · 新對局將自動顯示')
         if getattr(self.args, 'demo', False):
-            self.meta.configure(text='展示用虛構對局 · 40 套中文流程已內建')
+            self.meta.configure(text=f'展示用虛構對局 · {len(self.library.builds)} 套參考流程已內建')
         for role, players in [('對手' if me else '玩家', enemies), ('你', [me] if me else []), ('隊友', allies)]:
             for player in players:
                 civ = self.civs.get(player.civ_id)
@@ -498,7 +498,7 @@ def main():
     parser.add_argument('--with-game', action='store_true', help='also start the game through Steam')
     parser.add_argument('--setup', action='store_true', help='open settings before starting')
     parser.add_argument('--media-dir', '--library-dir', dest='media_dir', help='optional downloaded video/PDF directory')
-    parser.add_argument('--demo-build', type=int, choices=range(1, 41), metavar='1..40', help='open a build in the offline demo')
+    parser.add_argument('--demo-build', type=int, metavar='INDEX', help='open a build in the offline demo')
     parser.add_argument('--demo', action='store_true', help='synthetic example; no monitoring or network')
     parser.add_argument('--check-bundled-data', metavar='REPORT', help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -537,8 +537,12 @@ def main():
     if args.demo:
         from demo import populate
         populate(app)
-        if args.demo_build and app.library.builds:
-            root.after(200, lambda: app.library.open_build(app.library.builds[args.demo_build-1], True))
+        if args.demo_build is not None:
+            selected = next((b for b in app.library.builds if b.index == args.demo_build), None)
+            if selected is None:
+                app.close()
+                parser.error(f'unknown build index: {args.demo_build}')
+            root.after(200, lambda: app.library.open_build(selected, True))
     if args.with_game and not args.demo:
         root.after(1000, start_game)  # after our window is up, so the game ends up in front
     root.mainloop()

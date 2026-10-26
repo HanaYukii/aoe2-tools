@@ -10,6 +10,7 @@ import struct
 import subprocess
 import sys
 from pathlib import Path
+from build_library import load_library
 
 HERE = Path(__file__).parent
 BUILD = HERE / 'build'
@@ -42,6 +43,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--desktop', action='store_true', help='also copy to the local desktop')
     args = parser.parse_args()
+    builds = load_library()
+    expected = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
+                    videos=sum(bool(b.video_url) for b in builds), bundled=True)
     BUILD.mkdir(exist_ok=True)
     icon = BUILD / 'app.ico'
     create_icon(icon)
@@ -59,7 +63,7 @@ def main():
         report = Path(folder) / 'catalog-check.json'
         subprocess.run([str(exe), '--check-bundled-data', str(report)], cwd=folder, check=True, timeout=60)
         summary = json.loads(report.read_text(encoding='utf-8'))
-        if summary != dict(builds=40, steps=920, videos=38, bundled=True):
+        if summary != expected:
             raise RuntimeError(f'Packaged catalog verification failed: {summary}')
         print(f'Packaged catalog verified: {summary}')
     (destination / 'SHA256SUMS.txt').write_text(f'{hashlib.sha256(exe.read_bytes()).hexdigest()}  {exe.name}\n', encoding='ascii')

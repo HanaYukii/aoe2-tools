@@ -28,7 +28,7 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(self.builds[32].page, 69)
         self.assertEqual(self.builds[0].steps[0].wood, '4')
         path = self.directory / GUIDE_NAME
-        path.write_text(path.read_text().split('## 40')[0], encoding='utf-8')
+        path.write_text(path.read_text(encoding='utf-8').split('## 40')[0], encoding='utf-8')
         with self.assertRaises(LibraryError):
             load_library(self.directory)
 

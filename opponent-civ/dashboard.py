@@ -137,7 +137,7 @@ class Dashboard:
         root.protocol('WM_DELETE_WINDOW', self.close)
         if not getattr(args, 'demo', False):
             threading.Thread(target=self.monitor, daemon=True).start()
-        root.after(100, self.drain)
+        self.drain_timer = root.after(100, self.drain)
 
     def toggle_sidebar(self):
         if self.sidebar.winfo_manager():
@@ -154,6 +154,9 @@ class Dashboard:
     def close(self):
         self.library.save_positions()
         self.stop.set()
+        if self.drain_timer is not None:
+            self.root.after_cancel(self.drain_timer)
+            self.drain_timer = None
         self.pool.shutdown(wait=False, cancel_futures=True)
         if not getattr(self.args, 'demo', False):
             remember(self.root)
@@ -320,6 +323,11 @@ class Dashboard:
         self.root.lift()
 
     def drain(self):
+        if self.drain_timer is not None:
+            self.root.after_cancel(self.drain_timer)
+            self.drain_timer = None
+        if self.stop.is_set():
+            return
         try:
             while True:
                 event, value = self.events.get_nowait()
@@ -352,7 +360,7 @@ class Dashboard:
                             label.configure(text='電腦玩家' if not player.is_human else error or ('目前積分 · ' + summary if summary else '沒有排名紀錄'))
         except queue.Empty:
             pass
-        self.root.after(100, self.drain)
+        self.drain_timer = self.root.after(100, self.drain)
 
     def show(self, match, source, delay, preview):
         self.generation += 1

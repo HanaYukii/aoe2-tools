@@ -29,6 +29,13 @@ class DashboardTests(unittest.TestCase):
     def tearDown(self):
         self.app.close()
 
+    def test_manual_drain_replaces_pending_timer(self):
+        previous = self.app.drain_timer
+        self.app.drain()
+        pending = self.root.tk.call('after', 'info')
+        self.assertNotIn(previous, pending)
+        self.assertIn(self.app.drain_timer, pending)
+
     def test_offline_preview_and_match_switch(self):
         with patch('dashboard.fetch_ratings') as fetch:
             self.app.show(self.match, Path('preview.aoe2record'), None, True)

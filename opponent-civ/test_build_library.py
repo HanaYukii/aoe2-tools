@@ -3,16 +3,20 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from build_library import GUIDE_NAME, LibraryError, LibraryState, load_library, filter_builds
+from unittest.mock import patch
+from build_library import DATA_PATH, LibraryError, LibraryState, load_library, filter_builds, media_file, read_catalog
 
 
 def write_fixture(directory):
-    # Synthetic operations, not redistributed course content.
-    body = []
-    for index in range(1, 41):
-        body.append(f'## {index:02} 20 人口｜測試流程 {index}\n\n| 階段 | 配村 | 操作 | 木 | 食 | 金 | 石 | 人口 |\n')
-        body.extend(f'| {"黑暗" if n < 12 else "封建"} | 1 | 測試步驟 {n}。 | 4 | 10 | 2 | 0 | {n+1} |\n' for n in range(30))
-    (directory / GUIDE_NAME).write_text(''.join(body), encoding='utf-8')
+    data = read_catalog()
+    for item in data['builds']:
+        item['title'] = f"測試流程 {item['index']}"
+        item['notes'] = '測試筆記'
+        item['steps'] = [dict(age='黑暗' if n < 12 else '封建', allocation='1', task=f'測試步驟 {n}',
+                              wood='4', food='10', gold='2', stone='0', population=str(n+1)) for n in range(30)]
+    path = directory / 'builds.json'
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
+    return path
 
 
 class LibraryTests(unittest.TestCase):
@@ -20,17 +24,18 @@ class LibraryTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.directory = Path(self.temp.name)
-        write_fixture(self.directory)
-        self.builds = load_library(self.directory)
+        self.catalog = write_fixture(self.directory)
+        self.builds = load_library(data_path=self.catalog)
 
     def test_parse_complete_guide_and_reject_partial(self):
         self.assertEqual(len(self.builds), 40)
         self.assertEqual(self.builds[32].page, 69)
         self.assertEqual(self.builds[0].steps[0].wood, '4')
-        path = self.directory / GUIDE_NAME
-        path.write_text(path.read_text(encoding='utf-8').split('## 40')[0], encoding='utf-8')
+        data = read_catalog(self.catalog)
+        data['builds'][0]['steps'] = []
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
         with self.assertRaises(LibraryError):
-            load_library(self.directory)
+            load_library(data_path=self.catalog)
 
     def test_civilization_defaults_and_unavailable_cavalry(self):
         roman = [b.index for b in filter_builds(self.builds, 'Romans', filter_map=False)]
@@ -56,15 +61,44 @@ class LibraryTests(unittest.TestCase):
         loaded.toggle_favorite('Romans', self.builds[30].id)
         self.assertFalse(loaded.favorites('Romans'))
 
-    def test_video_manifest_matches_page_and_rejects_path_traversal(self):
+    def test_bundled_content_is_complete_without_media(self):
+        builds = load_library(self.directory/'does-not-exist')
+        self.assertEqual(len(builds), 40)
+        self.assertEqual(sum(len(b.steps) for b in builds), 920)
+        self.assertEqual(sum(bool(b.video_url) for b in builds), 38)
+        self.assertTrue(all(b.video is None and b.pdf is None for b in builds))
+        self.assertIn('動物配置', read_catalog()['overview'])
+
+    def test_optional_media_uses_known_filename_without_a_manifest(self):
         folder = self.directory/'Hera-會員流程影片'
         folder.mkdir()
-        ((folder/'sample.mp4').resolve()).touch()
-        (self.directory/'outside.mp4').touch()
-        (folder/'影片清單.json').write_text(json.dumps([{'pdf_page':5,'file':'sample.mp4'}, {'pdf_page':7,'file':'../outside.mp4'}]))
-        builds = load_library(self.directory)
-        self.assertEqual(builds[0].video, (folder/'sample.mp4').resolve())
+        filename = self.builds[0].video_filename
+        (folder/filename).touch()
+        builds = load_library(self.directory, data_path=self.catalog)
+        self.assertEqual(builds[0].video, (folder/filename).resolve())
         self.assertIsNone(builds[1].video)
+        self.assertTrue(builds[0].video_url.startswith('https://www.patreon.com/'))
+        self.assertIsNone(media_file(self.directory, '../outside.mp4'))
+        self.assertIsNone(media_file(self.directory, r'..\outside.mp4'))
+
+    def test_unreadable_optional_media_does_not_break_builtins(self):
+        with patch('build_library.Path.resolve', side_effect=PermissionError('unavailable drive')):
+            builds = load_library(self.directory)
+        self.assertEqual(len(builds), 40)
+        self.assertTrue(all(b.video is None for b in builds))
+
+    def test_duplicate_ids_and_unsafe_links_are_rejected(self):
+        data = read_catalog(self.catalog)
+        data['builds'][1]['id'] = data['builds'][0]['id']
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        with self.assertRaises(LibraryError):
+            load_library(data_path=self.catalog)
+        self.catalog = write_fixture(self.directory)
+        data = read_catalog(self.catalog)
+        data['builds'][0]['video_url'] = 'file:///local-file'
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        with self.assertRaises(LibraryError):
+            load_library(data_path=self.catalog)
 
     def test_missing_and_corrupt_state(self):
         path = self.directory/'state.json'

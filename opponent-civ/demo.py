@@ -14,7 +14,7 @@ def populate(app):
     else:
         # Clearly labeled fixtures; actual play always reads the installed game.
         app.civs = {43: Civ(43, 'Romans', '羅馬', '展示用文明頁。\n\n實戰時會從遊戲安裝資料讀取文明加成與科技說明。'),
-                    11: Civ(11, 'Vikings', '維京', '展示用對手文明頁。\n\n上方「我的文明流程」可開啟本機流程教材。'),
+                    11: Civ(11, 'Vikings', '維京', '展示用對手文明頁。\n\n上方「我的文明流程」可開啟內建中文流程。'),
                     35: Civ(35, 'Burgundians', '勃根地', '展示用文明頁。')}
         app.units = {}
     app.maps = {9: '阿拉伯', 29: '競技場'}

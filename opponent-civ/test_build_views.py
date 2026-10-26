@@ -18,7 +18,10 @@ class BuildViewTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.directory = Path(self.temp.name)
-        write_fixture(self.directory)
+        catalog = write_fixture(self.directory)
+        patcher = patch('build_library.DATA_PATH', catalog)
+        patcher.start()
+        self.addCleanup(patcher.stop)
         self.root = tk.Tk()
         self.root.withdraw()
         args = argparse.Namespace(no_elo=True, demo=True, library_dir=str(self.directory))
@@ -115,6 +118,25 @@ class BuildViewTests(unittest.TestCase):
         restored = self.ui.readers[('tab', build.id)]
         self.assertAlmostEqual(restored.scroll.canvas.yview()[0], position, places=2)
 
+    def test_member_video_is_available_without_local_files(self):
+        build = self.ui.builds[32]
+        self.assertIsNone(build.video)
+        self.ui.open_build(build)
+        reader = self.ui.direct
+        media = next(w for w in reader.media_bar.winfo_children() if w.cget('text') == '會員影片 ↗')
+        with patch('build_views.webbrowser.open') as open_page:
+            media.invoke()
+        open_page.assert_called_once_with(build.video_url)
+
+    def test_first_launch_without_media_or_old_settings(self):
+        self.ui.directory = None
+        self.ui.reload()
+        self.assertEqual(len(self.ui.builds), 40)
+        self.ui.open_picker()
+        self.assertEqual(self.ui.civ_name.get(), '羅馬')
+        self.ui.open_overview()
+        self.assertEqual(self.app.workspace_book.select(), str(self.ui.overview_tab))
+
     def test_sidebar_toggle_and_missing_library_recovery_view(self):
         self.app.toggle_sidebar()
         self.assertFalse(self.app.sidebar.winfo_manager())
@@ -123,7 +145,9 @@ class BuildViewTests(unittest.TestCase):
         self.ui.directory = self.directory/'missing'
         self.ui.reload()
         self.ui.open_picker()
-        self.assertIn('中文版流程', self.ui.count.cget('text'))
+        self.assertEqual(len(self.ui.builds), 40)
+        self.assertFalse(self.ui.error)
+        self.assertIn('5 套流程', self.ui.count.cget('text'))
 
 
 if __name__ == '__main__':

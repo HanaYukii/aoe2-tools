@@ -2,10 +2,11 @@
 import os
 import sys
 import subprocess
+import webbrowser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
-from build_library import LibraryState, load_library, filter_builds
+from build_library import LibraryState, load_library, filter_builds, read_catalog
 
 BG, PANEL, FG, MUTED, ACCENT, SURFACE = '#10141e', '#1a2030', '#e8edf7', '#9caac2', '#65d9c2', '#242e42'
 
@@ -71,11 +72,10 @@ class BuildReader(tk.Frame):
                  font=(font, 19, 'bold'), anchor='w', wraplength=800).pack(side='left', fill='x', expand=True)
         tools = tk.Frame(self, bg=PANEL)
         tools.pack(fill='x', padx=20, pady=(0, 12))
-        if build.video:
-            button(tools, '看流程影片 ↗', lambda: open_local(build.video), True).pack(side='right', padx=(8, 0))
-        if build.pdf:
-            button(tools, f'PDF · 第 {build.page} 頁 ↗', lambda: open_local(build.pdf)).pack(side='right')
-        self.position_label = tk.Label(tools, text='點一下步驟，標記看到的位置', bg=PANEL, fg=ACCENT, anchor='w')
+        self.media_bar = tk.Frame(tools, bg=PANEL)
+        self.media_bar.pack(side='right')
+        self.update_media(build)
+        self.position_label = tk.Label(tools, text=(build.arrival+'  ·  ' if build.arrival else '')+'點一下步驟，標記看到的位置', bg=PANEL, fg=ACCENT, anchor='w')
         self.position_label.pack(side='bottom', anchor='w', pady=(7, 0))
         self.scroll = ScrollArea(self)
         self.scroll.pack(fill='both', expand=True, padx=20, pady=(0, 12))
@@ -126,6 +126,17 @@ class BuildReader(tk.Frame):
         fraction = saved.get('scroll', 0)
         self.restore_fraction = max(0, min(float(fraction), 1)) if isinstance(fraction, (float, int)) else 0
         self.bind('<Map>', self.restore)
+
+    def update_media(self, build):
+        self.build = build
+        for child in self.media_bar.winfo_children():
+            child.destroy()
+        if build.video:
+            button(self.media_bar, '本機影片 ↗', lambda: open_local(build.video), True).pack(side='right', padx=(8, 0))
+        if build.video_url:
+            button(self.media_bar, '會員影片 ↗', lambda: webbrowser.open(build.video_url), not bool(build.video)).pack(side='right', padx=(8, 0))
+        if build.pdf:
+            button(self.media_bar, f'PDF · 第 {build.page} 頁 ↗', lambda: open_local(build.pdf)).pack(side='right')
 
     def restore(self, event):
         if event.widget is self and self.restore_fraction is not None:
@@ -181,28 +192,59 @@ class BuildLibraryUI:
         self.readers, self.direct, self.reader_frame = {}, None, None
         self.opened_menu = tk.Menu(app.root, tearoff=False)
         self.opened_button = ttk.Menubutton(app.quickbar, text='已開流程 ▾', menu=self.opened_menu, style='Build.TButton')
-        candidates = [getattr(app.args, 'library_dir', None), self.state.data.get('library_dir'),
-                      Path.home()/'Documents'/'AoE研究區'/'Hera']
-        self.directory = next((Path(p) for p in candidates if p), None)
+        # Old folder settings become optional media locations; never a source of steps.
+        selected = (getattr(app.args, 'media_dir', None) or getattr(app.args, 'library_dir', None)
+                    or self.state.data.get('media_dir') or self.state.data.get('library_dir'))
+        self.directory = Path(selected) if selected else None
+        self.overview_tab = None
         self.reload()
         app.workspace_book.bind('<<NotebookTabChanged>>', lambda e: self.save_positions())
 
     def reload(self):
         try:
-            self.builds = load_library(self.directory) if self.directory else []
-            self.error = '' if self.builds else '先選擇本機 Hera 教材資料夾。'
+            self.builds = load_library(self.directory)
+            self.error = ''
         except (OSError, ValueError, TypeError, KeyError) as exc:
             self.builds, self.error = [], str(exc)
 
     def choose_folder(self):
-        folder = filedialog.askdirectory(parent=self.app.root, title='選擇 Hera 教材資料夾', initialdir=self.directory)
+        folder = filedialog.askdirectory(parent=self.app.root, title='選擇已下載的影片資料夾（選用）', initialdir=self.directory)
         if folder:
             self.directory = Path(folder)
             self.reload()
-            if self.builds:
-                self.state.data['library_dir'] = folder
+            self.state.data['media_dir'] = folder
+            try:
                 self.state.save()
+            except OSError:
+                messagebox.showinfo('無法儲存設定', '本次仍可播放，重新開啟後請再選影片資料夾。', parent=self.app.root)
+            updated = {b.id: b for b in self.builds}
+            for reader in self.readers.values():
+                if reader.build.id in updated:
+                    reader.update_media(updated[reader.build.id])
             self.refresh_picker()
+            if self.builds and not any(b.video or b.pdf for b in self.builds):
+                messagebox.showinfo('未找到本機影片', '這個資料夾沒有對應的影片或 PDF；內建流程與會員影片連結仍可照常使用。', parent=self.app.root)
+
+    def open_overview(self):
+        app = self.app
+        if self.overview_tab is None:
+            self.overview_tab = tk.Frame(app.workspace_book, bg=PANEL)
+            app.workspace_book.add(self.overview_tab, text='開局調整')
+            area = tk.Text(self.overview_tab, bg=PANEL, fg=FG, wrap='word', relief='flat',
+                           font=(app.font, app.font_size), padx=24, pady=20, spacing3=8)
+            scroll = ttk.Scrollbar(self.overview_tab, command=area.yview)
+            area.configure(yscrollcommand=scroll.set)
+            scroll.pack(side='right', fill='y')
+            area.pack(fill='both', expand=True)
+            # Render the short introduction as readable paragraphs, including animal variants.
+            for line in read_catalog()['overview'].splitlines():
+                if line.startswith('|---'):
+                    continue
+                if line.startswith('|'):
+                    line = '：'.join(part.strip() for part in line.strip('|').split('|'))
+                area.insert('end', line.lstrip('# ').replace('<br>', '\n')+'\n')
+            area.configure(state='disabled')
+        app.workspace_book.select(self.overview_tab)
 
     def open_picker(self):
         if self.picker and self.picker.winfo_exists():
@@ -220,7 +262,8 @@ class BuildLibraryUI:
         top = tk.Frame(window, bg=PANEL)
         top.pack(fill='x', padx=24, pady=(22, 12))
         tk.Label(top, text='我的文明流程', bg=PANEL, fg=FG, font=(app.font, 22, 'bold')).pack(side='left')
-        button(top, '教材資料夾…', self.choose_folder).pack(side='right')
+        button(top, '本機影片（選用）…', self.choose_folder).pack(side='right')
+        button(top, '開局調整', self.open_overview).pack(side='right', padx=8)
         context = tk.Frame(window, bg=PANEL)
         context.pack(fill='x', padx=24, pady=8)
         self.civ_options = {'未指定文明': ''}
@@ -263,7 +306,7 @@ class BuildLibraryUI:
         builds = filter_builds(self.builds, civ, self.context_map, self.search.get(), mode, favorites, self.use_map.get())
         self.count.configure(text=self.error or f'{len(builds)} 套流程' + (' · 搜尋全部流程' if self.search.get().strip() else ''))
         if not builds:  # the count line already states the error; here say what to do about it
-            hint = '按右上角「教材資料夾…」選擇自己的 Hera 教材目錄。' if self.error else '沒有符合的流程。試試「全部流程」或取消地圖篩選。'
+            hint = '請重新下載最新版程式，內建流程不需要另外選擇資料夾。' if self.error else '沒有符合的流程。試試「全部流程」或取消地圖篩選。'
             tk.Label(self.results.body, text=hint, bg=PANEL, fg=MUTED, wraplength=680, pady=35).pack(fill='x')
         for b in builds:
             row = tk.Frame(self.results.body, bg=BG, padx=16, pady=12)
@@ -272,7 +315,7 @@ class BuildLibraryUI:
             title.pack(fill='x')
             tk.Label(title, text=f'{b.population} 人口  ·  {b.title}', bg=BG, fg=FG, font=(self.app.font, 14, 'bold'), anchor='w').pack(side='left')
             tag = {'ready': '文明專屬' if b.civs else '通用', 'adjust': '開局需調整', 'other': '其他文明', 'unavailable': '此文明不適用', 'unknown': '先選文明確認適用性'}[b.compatibility(civ)]
-            tk.Label(row, text=tag+'  ·  '+{'open':'開放地圖','closed':'封閉地圖','fortress':'堡壘','water':'有魚可吃的地圖'}[b.map_type]+('  ·  影片可看' if b.video else ''), bg=BG, fg=MUTED, anchor='w').pack(fill='x', pady=(4, 10))
+            tk.Label(row, text=tag+'  ·  '+{'open':'開放地圖','closed':'封閉地圖','fortress':'堡壘','water':'有魚可吃的地圖'}[b.map_type]+('  ·  本機影片' if b.video else '  ·  會員影片' if b.video_url else ''), bg=BG, fg=MUTED, anchor='w').pack(fill='x', pady=(4, 10))
             actions = tk.Frame(row, bg=BG)
             actions.pack(fill='x')
             button(actions, '直接看', lambda item=b: self.open_build(item, False), True).pack(side='left', padx=(0, 8))

@@ -1,25 +1,14 @@
-"""Read a user's local Chinese guide; never bundle membership materials in the app."""
+"""Bundled Chinese build orders with optional local media attachments."""
 import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import urlparse
 from app_paths import app_data_dir
 
-GUIDE_NAME = 'Hera-2026-10-完整繁中攻略-可編輯文字.md'
+DATA_PATH = Path(__file__).resolve().parent / 'data' / 'builds.zh-TW.json'
 PDF_NAME = 'Hera-2026-10-完整繁中攻略-台灣玩家用語.pdf'
 STATE_PATH = app_data_dir() / 'builds.json'
-# Guide indices are specific to this local 2026-10, 40-build edition.
-STARTERS = {1, 2, 15, 22}
-SPECIAL = {4: ('armenians',), 5: ('burgundians',), 6: ('incas', 'mapuche', 'muisca', 'tupi'),
-           7: ('chinese',), 8: ('cumans',), 9: ('danes',), 10: ('aztecs', 'incas', 'mayans'),
-           13: ('aztecs', 'incas', 'mayans'), 14: ('ethiopians',), 23: ('georgians',),
-           24: ('japanese',), 25: ('jurchens', 'koreans', 'vietnamese', 'chinese', 'khitans'),
-           26: ('khmer',), 27: ('khmer',), 29: ('koreans', 'byzantines', 'lithuanians'),
-           30: ('malay',), 32: ('portuguese',), 33: ('romans',), 34: ('saxons',),
-           38: ('teutons',), 39: ('turks',), 40: ('varangians',)}
-CLOSED = {15, 16, 17, 39}
-ADVANCED = {3, 4, 5, 6, 8, 25, 26, 27, 32, 34, 38, 39, 40}
-CAVALRY = {2, 11, 16, 28, 35, 36, 37}
 MESO = {'aztecs', 'mayans', 'incas'}
 
 
@@ -65,9 +54,12 @@ class Build:
     video: Path | None
     pdf: Path | None
 
-    @property
-    def starter(self):
-        return self.index in STARTERS
+    starter: bool = False
+    requires_cavalry: bool = False
+    video_url: str = ''
+    video_filename: str = ''
+    recommended_civs: str = ''
+    arrival: str = ''
 
     def compatibility(self, civ_key):
         civ_key = key(civ_key)
@@ -75,7 +67,7 @@ class Build:
             return 'unknown'
         if self.civs and civ_key not in self.civs:
             return 'other'
-        if self.index in CAVALRY and civ_key in MESO:
+        if self.requires_cavalry and civ_key in MESO:
             return 'unavailable'
         if not self.civs and civ_key in {'chinese', 'mayans'}:
             return 'adjust'
@@ -86,51 +78,73 @@ class LibraryError(ValueError):
     pass
 
 
-def load_library(directory):
-    """Parse the local editable guide and optional verified video manifest."""
-    directory = Path(directory).expanduser().resolve()
-    guide = directory / GUIDE_NAME
-    if not guide.is_file():
-        raise LibraryError('這個資料夾沒有中文版流程文字檔，請選 Hera 教材資料夾。')
-    parts = re.split(r'(?m)^## (\d+) ([^\n]+)\n', guide.read_text(encoding='utf-8'))
-    videos = {}
-    manifest = directory / 'Hera-會員流程影片' / '影片清單.json'
-    if manifest.is_file():
-        for item in json.loads(manifest.read_text(encoding='utf-8')):
-            # Only match files inside the chosen library, never arbitrary paths.
-            filename = item.get('file', '')
-            if Path(filename).name == filename:
-                path = directory / 'Hera-會員流程影片' / filename
-                if path.is_file():
-                    videos[item['pdf_page']] = path
-    pdf = directory / PDF_NAME
-    builds = []
-    for pos in range(1, len(parts), 3):
-        number, heading, body = parts[pos:pos+3]
-        index = int(number)
-        match = re.fullmatch(r'(.+?) 人口(?:＋3 漁船)?｜(.+)', heading.strip())
-        if not match:
-            raise LibraryError(f'第 {index} 套流程標題格式無法辨識。')
-        population, title = match.groups()
-        if '＋3 漁船' in heading:
-            title += '（＋3 漁船）'
-        steps = []
-        for line in body.splitlines():
-            if re.match(r'\| (黑暗|升封途中|封建|升城途中|城堡|升帝途中|帝王) \|', line):
-                fields = [v.strip() for v in line.strip('|').split('|')]
-                if len(fields) != 8:
-                    raise LibraryError(f'第 {index} 套流程的配工表欄位不完整。')
-                steps.append(Step(*fields))
-        if not steps:
-            raise LibraryError(f'第 {index} 套流程沒有配工表。')
-        page = 5+(index-1)*2
-        notes = body.split('### 打法目的', 1)[-1].strip() if '### 打法目的' in body else ''
-        kind = 'fortress' if index == 18 else 'water' if index == 21 else 'closed' if index in CLOSED else 'open'
-        builds.append(Build(index, f'hera-2026-10-{index:02}', title, population, SPECIAL.get(index, ()),
-                            kind, index in ADVANCED, tuple(steps), notes, page,
-                            videos.get(page), pdf if pdf.is_file() else None))
-    if len(builds) != 40 or {b.index for b in builds} != set(range(1, 41)):
-        raise LibraryError('目前支援 2026 年 10 月的 40 套中文版流程，這份內容不完整或版本不同。')
+def read_catalog(data_path=None):
+    try:
+        data = json.loads(Path(data_path or DATA_PATH).read_text(encoding='utf-8'))
+        if data.get('schema_version') != 1 or not isinstance(data.get('builds'), list):
+            raise ValueError('unsupported catalog')
+        return data
+    except (OSError, ValueError, AttributeError) as exc:
+        raise LibraryError('內建流程資料無法讀取，請重新下載完整版本。') from exc
+
+
+def media_file(directory, filename):
+    """Resolve only the known file names inside the optional media directory."""
+    if not directory or not filename or Path(filename).name != filename or '/' in filename or '\\' in filename:
+        return None
+    try:
+        root = Path(directory).expanduser().resolve()
+        for parent in (root, root / 'Hera-會員流程影片'):
+            candidate = (parent / filename).resolve()
+            if candidate.is_relative_to(root) and candidate.is_file():
+                return candidate
+    except (OSError, ValueError, RuntimeError):
+        pass  # An unavailable optional drive cannot disable the bundled guide.
+    return None
+
+
+def load_library(media_dir=None, *, data_path=None):
+    """Always read bundled steps. Missing optional videos/PDF never hide builds."""
+    data = read_catalog(data_path)
+    builds, ids, indices = [], set(), set()
+    try:
+        for item in data['builds']:
+            if not isinstance(item['index'], int) or item['index'] <= 0:
+                raise ValueError('invalid index')
+            if item['id'] in ids or item['index'] in indices:
+                raise ValueError('duplicate build')
+            ids.add(item['id'])
+            indices.add(item['index'])
+            for field in ('id', 'title', 'population', 'notes'):
+                if not isinstance(item[field], str) or not item[field]:
+                    raise ValueError('missing text')
+            if item['map_type'] not in {'open', 'closed', 'water', 'fortress'}:
+                raise ValueError('invalid map')
+            if not isinstance(item['civs'], list) or not all(isinstance(c, str) for c in item['civs']):
+                raise ValueError('invalid civilizations')
+            for field in ('starter', 'advanced', 'requires_cavalry'):
+                if not isinstance(item[field], bool):
+                    raise ValueError('invalid flag')
+            steps = tuple(Step(**step) for step in item['steps'])
+            if not steps or any(not step.task or not step.age or not all(isinstance(v, str) for v in vars(step).values()) for step in steps):
+                raise ValueError('invalid steps')
+            url = item.get('video_url', '')
+            parsed = urlparse(url)
+            if url and (parsed.scheme != 'https' or parsed.hostname not in {'www.patreon.com', 'patreon.com'}):
+                raise ValueError('invalid video link')
+            filename = item.get('video_filename', '')
+            builds.append(Build(
+                index=item['index'], id=item['id'], title=item['title'], population=item['population'],
+                civs=tuple(item['civs']), map_type=item['map_type'], advanced=item['advanced'],
+                steps=steps, notes=item['notes'], page=item['page'],
+                video=media_file(media_dir, filename), pdf=media_file(media_dir, PDF_NAME),
+                starter=item['starter'], requires_cavalry=item['requires_cavalry'],
+                video_url=url, video_filename=filename,
+                recommended_civs=item.get('recommended_civs', ''), arrival=item.get('arrival', '')))
+        if not builds:
+            raise ValueError('empty catalog')
+    except (KeyError, TypeError, ValueError, AttributeError) as exc:
+        raise LibraryError('內建流程資料不完整，請重新下載完整版本。') from exc
     return builds
 
 

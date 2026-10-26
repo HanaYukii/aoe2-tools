@@ -2,6 +2,9 @@
 import argparse
 import ctypes
 import hashlib
+import json
+import tempfile
+import os
 import shutil
 import struct
 import subprocess
@@ -46,10 +49,19 @@ def main():
     subprocess.run([
         sys.executable, '-m', 'PyInstaller', '--onefile', '--windowed', '--noconfirm', '--clean',
         '--name', EXE_NAME, '--icon', str(icon),
+        '--add-data', f'{HERE / "data"}{os.pathsep}data',
         '--distpath', str(destination), '--workpath', str(BUILD / 'work'), '--specpath', str(BUILD),
         str(HERE / 'dashboard.py'),
     ], check=True)
-    exe = destination / f'{EXE_NAME}.exe'
+    exe = (destination / f'{EXE_NAME}.exe').resolve()
+    # Run the actual one-file EXE from an empty directory, with no game or media.
+    with tempfile.TemporaryDirectory() as folder:
+        report = Path(folder) / 'catalog-check.json'
+        subprocess.run([str(exe), '--check-bundled-data', str(report)], cwd=folder, check=True, timeout=60)
+        summary = json.loads(report.read_text(encoding='utf-8'))
+        if summary != dict(builds=40, steps=920, videos=38, bundled=True):
+            raise RuntimeError(f'Packaged catalog verification failed: {summary}')
+        print(f'Packaged catalog verified: {summary}')
     (destination / 'SHA256SUMS.txt').write_text(f'{hashlib.sha256(exe.read_bytes()).hexdigest()}  {exe.name}\n', encoding='ascii')
     if args.desktop:
         shutil.copy2(exe, desktop_dir() / DESKTOP_NAME)

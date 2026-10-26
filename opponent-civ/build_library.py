@@ -83,8 +83,24 @@ def read_catalog(data_path=None):
         data = json.loads(Path(data_path or DATA_PATH).read_text(encoding='utf-8'))
         if data.get('schema_version') != 1 or not isinstance(data.get('builds'), list):
             raise ValueError('unsupported catalog')
+        sheet_ids = set()
+        build_ids = {b['id'] for b in data['builds']}
+        for sheet in data.get('reference_sheets', []):
+            if not all(isinstance(sheet.get(k), str) and sheet[k] for k in ('id', 'civ', 'title', 'subtitle')):
+                raise ValueError('invalid reference sheet')
+            if sheet['id'] in sheet_ids or not sheet.get('cards') or not sheet.get('build_ids'):
+                raise ValueError('invalid reference sheet')
+            sheet_ids.add(sheet['id'])
+            if any(i not in build_ids for i in sheet['build_ids']):
+                raise ValueError('unknown reference build')
+            for card in sheet['cards']:
+                if not all(isinstance(card.get(k), str) and card[k] for k in ('title', 'body')):
+                    raise ValueError('invalid reference card')
+            for source in sheet.get('sources', []):
+                if not isinstance(source.get('title'), str) or urlparse(source.get('url', '')).scheme != 'https':
+                    raise ValueError('invalid reference source')
         return data
-    except (OSError, ValueError, AttributeError) as exc:
+    except (OSError, ValueError, AttributeError, KeyError, TypeError) as exc:
         raise LibraryError('內建流程資料無法讀取，請重新下載完整版本。') from exc
 
 

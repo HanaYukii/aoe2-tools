@@ -45,7 +45,7 @@ class Dashboard:
         self.stop = threading.Event()
         self.pool = ThreadPoolExecutor(max_workers=2)
         self.generation = 0
-        self.font_size = 14
+        self.font_size = 12
         families = set(tkfont.families(root))
         self.font = next((f for f in ('Noto Sans TC', 'Microsoft JhengHei UI', 'PingFang TC') if f in families), 'TkDefaultFont')
         self.display_font = 'Noto Serif TC' if 'Noto Serif TC' in families else self.font
@@ -173,6 +173,8 @@ class Dashboard:
         self.font_size = max(11, min(24, self.font_size + delta))
         for reader in self.library.readers.values():
             reader.resize(self.font_size)
+        for sheet in self.library.reference_tabs.values():
+            sheet.resize(self.font_size)
         for text in [text for _, _, text in self.tabs] + self.counter_texts:
             self.style_text(text)
 

@@ -7,7 +7,10 @@ key-value file holds the official text for those ids.
 import json
 import os
 import re
-import winreg
+try:
+    import winreg
+except ImportError:  # offline previews on macOS / Linux
+    winreg = None
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -27,6 +30,8 @@ class Civ:
 def find_game_dir():
     if os.environ.get('AOE2DE_DIR'):
         return Path(os.environ['AOE2DE_DIR'])
+    if winreg is None:
+        return DEFAULT_GAME_DIR
     try:
         with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'Software\Valve\Steam') as key:
             steam = Path(winreg.QueryValueEx(key, 'SteamPath')[0])

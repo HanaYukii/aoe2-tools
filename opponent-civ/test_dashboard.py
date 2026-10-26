@@ -1,5 +1,6 @@
 """Regression checks for match switching and the offline dashboard."""
 import argparse
+import gc
 from dataclasses import replace
 from pathlib import Path
 import tkinter as tk
@@ -28,6 +29,15 @@ class DashboardTests(unittest.TestCase):
 
     def tearDown(self):
         self.app.close()
+        self.app = self.root = None  # free the dashboard's Tk objects on this thread (see test_build_views)
+        gc.collect()
+
+    def test_manual_drain_replaces_pending_timer(self):
+        previous = self.app.drain_timer
+        self.app.drain()
+        pending = self.root.tk.call('after', 'info')
+        self.assertNotIn(previous, pending)
+        self.assertIn(self.app.drain_timer, pending)
 
     def test_offline_preview_and_match_switch(self):
         with patch('dashboard.fetch_ratings') as fetch:

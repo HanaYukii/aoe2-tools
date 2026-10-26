@@ -12,6 +12,7 @@ from pathlib import Path
 from tkinter import ttk
 
 from civdata import load_civs
+from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
 from collections import Counter
 from history import recent_matches
@@ -44,7 +45,7 @@ class Dashboard:
         self.generation = 0
         self.font_size = 14
         families = set(tkfont.families(root))
-        self.font = 'Noto Sans TC' if 'Noto Sans TC' in families else 'Microsoft JhengHei UI'
+        self.font = next((f for f in ('Noto Sans TC', 'Microsoft JhengHei UI', 'PingFang TC') if f in families), 'TkDefaultFont')
         self.display_font = 'Noto Serif TC' if 'Noto Serif TC' in families else self.font
         self.civs, self.my_id = {}, None
         self.units = {}
@@ -62,6 +63,9 @@ class Dashboard:
         root.option_add('*Font', (self.font, 10))
         style = ttk.Style(root)
         style.theme_use('clam')
+        style.configure('Build.TButton', background=SURFACE, foreground=FG, padding=(16, 11), borderwidth=0, font=(self.font, 12))
+        style.map('Build.TButton', background=[('active', '#344563')], foreground=[('disabled', MUTED)])
+        style.configure('Accent.Build.TButton', foreground=ACCENT)
         style.configure('TNotebook', background=PANEL, borderwidth=0, bordercolor=PANEL, lightcolor=PANEL, darkcolor=PANEL)
         style.layout('TNotebook', [('Notebook.client', {'sticky': 'nswe'})])
         style.configure('TNotebook.Tab', borderwidth=0, bordercolor=PANEL, lightcolor=PANEL, darkcolor=PANEL, background=BG, foreground=MUTED, padding=(12, 10), font=(self.font, 10))
@@ -77,7 +81,7 @@ class Dashboard:
         root.option_add('*Button.activeForeground', FG)
         root.option_add('*Button.highlightThickness', 0)
         bar = tk.Frame(root, bg=BG)
-        bar.pack(fill='x', padx=28, pady=(22, 18))
+        bar.pack(fill='x', padx=28, pady=(10, 10))
         tk.Label(bar, text='II', font=('Georgia', 30, 'bold'), bg=BG, fg=ACCENT).pack(side='left', padx=(0, 14))
         brand = tk.Frame(bar, bg=BG)
         brand.pack(side='left')
@@ -86,49 +90,73 @@ class Dashboard:
         self.pin = tk.BooleanVar()
         tk.Checkbutton(bar, text='保持置頂', variable=self.pin, command=lambda: root.attributes('-topmost', self.pin.get()), bg=BG, fg=MUTED, selectcolor=PANEL, activebackground=BG).pack(side='right', padx=(20, 0))
         for label, delta in [('＋', 1), ('－', -1)]:
-            tk.Button(bar, text=label, command=lambda d=delta: self.resize(d), bg=BG, fg=MUTED, relief='flat', borderwidth=0, padx=10, cursor='hand2').pack(side='right')
+            button(bar, label, lambda d=delta: self.resize(d)).pack(side='right')
         tk.Label(bar, text='字級', bg=BG, fg=MUTED).pack(side='right')
+        self.sidebar_toggle = button(bar, '收起對局列表', self.toggle_sidebar)
+        self.sidebar_toggle.pack(side='right', padx=16)
         footer = tk.Frame(root, bg=BG)
         footer.pack(side='bottom', fill='x', padx=28, pady=12)
-        tk.Label(footer, text='●  本機錄影 · 自動監看', bg=BG, fg=ACCENT).pack(side='left')
+        tk.Label(footer, text='●  展示對局 · 本機教材' if getattr(args, 'demo', False) else '●  本機錄影 · 自動監看', bg=BG, fg=ACCENT).pack(side='left')
         tk.Label(footer, text='離線模式' if args.no_elo else '排行榜顯示目前積分', bg=BG, fg=MUTED).pack(side='right')
         workspace = tk.Frame(root, bg=BG)
         workspace.pack(fill='both', expand=True, padx=28)
-        self.sidebar = tk.Frame(workspace, bg=BG, width=340)
+        self.sidebar = tk.Frame(workspace, bg=BG, width=300)
         self.sidebar.pack(side='left', fill='y', padx=(0, 22))
         self.sidebar.pack_propagate(False)
-        detail = tk.Frame(workspace, bg=PANEL)
+        detail = self.detail = tk.Frame(workspace, bg=PANEL)
         detail.pack(side='left', fill='both', expand=True)
         ribbon = tk.Frame(detail, bg=PANEL, height=3)
         ribbon.pack(fill='x')
         for color in COLORS:
             tk.Frame(ribbon, bg=color, height=3).pack(side='left', fill='x', expand=True)
         self.status = tk.Label(detail, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
-        self.status.pack(fill='x', padx=28, pady=(22, 8))
+        self.status.pack(fill='x', padx=22, pady=(10, 4))
         self.meta = tk.Label(detail, text='選一場對局，看看對手的文明。', anchor='w', bg=PANEL, fg=MUTED, wraplength=740, justify='left')
-        self.meta.pack(fill='x', padx=28, pady=(0, 20))
+        self.meta.pack(fill='x', padx=22, pady=(0, 6))
+        quickbar = self.quickbar = tk.Frame(detail, bg=PANEL)
+        quickbar.pack(fill='x', padx=20, pady=(0, 12))
+        self.build_button = button(quickbar, '我的文明流程', lambda: self.library.open_picker(), True)
+        self.build_button.pack(side='left')
+        self.workspace_book = ttk.Notebook(detail)
+        self.workspace_book.pack(fill='both', expand=True)
+        self.rp_frame = tk.Frame(self.workspace_book, bg=PANEL)
+        self.workspace_book.add(self.rp_frame, text='對局 RP')
         root.bind('<Configure>', lambda event: self.reflow(event))
-        self.book = ttk.Notebook(detail)
+        self.book = ttk.Notebook(self.rp_frame)
         self.book.pack(fill='both', expand=True, padx=20, pady=(0, 16))
         self.empty = tk.Frame(self.book, bg=PANEL)
         self.book.add(self.empty, text='文明情報')
         tk.Label(self.empty, text='下一場，知己知彼。', bg=PANEL, fg=FG, font=(self.font, 23, 'bold')).pack(pady=(100, 20))
         tk.Label(self.empty, text='左側回顧最近 10 場對局。\n新對局開始時，這裡會自動更新。', bg=PANEL, fg=MUTED, font=(self.font, 13), justify='center').pack()
-        self.preview = tk.Button(footer, text='最近一場', command=self.preview_latest, state='disabled', bg=BG, fg=MUTED, relief='flat')
+        self.preview = button(footer, '最近一場', self.preview_latest)
+        self.preview.configure(state='disabled')
         self.preview.pack(side='left', padx=20)
-        tk.Button(footer, text='設定', command=self.configure_app, bg=BG, fg=ACCENT, relief='flat').pack(side='right', padx=16)
+        button(footer, '設定', self.configure_app, True).pack(side='right', padx=16)
+        self.library = BuildLibraryUI(self)
         self.open_history()
         root.protocol('WM_DELETE_WINDOW', self.close)
         if not getattr(args, 'demo', False):
             threading.Thread(target=self.monitor, daemon=True).start()
-        root.after(100, self.drain)
+        self.drain_timer = root.after(100, self.drain)
+
+    def toggle_sidebar(self):
+        if self.sidebar.winfo_manager():
+            self.sidebar.pack_forget()
+            self.sidebar_toggle.configure(text='展開對局列表')
+        else:
+            self.sidebar.pack(side='left', fill='y', padx=(0, 22), before=self.detail)
+            self.sidebar_toggle.configure(text='收起對局列表')
 
     def configure_app(self):
         data = read_settings()
         SetupDialog(self.root, data)
 
     def close(self):
+        self.library.save_positions()
         self.stop.set()
+        if self.drain_timer is not None:
+            self.root.after_cancel(self.drain_timer)
+            self.drain_timer = None
         self.pool.shutdown(wait=False, cancel_futures=True)
         if not getattr(self.args, 'demo', False):
             remember(self.root)
@@ -141,6 +169,8 @@ class Dashboard:
 
     def resize(self, delta):
         self.font_size = max(11, min(24, self.font_size + delta))
+        for reader in self.library.readers.values():
+            reader.resize(self.font_size)
         for text in [text for _, _, text in self.tabs] + self.counter_texts:
             self.style_text(text)
 
@@ -235,7 +265,8 @@ class Dashboard:
         self.history_tree.pack(fill='both', expand=True)
         self.history_tree.bind('<<TreeviewSelect>>', lambda event: self.select_history())
         self.history_tree.bind('<Return>', lambda event: self.select_history())
-        self.history_button = tk.Button(window, text='重新整理對局', command=self.refresh_history, state='disabled', bg=BG, fg=ACCENT, relief='flat', cursor='hand2', pady=10)
+        self.history_button = button(window, '重新整理對局', self.refresh_history, True)
+        self.history_button.configure(state='disabled')
         self.history_button.pack(fill='x', pady=(10, 0))
         tk.Label(window, text='錄影檔頭未含勝敗與時長', bg=BG, fg=MUTED, font=(self.font, 9)).pack(anchor='w', pady=8)
 
@@ -292,6 +323,11 @@ class Dashboard:
         self.root.lift()
 
     def drain(self):
+        if self.drain_timer is not None:
+            self.root.after_cancel(self.drain_timer)
+            self.drain_timer = None
+        if self.stop.is_set():
+            return
         try:
             while True:
                 event, value = self.events.get_nowait()
@@ -324,12 +360,15 @@ class Dashboard:
                             label.configure(text='電腦玩家' if not player.is_human else error or ('目前積分 · ' + summary if summary else '沒有排名紀錄'))
         except queue.Empty:
             pass
-        self.root.after(100, self.drain)
+        self.drain_timer = self.root.after(100, self.drain)
 
     def show(self, match, source, delay, preview):
         self.generation += 1
         generation = self.generation
+        self.library.save_positions()
+        self.library.back()
         self.match = match
+        self.library.reset_context()
         for tab in self.book.tabs():
             self.book.nametowidget(tab).destroy()
         self.tabs = []
@@ -340,6 +379,8 @@ class Dashboard:
         place_name = map_label(match, self.maps)
         self.status.configure(text=('歷史預覽' if preview else '已讀取新對局') + f' · {kind}' + (f' · {place_name}' if place_name else '') + f' · {len(match.players)} 人 · {datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}')
         self.meta.configure(text=('歷史對局 · 文明說明與積分為目前資料' if preview else f'開局後 {delay:.1f} 秒讀到') + ' · 新對局將自動顯示')
+        if getattr(self.args, 'demo', False):
+            self.meta.configure(text='展示用虛構對局 · 教材讀取本機檔案')
         for role, players in [('對手' if me else '玩家', enemies), ('你', [me] if me else []), ('隊友', allies)]:
             for player in players:
                 civ = self.civs.get(player.civ_id)
@@ -454,6 +495,8 @@ def main():
     parser.add_argument('--no-elo', action='store_true', default=None)
     parser.add_argument('--with-game', action='store_true', help='also start the game through Steam')
     parser.add_argument('--setup', action='store_true', help='open settings before starting')
+    parser.add_argument('--library-dir', help='local Hera Chinese guide and video directory')
+    parser.add_argument('--demo-build', type=int, choices=range(1, 41), metavar='1..40', help='open a build in the offline demo')
     parser.add_argument('--demo', action='store_true', help='synthetic example; no monitoring or network')
     args = parser.parse_args()
     if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game
@@ -484,6 +527,8 @@ def main():
     if args.demo:
         from demo import populate
         populate(app)
+        if args.demo_build and app.library.builds:
+            root.after(200, lambda: app.library.open_build(app.library.builds[args.demo_build-1], True))
     if args.with_game and not args.demo:
         root.after(1000, start_game)  # after our window is up, so the game ends up in front
     root.mainloop()

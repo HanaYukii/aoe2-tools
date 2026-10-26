@@ -18,6 +18,7 @@ import time
 import traceback
 from datetime import datetime
 from pathlib import Path
+from app_paths import app_data_dir
 
 from civdata import load_civs
 from ratings import RM_1V1, RM_TEAM, fetch_ratings
@@ -29,7 +30,7 @@ GIVE_UP_SECONDS = 120
 IN_PROGRESS_SECONDS = 15   # a recording written this recently is a match in progress
 TITLE = 'AoE2 對手文明'
 # Not next to the script: the packaged exe runs from a temp folder and lives on the desktop.
-log_path = Path(os.environ['LOCALAPPDATA']) / 'aoe2-tools' / 'opponent-civ' / 'watch_log.jsonl'
+log_path = app_data_dir() / 'watch_log.jsonl'
 
 
 class Pending:

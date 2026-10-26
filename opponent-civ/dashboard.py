@@ -96,6 +96,8 @@ class Dashboard:
         tk.Label(bar, text='字級', bg=BG, fg=MUTED).pack(side='right')
         self.sidebar_toggle = button(bar, '收起對局列表', self.toggle_sidebar)
         self.sidebar_toggle.pack(side='right', padx=16)
+        tk.Label(bar, text='記得蓋房子', font=(self.display_font, 26, 'bold'),
+                 bg=BG, fg=AMBER).pack(side='left', fill='x', expand=True, padx=12)
         footer = tk.Frame(root, bg=BG)
         footer.pack(side='bottom', fill='x', padx=28, pady=12)
         tk.Label(footer, text='●  展示對局 · 內建流程' if getattr(args, 'demo', False) else '●  本機錄影 · 自動監看', bg=BG, fg=ACCENT).pack(side='left')

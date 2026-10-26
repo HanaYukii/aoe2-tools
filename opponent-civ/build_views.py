@@ -76,11 +76,11 @@ class ReferenceSheet(tk.Frame):
         self.scroll.pack(fill='both', expand=True, padx=10, pady=(0, 8))
         self.cards, self.texts = [], []
         for item in sheet['cards']:
-            card = tk.Frame(self.scroll.body, bg=BG, padx=12, pady=10)
+            card = tk.Frame(self.scroll.body, bg=BG, padx=10, pady=7)
             tk.Label(card, text=item['title'], bg=BG, fg=ACCENT, anchor='w',
-                     font=(font, 12, 'bold')).pack(fill='x', pady=(0, 6))
+                     font=(font, 12, 'bold')).pack(fill='x', pady=(0, 4))
             label = tk.Label(card, text=item['body'], bg=BG, fg=FG, anchor='nw',
-                             justify='left', font=(font, size), wraplength=520)
+                             justify='left', font=(font, max(10, size-1)), wraplength=520)
             label.pack(fill='both', expand=True)
             self.cards.append(card)
             self.texts.append(label)
@@ -107,7 +107,7 @@ class ReferenceSheet(tk.Frame):
     def resize(self, size):
         self.size = size
         for label in self.texts:
-            label.configure(font=(self.font, size))
+            label.configure(font=(self.font, max(10, size-1)))
 
 
 class BuildReader(tk.Frame):

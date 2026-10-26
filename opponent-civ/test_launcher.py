@@ -1,4 +1,5 @@
 """Window placement across monitors, and the --with-game entry point."""
+import gc
 import json
 import sys
 import tempfile
@@ -29,6 +30,8 @@ class PlacementTests(unittest.TestCase):
     def tearDown(self):
         self.root.destroy()
         self.dir.cleanup()
+        self.root = self.requested_geometry = None  # free Tk on this thread (see test_build_views)
+        gc.collect()
 
     def geometry(self):
         return self.requested_geometry.call_args.args[0]

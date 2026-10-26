@@ -1,5 +1,6 @@
 """Exercise real Tk views with synthetic local material and match events."""
 import argparse
+import gc
 import tempfile
 import tkinter as tk
 import unittest
@@ -33,6 +34,10 @@ class BuildViewTests(unittest.TestCase):
     def tearDown(self):
         self.app.close()
         self.temp.cleanup()
+        # Dashboard and its library point at each other, so only the cycle collector frees them.
+        # Collect here, on the Tk thread: run later on a worker thread, Tk aborts the whole suite.
+        self.app = self.ui = self.root = None
+        gc.collect()
 
     def test_picker_reuses_an_embedded_tab_and_tracks_new_context(self):
         self.ui.open_picker()

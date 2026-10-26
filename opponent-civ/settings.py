@@ -3,6 +3,7 @@ import json
 import os
 from collections import Counter
 from pathlib import Path
+from app_paths import app_data_dir
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
@@ -10,7 +11,7 @@ from civdata import find_game_dir, load_civs
 from rec_header import NotReady, Unsupported, read_match
 from savegames import infer_my_profile_id, recordings, savegame_dirs
 
-SETTINGS_PATH = Path(os.environ['LOCALAPPDATA']) / 'aoe2-tools' / 'opponent-civ' / 'settings.json'
+SETTINGS_PATH = app_data_dir() / 'settings.json'
 
 
 def read_settings(path=SETTINGS_PATH):

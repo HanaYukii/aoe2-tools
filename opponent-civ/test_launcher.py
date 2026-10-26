@@ -5,7 +5,7 @@ import tempfile
 import tkinter as tk
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 import dashboard
 import launcher
@@ -23,42 +23,43 @@ class PlacementTests(unittest.TestCase):
         self.addCleanup(patcher.stop)
         self.root = tk.Tk()
         self.root.withdraw()
+        self.requested_geometry = Mock(wraps=self.root.geometry)
+        self.root.geometry = self.requested_geometry
 
     def tearDown(self):
         self.root.destroy()
         self.dir.cleanup()
 
     def geometry(self):
-        self.root.update_idletasks()
-        return self.root.wm_geometry()
+        return self.requested_geometry.call_args.args[0]
 
     def test_first_run_goes_to_the_second_screen(self):
         launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])
-        self.assertEqual(self.geometry(), '1220x860+426+1768')
+        self.assertEqual(self.geometry(), '2074x1253+501+1797')
 
     def test_only_one_screen_keeps_tk_default_position(self):
         launcher.place(self.root, 1220, 860, [PRIMARY])
-        self.assertTrue(self.geometry().startswith('1220x860'))
+        self.assertTrue(self.geometry().startswith('2304x1260'))
 
     def test_last_spot_is_restored_while_its_screen_exists(self):
-        self.state.write_text(json.dumps(dict(x=500, y=1800, width=1000, height=700, zoomed=False)))
+        self.state.write_text(json.dumps(dict(layout_version=2, x=500, y=1800, width=1000, height=700, zoomed=False)))
         launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])
         self.assertEqual(self.geometry(), '1000x700+500+1800')
 
     def test_spot_saved_on_the_primary_yields_to_a_second_screen(self):
-        self.state.write_text(json.dumps(dict(x=78, y=78, width=1000, height=700, zoomed=False)))
+        self.state.write_text(json.dumps(dict(layout_version=2, x=78, y=78, width=1000, height=700, zoomed=False)))
         launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])     # saved while laptop-only
-        self.assertEqual(self.geometry(), '1220x860+426+1768')
+        self.assertEqual(self.geometry(), '2074x1253+501+1797')
 
     def test_single_screen_reuses_its_spot(self):
-        self.state.write_text(json.dumps(dict(x=78, y=78, width=1000, height=700, zoomed=False)))
+        self.state.write_text(json.dumps(dict(layout_version=2, x=78, y=78, width=1000, height=700, zoomed=False)))
         launcher.place(self.root, 1220, 860, [PRIMARY])
         self.assertEqual(self.geometry(), '1000x700+78+78')
 
     def test_last_spot_on_an_unplugged_screen_falls_back(self):
-        self.state.write_text(json.dumps(dict(x=-3000, y=100, width=1000, height=700, zoomed=False)))
+        self.state.write_text(json.dumps(dict(layout_version=2, x=-3000, y=100, width=1000, height=700, zoomed=False)))
         launcher.place(self.root, 1220, 860, [PRIMARY, SECOND])
-        self.assertEqual(self.geometry(), '1220x860+426+1768')
+        self.assertEqual(self.geometry(), '2074x1253+501+1797')
 
     def test_hidden_windows_are_not_remembered(self):
         launcher.remember(self.root)

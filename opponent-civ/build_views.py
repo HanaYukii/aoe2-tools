@@ -262,9 +262,9 @@ class BuildLibraryUI:
         mode = 'all' if self.search.get().strip() else self.mode.get()
         builds = filter_builds(self.builds, civ, self.context_map, self.search.get(), mode, favorites, self.use_map.get())
         self.count.configure(text=self.error or f'{len(builds)} 套流程' + (' · 搜尋全部流程' if self.search.get().strip() else ''))
-        if not builds:
-            tk.Label(self.results.body, text=self.error or '沒有符合的流程。試試「全部流程」或取消地圖篩選。',
-                     bg=PANEL, fg=MUTED, wraplength=680, pady=35).pack(fill='x')
+        if not builds:  # the count line already states the error; here say what to do about it
+            hint = '按右上角「教材資料夾…」選擇自己的 Hera 教材目錄。' if self.error else '沒有符合的流程。試試「全部流程」或取消地圖篩選。'
+            tk.Label(self.results.body, text=hint, bg=PANEL, fg=MUTED, wraplength=680, pady=35).pack(fill='x')
         for b in builds:
             row = tk.Frame(self.results.body, bg=BG, padx=16, pady=12)
             row.pack(fill='x', pady=(0, 8))

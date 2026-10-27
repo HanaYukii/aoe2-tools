@@ -56,7 +56,6 @@ class Build:
 
     starter: bool = False
     requires_cavalry: bool = False
-    video_url: str = ''
     video_filename: str = ''
     recommended_civs: str = ''
     arrival: str = ''
@@ -144,18 +143,13 @@ def load_library(media_dir=None, *, data_path=None):
             steps = tuple(Step(**step) for step in item['steps'])
             if not steps or any(not step.task or not step.age or not all(isinstance(v, str) for v in vars(step).values()) for step in steps):
                 raise ValueError('invalid steps')
-            url = item.get('video_url', '')
-            parsed = urlparse(url)
-            if url and (parsed.scheme != 'https' or parsed.hostname not in {'www.patreon.com', 'patreon.com'}):
-                raise ValueError('invalid video link')
             filename = item.get('video_filename', '')
             builds.append(Build(
                 index=item['index'], id=item['id'], title=item['title'], population=item['population'],
                 civs=tuple(item['civs']), map_type=item['map_type'], advanced=item['advanced'],
                 steps=steps, notes=item['notes'], page=item['page'],
                 video=media_file(media_dir, filename), pdf=media_file(media_dir, PDF_NAME),
-                starter=item['starter'], requires_cavalry=item['requires_cavalry'],
-                video_url=url, video_filename=filename,
+                starter=item['starter'], requires_cavalry=item['requires_cavalry'], video_filename=filename,
                 recommended_civs=item.get('recommended_civs', ''), arrival=item.get('arrival', '')))
         if not builds:
             raise ValueError('empty catalog')
@@ -164,29 +158,35 @@ def load_library(media_dir=None, *, data_path=None):
     return builds
 
 
-def filter_builds(builds, civ_key='', map_label='', query='', mode='recommended', favorites=(), filter_map=True):
-    """Separate applicable defaults from the full library; never imply automatic match strategy."""
-    kind = map_kind(map_label) if filter_map else None
-    terms = query.casefold().replace('maa', '裝甲').replace('fc', '直城').strip()
+def default_order(builds, civ_key='', favorites=()):
+    """A civilization's recommendations before the user orders them: old favorites, its own
+    builds, then the general starters. Advanced and adjusted openings wait in the full list."""
     result = []
     for b in builds:
         compatibility = b.compatibility(civ_key)
-        if mode != 'all' and compatibility in {'other', 'unavailable'}:
+        if compatibility in {'other', 'unavailable'}:
             continue
-        if kind and b.map_type != kind:
-            continue
-        if mode == 'favorites' and b.id not in favorites:
-            continue
-        if mode == 'recommended' and b.id not in favorites:
-            if compatibility == 'adjust' or b.advanced or not (b.starter or (b.civs and civ_key)):
-                continue
-        if terms and terms not in (b.title+' '+b.population).casefold():
+        if b.id not in favorites and (compatibility == 'adjust' or b.advanced or not (b.starter or (b.civs and civ_key))):
             continue
         result.append(b)
     return sorted(result, key=lambda b: (b.id not in favorites, not bool(b.civs), not b.starter, b.index))
 
 
+def search_builds(builds, civ_key='', query=''):
+    """Every build whose title or population matches; ones the civilization can play come first."""
+    terms = query.casefold().replace('maa', '裝甲').replace('fc', '直城').strip()
+    found = [b for b in builds if terms in (b.title+' '+b.population).casefold()]
+    return sorted(found, key=lambda b: (b.compatibility(civ_key) in {'other', 'unavailable'}, b.index))
+
+
+def opening_for(builds, map_label=''):
+    """The first build that suits the map; simply the first when the map is unknown or none suits."""
+    kind = map_kind(map_label)
+    return next((b for b in builds if b.map_type == kind), builds[0] if builds else None)
+
+
 class LibraryState:
+    """Each civilization's recommended builds in the user's own order."""
     def __init__(self, path=STATE_PATH):
         self.path = Path(path)
         try:
@@ -195,18 +195,45 @@ class LibraryState:
                 self.data = {}
         except (OSError, ValueError):
             self.data = {}
-        for field in ('favorites', 'positions'):
+        for field in ('favorites', 'order', 'removed'):
             if not isinstance(self.data.get(field), dict):
                 self.data[field] = {}
+        self.data.pop('positions', None)  # reading marks now last one game, not across launches
+
+    def ids(self, field, civ_key):
+        ids = self.data[field].get(key(civ_key), [])
+        return [i for i in ids if isinstance(i, str)] if isinstance(ids, list) else []
 
     def favorites(self, civ_key):
-        ids = self.data['favorites'].get(key(civ_key), [])
-        return ids if isinstance(ids, list) else []
+        """Stars from older versions; they only lead the default order now."""
+        return self.ids('favorites', civ_key)
 
-    def toggle_favorite(self, civ_key, build_id):
-        ids = list(self.favorites(civ_key))
-        ids.remove(build_id) if build_id in ids else ids.append(build_id)
-        self.data['favorites'][key(civ_key)] = ids
+    def recommended(self, builds, civ_key):
+        """The user's order, then any default they never removed (such as a newly bundled build)."""
+        by_id = {b.id: b for b in builds}
+        removed = set(self.ids('removed', civ_key))
+        defaults = [b.id for b in default_order(builds, key(civ_key), self.favorites(civ_key)) if b.id not in removed]
+        return [by_id[i] for i in dict.fromkeys(self.ids('order', civ_key) + defaults) if i in by_id]
+
+    def move(self, builds, civ_key, build_id, offset):
+        ids = [b.id for b in self.recommended(builds, civ_key)]
+        if build_id in ids:
+            here = ids.index(build_id)
+            ids.insert(max(0, min(len(ids) - 1, here + offset)), ids.pop(here))
+            self.store(builds, civ_key, ids)
+
+    def add(self, builds, civ_key, build_id):
+        ids = [b.id for b in self.recommended(builds, civ_key)]
+        self.store(builds, civ_key, ids if build_id in ids else ids + [build_id])
+
+    def remove(self, builds, civ_key, build_id):
+        self.store(builds, civ_key, [b.id for b in self.recommended(builds, civ_key) if b.id != build_id])
+
+    def store(self, builds, civ_key, ids):
+        """Keep the whole list; a default left out of it stays out."""
+        defaults = [b.id for b in default_order(builds, key(civ_key), self.favorites(civ_key))]
+        self.data['order'][key(civ_key)] = ids
+        self.data['removed'][key(civ_key)] = [i for i in defaults if i not in ids]
         self.save()
 
     def save(self):

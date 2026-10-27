@@ -151,20 +151,70 @@ class BuildViewTests(unittest.TestCase):
         next(w for w in header.winfo_children() if w.cget('text') == '測試流程 16').invoke()
         self.assertEqual(self.ui.build.index, 16)
         self.assertEqual(self.book.select(), str(self.ui.plan_tab))
-        self.game(1, 29, hour=1)  # Britons fast castle: the Burgundian sheet for that build is not theirs
-        self.assertEqual(self.ui.build.index, 15)
+        self.game(1, 9, hour=1)  # Britons on Arabia: no sheet of theirs and none for the map
         self.assertIsNone(self.ui.sheet)
         self.assertEqual(str(self.book.tab(self.ui.sheet_tab, 'state')), 'disabled')
         self.assertFalse(self.ui.next_button.winfo_manager())
+        self.game(1, 29, hour=2)  # Britons fast castle on Arena: the Burgundian sheet for it is not theirs
+        self.assertEqual(self.ui.build.index, 15)
+        self.assertEqual(self.ui.sheet, 'arena-castle-drop')
+        self.assertFalse(self.ui.sheet_bar.winfo_manager())  # one sheet: nothing to switch
         library = self.ui.library_tab
         library.civ_name.set('羅馬')
         library.refresh(top=True)
-        next(w for w in library.sheet_bar.winfo_children() if isinstance(w, ttk.Button)).invoke()
+        sheet_buttons = [w for w in library.sheet_bar.winfo_children() if isinstance(w, ttk.Button)]
+        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・城堡長劍衝車速查', '競技場・壓堡應對'])
+        sheet_buttons[0].invoke()
         self.assertEqual(self.ui.sheet, 'romans-castle-push')
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
-        self.game(43, 9, hour=2)
+        self.assertEqual([b.cget('text') for b in self.ui.sheet_bar.winfo_children()],
+                         ['競技場・壓堡應對', '羅馬・城堡長劍衝車速查'])  # the pick joins what applies here
+        self.game(43, 9, hour=3)
         self.assertEqual(self.ui.sheet, 'romans-castle-push')
-        self.assertEqual(len(self.ui.sheet_views), 2)
+        self.assertEqual(len(self.ui.sheet_views), 3)
+
+    def test_arena_adds_the_castle_drop_sheet_beside_the_civilization_sheet(self):
+        self.game(35, 29)
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
+        self.assertEqual(self.ui.sheet_bar.winfo_manager(), 'pack')
+        choices = self.ui.sheet_bar.winfo_children()
+        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・城堡期速查', '勃根地競技場・防壓堡速查', '競技場・壓堡應對'])
+        choices[1].invoke()
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
+        self.assertEqual(self.ui.sheet_views['burgundians-arena-defense'].winfo_manager(), 'pack')
+        self.ui.sheet_bar.winfo_children()[2].invoke()
+        self.assertEqual(self.ui.sheet, 'arena-castle-drop')
+        view = self.ui.sheet_views['arena-castle-drop']
+        self.assertEqual(view.winfo_manager(), 'pack')
+        self.assertFalse(self.ui.sheet_views['burgundians-arena-castle'].winfo_manager())
+        self.assertEqual(self.ui.sheet_choice.get(), 'arena-castle-drop')
+        self.game(35, 29, hour=1, live=True)  # the next game starts from its own sheet again
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
+
+    def test_map_shortcut_is_optional_and_never_auto_switches_tabs(self):
+        self.game(35, 29, live=True)
+        bar = self.app.map_shortcuts
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+        self.assertEqual(len(bar.winfo_children()), 1)  # dedicated version replaces generic
+        bar.winfo_children()[0].invoke()
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
+        self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
+        self.book.select(self.ui.plan_tab)
+        self.ui.refresh()
+        self.assertEqual(self.book.select(), str(self.ui.plan_tab))
+        self.game(1, 29, hour=1, live=True)
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+        bar.winfo_children()[0].invoke()
+        self.assertEqual(self.ui.sheet, 'arena-castle-drop')
+        for hour, map_id in enumerate((9, -1), 2):
+            self.game(35, map_id, hour=hour)
+            self.assertFalse(bar.winfo_children())
+            self.assertFalse(bar.winfo_manager())
+            self.ui.open_sheet('burgundians-arena-defense')  # manual library pick doesn't enable a map shortcut
+            self.assertFalse(bar.winfo_children())
+        self.game(35, 29, hour=4)  # history gets the same map-aware entry
+        self.assertEqual(len(bar.winfo_children()), 1)
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
 
     def test_library_search_add_remove_and_overview(self):
         self.game(35, 9)

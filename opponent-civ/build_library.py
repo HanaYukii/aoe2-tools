@@ -85,10 +85,18 @@ def read_catalog(data_path=None):
         sheet_ids = set()
         build_ids = {b['id'] for b in data['builds']}
         for sheet in data.get('reference_sheets', []):
-            if not all(isinstance(sheet.get(k), str) and sheet[k] for k in ('id', 'civ', 'title', 'subtitle')):
+            if not all(isinstance(sheet.get(k), str) and sheet[k] for k in ('id', 'title', 'subtitle')):
                 raise ValueError('invalid reference sheet')
-            if sheet['id'] in sheet_ids or not sheet.get('cards') or not sheet.get('build_ids'):
+            maps = sheet.setdefault('maps', [])
+            if not isinstance(sheet.get('civ'), str) or not isinstance(maps, list) or not all(isinstance(m, str) and m for m in maps):
                 raise ValueError('invalid reference sheet')
+            # A sheet for every civilization ('civ' empty) must name the maps it is for.
+            if sheet['id'] in sheet_ids or not sheet.get('cards') or not isinstance(sheet.get('build_ids'), list) or not (sheet['civ'] or maps):
+                raise ValueError('invalid reference sheet')
+            shortcut = sheet.get('shortcut')
+            if shortcut is not None and (not isinstance(shortcut, dict) or
+                    not all(isinstance(shortcut.get(k), str) and shortcut[k].strip() for k in ('id', 'label'))):
+                raise ValueError('invalid reference shortcut')
             sheet_ids.add(sheet['id'])
             if any(i not in build_ids for i in sheet['build_ids']):
                 raise ValueError('unknown reference build')
@@ -177,6 +185,21 @@ def search_builds(builds, civ_key='', query=''):
     terms = query.casefold().replace('maa', '裝甲').replace('fc', '直城').strip()
     found = [b for b in builds if terms in (b.title+' '+b.population).casefold()]
     return sorted(found, key=lambda b: (b.compatibility(civ_key) in {'other', 'unavailable'}, b.index))
+
+
+def sheets_for(sheets, civ_key='', build=None, map_label=''):
+    """The sheets for a match: the civilization's own, those for `build` first, then the ones for
+    every civilization on this map. A sheet that lists maps applies only on them. Without a
+    civilization, only a sheet for the build counts as its own."""
+    civ, label = key(civ_key), map_label.casefold()
+
+    def linked(sheet):
+        return build is not None and build.id in sheet['build_ids']
+
+    def on_map(sheet):
+        return not sheet['maps'] or any(word.casefold() in label for word in sheet['maps'])
+    own = [s for s in sheets if s['civ'] and (s['civ'] == civ if civ else linked(s)) and on_map(s)]
+    return sorted(own, key=lambda s: not linked(s)) + [s for s in sheets if not s['civ'] and on_map(s)]
 
 
 def opening_for(builds, map_label=''):

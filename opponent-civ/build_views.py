@@ -171,7 +171,7 @@ class BuildReader(tk.Frame):
         for age in self.ages:
             button(jump, age, lambda a=age: self.jump(a)).pack(side='left', padx=(0, 6))
         if reference:
-            button(jump, '勃根地城堡速查', reference, True).pack(side='left', padx=(0, 6))
+            button(jump, '城堡期速查', reference, True).pack(side='left', padx=(0, 6))
         self.scroll.bind_wheel(grid)
         self.scroll.canvas.bind('<Configure>', self.reflow, add='+')
         if isinstance(self.selected, int) and 0 <= self.selected < len(self.rows):

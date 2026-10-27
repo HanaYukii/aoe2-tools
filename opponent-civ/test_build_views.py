@@ -149,6 +149,19 @@ class BuildViewTests(unittest.TestCase):
         self.assertFalse(self.ui.error)
         self.assertIn('5 套流程', self.ui.count.cget('text'))
 
+    def test_roman_reference_routes_from_picker_and_reader(self):
+        self.ui.open_picker()
+        buttons = self.ui.reference_bar.winfo_children()
+        self.assertEqual(len(buttons), 1)
+        buttons[0].invoke()
+        sid = 'romans-castle-push'
+        sheet = self.ui.reference_tabs[sid]
+        self.ui.open_build(self.ui.builds[32])
+        self.ui.reference_for(self.ui.builds[32])()
+        self.assertIs(self.ui.reference_tabs[sid], sheet)
+        self.assertEqual(self.app.workspace_book.select(), str(sheet))
+        self.assertNotIn('burgundians-arena-castle', self.ui.reference_tabs)
+
     def test_reference_tab_reuses_and_preserves_build_progress(self):
         self.ui.open_picker()
         self.ui.civ_name.set('勃根地')

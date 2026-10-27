@@ -4,8 +4,9 @@ import gc
 import tempfile
 import tkinter as tk
 import unittest
-from dataclasses import replace
 from pathlib import Path
+from types import SimpleNamespace
+from tkinter import ttk
 from unittest.mock import patch
 from civdata import Civ
 from dashboard import Dashboard
@@ -13,6 +14,8 @@ from build_library import LibraryState
 from build_views import wrap_text
 from rec_header import Match, Player
 from test_build_library import write_fixture
+
+TABS = ['對局 RP', '前期流程', '中期速查', '流程庫']
 
 
 class BuildViewTests(unittest.TestCase):
@@ -29,168 +32,195 @@ class BuildViewTests(unittest.TestCase):
         with patch('build_views.LibraryState', return_value=LibraryState(self.directory/'state.json')):
             self.app = Dashboard(self.root, args)
         self.app.my_id = 10
-        self.app.civs = {43: Civ(43, 'Romans', '羅馬', '展示'), 35: Civ(35, 'Burgundians', '勃根地', '展示')}
-        self.match = Match(68.9, 1, 1700000000, True, True, False,
-                           (Player(1, '自己', 43, 2, 0, 10, 2), Player(2, '對手', 35, 3, 1, 20, 2)))
-        self.app.show(self.match, Path('fixture.aoe2record'), None, True)
+        self.app.civs = {43: Civ(43, 'Romans', '羅馬', '展示'), 35: Civ(35, 'Burgundians', '勃根地', '展示'),
+                         1: Civ(1, 'Britons', '不列顛', '展示')}
+        self.app.maps = {9: '阿拉伯', 29: '競技場'}
         self.ui = self.app.library
+        self.book = self.app.workspace_book
 
     def tearDown(self):
         self.app.close()
         self.temp.cleanup()
         # Dashboard and its library point at each other, so only the cycle collector frees them.
         # Collect here, on the Tk thread: run later on a worker thread, Tk aborts the whole suite.
-        self.app = self.ui = self.root = None
+        self.app = self.ui = self.book = self.root = None
         gc.collect()
 
-    def test_picker_reuses_an_embedded_tab_and_tracks_new_context(self):
-        self.ui.open_picker()
-        first = self.ui.picker
-        self.assertNotIsInstance(first, tk.Toplevel)
-        self.assertEqual(self.ui.civ_name.get(), '羅馬')
-        self.ui.open_picker()
-        self.assertIs(self.ui.picker, first)
-        changed = replace(self.match, players=(replace(self.match.players[0], civ_id=35), self.match.players[1]))
-        self.app.show(changed, Path('new.aoe2record'), .5, False)
-        self.ui.open_picker()
-        self.assertEqual(self.ui.civ_name.get(), '勃根地')
+    def game(self, civ_id, map_id=9, hour=0, live=False):
+        """Show a match where I play `civ_id`: live as a new game, otherwise as browsed history."""
+        match = Match(68.9, 1, 1700000000 + hour * 3600, True, True, False,
+                      (Player(1, '自己', civ_id, 2, 0, 10, 2), Player(2, '對手', 1, 3, 1, 20, 2)), map_id=map_id)
+        self.app.show(match, Path(f'{hour}.aoe2record'), .5 if live else None, not live)
+        return match
 
-    def test_direct_reader_keeps_all_stages_and_mark_when_returning(self):
-        build = self.ui.builds[32]
-        self.ui.open_build(build)
-        reader = self.ui.direct
+    def build(self, index):
+        return next(b for b in self.ui.builds if b.index == index)
+
+    def row(self, index):
+        """A build's row in the library, as {button text: button}."""
+        for row in self.ui.library_tab.results.body.winfo_children():
+            actions, text = row.winfo_children()
+            if text.winfo_children()[0].cget('text').split('  ')[-1] == f'測試流程 {index}':
+                return {b.cget('text'): b for b in actions.winfo_children()}
+        raise AssertionError(f'build {index} is not listed')
+
+    def texts(self, widget):
+        for child in widget.winfo_children():
+            try:
+                yield str(child.cget('text'))
+            except tk.TclError:
+                pass
+            yield from self.texts(child)
+
+    def tabs(self):
+        return [self.book.tab(tab, 'text').split(' · ')[0] for tab in self.book.tabs()]
+
+    def test_tabs_stay_fixed_while_clicking_around(self):
+        self.assertEqual(self.tabs(), TABS)
+        self.game(35, 29)
+        self.ui.pick(self.build(16))
+        self.ui.open_sheet('romans-castle-push')
+        self.ui.library_tab.mode.set('overview')
+        self.ui.library_tab.refresh(top=True)
+        self.ui.fill_switch()
+        self.ui.switch_menu.invoke(0)
+        self.game(43, hour=1, live=True)
+        self.assertEqual(self.tabs(), TABS)
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))  # a new match opens on its RP
+        self.assertEqual([r for r in self.ui.readers.values() if r.winfo_manager()], [self.ui.readers[self.ui.build.id]])
+
+    def test_opening_is_the_first_recommended_build_that_suits_the_map(self):
+        self.game(35, 29)
+        self.assertEqual(self.ui.build.index, 15)
+        self.assertEqual(self.book.tab(self.ui.plan_tab, 'text'), '前期流程 · 測試流程 15')
+        self.assertEqual(self.ui.title.cget('text'), f'{self.build(15).population} 人口  ·  測試流程 15')
+        self.game(35, 9, hour=1)
+        self.assertEqual(self.ui.build.index, 1)
+        self.game(43, 9, hour=2)
+        self.assertEqual(self.ui.build.index, 33)
+        self.assertIn('阿拉伯（開放地圖）', self.ui.library_tab.map_note.cget('text'))
+
+    def test_reordering_recommendations_moves_the_default_and_persists(self):
+        self.game(35, 9)
+        library = self.ui.library_tab
+        self.assertIn('disabled', self.row(1)['▲'].state())
+        self.assertIn('disabled', self.row(22)['▼'].state())
+        for _ in range(3):
+            self.row(22)['▲'].invoke()
+        self.assertEqual([b.index for b in self.ui.recommended()], [22, 1, 2, 15])
+        self.assertEqual(self.ui.build.index, 22)  # now the first that suits Arabia
+        self.assertEqual(library.moved, self.build(22).id)
+        saved = LibraryState(self.directory/'state.json').recommended(self.ui.builds, 'Burgundians')
+        self.assertEqual([b.index for b in saved], [22, 1, 2, 15])
+        self.game(35, 29, hour=1)
+        self.assertEqual(self.ui.build.index, 15)  # Arena still opens the closed-map build
+        with patch.object(LibraryState, 'save', side_effect=OSError('read-only')):
+            self.row(2)['▲'].invoke()
+        self.assertEqual([b.index for b in self.ui.recommended()], [22, 2, 1, 15])
+        self.assertIn('無法寫入設定檔', library.note.cget('text'))
+
+    def test_a_pick_belongs_to_its_match_and_a_new_game_starts_over(self):
+        first = self.game(35, 9, live=True)
+        self.assertEqual(self.ui.build.index, 1)
+        self.ui.readers[self.build(1).id].mark(5)
+        self.ui.fill_switch()
+        menu = self.ui.switch_menu
+        self.assertTrue(menu.entrycget(0, 'label').startswith('✓ 1. 測試流程 1'))
+        self.assertEqual(menu.type(4), 'separator')
+        menu.invoke(2)
+        self.assertEqual(self.ui.build.index, 15)
+        self.assertEqual(self.book.select(), str(self.ui.plan_tab))
+        self.game(43, hour=1)  # browse an older match
+        self.assertEqual(self.ui.build.index, 33)
+        self.app.show(first, Path('0.aoe2record'), None, True)  # back to the game being played
+        self.assertEqual(self.ui.build.index, 15)
+        self.assertEqual(self.ui.readers[self.build(1).id].selected, 5)  # browsing keeps marks
+        self.game(35, 9, hour=2, live=True)
+        self.assertEqual(self.ui.build.index, 1)
+        self.assertEqual(self.ui.readers[self.build(1).id].selected, -1)  # a new game starts from the top
+        self.assertEqual(list(self.ui.readers), [self.build(1).id])
+
+    def test_sheet_tab_follows_the_build_then_the_civilization(self):
+        self.game(35, 29)
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
+        self.assertEqual(str(self.book.tab(self.ui.sheet_tab, 'state')), 'normal')
+        self.ui.next_button.invoke()
+        self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
+        view = self.ui.sheet_views['burgundians-arena-castle']
+        header = view.winfo_children()[0]
+        next(w for w in header.winfo_children() if w.cget('text') == '測試流程 16').invoke()
+        self.assertEqual(self.ui.build.index, 16)
+        self.assertEqual(self.book.select(), str(self.ui.plan_tab))
+        self.game(1, 29, hour=1)  # Britons fast castle: the Burgundian sheet for that build is not theirs
+        self.assertEqual(self.ui.build.index, 15)
+        self.assertIsNone(self.ui.sheet)
+        self.assertEqual(str(self.book.tab(self.ui.sheet_tab, 'state')), 'disabled')
+        self.assertFalse(self.ui.next_button.winfo_manager())
+        library = self.ui.library_tab
+        library.civ_name.set('羅馬')
+        library.refresh(top=True)
+        next(w for w in library.sheet_bar.winfo_children() if isinstance(w, ttk.Button)).invoke()
+        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
+        self.game(43, 9, hour=2)
+        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(len(self.ui.sheet_views), 2)
+
+    def test_library_search_add_remove_and_overview(self):
+        self.game(35, 9)
+        library = self.ui.library_tab
+        library.search.set('流程 3')
+        self.assertEqual(library.mode.get(), 'all')
+        self.assertIn('11 套流程', library.note.cget('text'))
+        self.row(31)['加入推薦'].invoke()
+        self.assertEqual([b.index for b in self.ui.recommended()][-1], 31)
+        self.assertIn('disabled', self.row(31)['已在推薦'].state())
+        self.row(33)['看流程'].invoke()
+        self.assertEqual(self.ui.build.index, 33)
+        self.assertEqual(self.book.select(), str(self.ui.plan_tab))
+        self.game(35, 9, hour=1)  # another match resets the library to its recommendations
+        self.assertEqual((library.mode.get(), library.search.get()), ('recommended', ''))
+        self.row(31)['移出'].invoke()
+        self.assertNotIn(31, [b.index for b in self.ui.recommended()])
+        library.mode.set('overview')
+        library.refresh(top=True)
+        self.assertFalse(library.results.winfo_manager())
+        self.assertIn('動物配置', library.overview.winfo_children()[0].get('1.0', 'end'))
+        library.mode.set('recommended')
+        library.refresh(top=True)
+        self.assertFalse(library.overview.winfo_manager())
+        self.assertEqual(library.results.winfo_manager(), 'pack')
+
+    def test_reader_marks_steps_and_has_no_member_video_links(self):
+        self.game(43)
+        reader = self.ui.readers[self.ui.build.id]
         self.assertEqual(len(reader.rows), 30)
         self.assertEqual(list(reader.ages), ['黑暗', '封建'])
         reader.mark(14)
-        self.ui.back()
-        self.ui.open_build(build)
-        self.assertIs(self.ui.direct, reader)
-        self.assertEqual(reader.selected, 14)
         self.assertEqual(reader.rows[14][0].cget('bg'), '#24473f')
+        self.assertIn('第 15 步', reader.position_label.cget('text'))
+        self.ui.library_tab.search.set('流程')
+        self.assertFalse([t for t in self.texts(self.root) if '會員影片' in t])
+        self.app.resize(1)
+        self.assertEqual(reader.size, self.app.font_size)
 
-    def test_separate_tab_survives_new_match_and_does_not_duplicate(self):
-        build = self.ui.builds[0]
-        self.ui.open_build(build, True)
-        self.ui.open_build(build, True)
-        self.assertEqual(len(self.app.workspace_book.tabs()), 2)
-        reader = self.ui.readers[('tab', build.id)]
-        reader.mark(5)
-        self.app.show(self.match, Path('live.aoe2record'), .5, False)
-        self.assertTrue(reader.winfo_exists())
-        self.assertEqual(reader.selected, 5)
-        self.assertEqual(self.app.workspace_book.select(), str(self.app.rp_frame))
-        self.ui.close_tab(('tab', build.id))
-        self.assertEqual(len(self.app.workspace_book.tabs()), 1)
-        self.ui.open_build(build, True)
-        self.assertEqual(self.ui.readers[('tab', build.id)].selected, 5)
-
-    def test_promoting_direct_reader_does_not_duplicate_or_lose_mark(self):
-        build = self.ui.builds[32]
-        self.ui.open_build(build)
-        self.ui.direct.mark(9)
-        self.ui.open_build(build, True)
-        self.assertNotIn(('direct', build.id), self.ui.readers)
-        reader = self.ui.readers[('tab', build.id)]
-        self.assertEqual(reader.selected, 9)
-        self.ui.open_build(build, False)
-        self.assertEqual(self.app.workspace_book.select(), str(reader))
-        self.assertEqual(len(self.ui.readers), 1)
-
-    def test_scroll_position_survives_switching_and_reopening(self):
-        self.root.attributes('-alpha', 0.0)
-        self.root.geometry('1200x800+0+0')
-        self.root.deiconify()
-        build = self.ui.builds[0]
-        self.ui.open_build(build, True)
-        self.root.update()
-        reader = self.ui.readers[('tab', build.id)]
-        reader.jump('封建')
-        self.root.update()
-        position = reader.scroll.canvas.yview()[0]
-        self.assertGreater(position, 0)
-        self.ui.back()
-        self.root.update()
-        self.ui.open_build(build, True)
-        self.root.update()
-        self.assertAlmostEqual(reader.scroll.canvas.yview()[0], position, places=2)
-        self.ui.close_tab(('tab', build.id))
-        self.ui.open_build(build, True)
-        self.root.update()
-        restored = self.ui.readers[('tab', build.id)]
-        self.assertAlmostEqual(restored.scroll.canvas.yview()[0], position, places=2)
-
-    def test_member_video_is_available_without_local_files(self):
-        build = self.ui.builds[32]
-        self.assertIsNone(build.video)
-        self.ui.open_build(build)
-        reader = self.ui.direct
-        media = next(w for w in reader.media_bar.winfo_children() if w.cget('text') == '會員影片 ↗')
-        with patch('build_views.webbrowser.open') as open_page:
-            media.invoke()
-        open_page.assert_called_once_with(build.video_url)
-
-    def test_first_launch_without_media_or_old_settings(self):
+    def test_first_launch_and_an_unreadable_catalog(self):
         self.ui.directory = None
         self.ui.reload()
+        self.game(43)
         self.assertEqual(len(self.ui.builds), 40)
-        self.ui.open_picker()
-        self.assertEqual(self.ui.civ_name.get(), '羅馬')
-        self.ui.open_overview()
-        self.assertEqual(self.app.workspace_book.select(), str(self.ui.overview_tab))
-
-    def test_sidebar_toggle_and_missing_library_recovery_view(self):
-        self.app.toggle_sidebar()
-        self.assertFalse(self.app.sidebar.winfo_manager())
-        self.app.toggle_sidebar()
-        self.assertEqual(self.app.sidebar.winfo_manager(), 'pack')
-        self.ui.directory = self.directory/'missing'
-        self.ui.reload()
-        self.ui.open_picker()
-        self.assertEqual(len(self.ui.builds), 40)
-        self.assertFalse(self.ui.error)
-        self.assertIn('5 套流程', self.ui.count.cget('text'))
-
-    def test_roman_reference_routes_from_picker_and_reader(self):
-        self.ui.open_picker()
-        buttons = self.ui.reference_bar.winfo_children()
-        self.assertEqual(len(buttons), 1)
-        buttons[0].invoke()
-        sid = 'romans-castle-push'
-        sheet = self.ui.reference_tabs[sid]
-        self.ui.open_build(self.ui.builds[32])
-        self.ui.reference_for(self.ui.builds[32])()
-        self.assertIs(self.ui.reference_tabs[sid], sheet)
-        self.assertEqual(self.app.workspace_book.select(), str(sheet))
-        self.assertNotIn('burgundians-arena-castle', self.ui.reference_tabs)
-
-    def test_reference_tab_reuses_and_preserves_build_progress(self):
-        self.ui.open_picker()
-        self.ui.civ_name.set('勃根地')
-        self.ui.refresh_picker()
-        buttons = self.ui.reference_bar.winfo_children()
-        self.assertEqual(len(buttons), 1)
-        build = self.ui.builds[14]
-        self.ui.open_build(build)
-        self.ui.direct.mark(7)
-        buttons[0].invoke()
-        sid = 'burgundians-arena-castle'
-        sheet = self.ui.reference_tabs[sid]
-        self.assertNotIsInstance(sheet, tk.Toplevel)
-        self.ui.open_reference(sid)
-        self.assertIs(self.ui.reference_tabs[sid], sheet)
-        self.app.resize(1)
-        self.assertEqual(sheet.size, self.app.font_size)
-        self.ui.open_build(build)
-        self.assertEqual(self.ui.direct.selected, 7)
-        self.app.show(self.match, Path('live.aoe2record'), .5, False)
-        self.assertTrue(sheet.winfo_exists())
-        self.ui.close_reference(sid)
-        self.assertNotIn(sid, self.ui.reference_tabs)
+        self.assertEqual(self.ui.build.index, 33)
+        with patch('build_library.DATA_PATH', self.directory/'missing.json'):
+            self.ui.reload()
+        self.ui.refresh(top=True)
+        self.assertIsNone(self.ui.build)
+        self.assertIn('內建流程資料', self.ui.title.cget('text'))
+        self.assertIn('內建流程資料', self.ui.library_tab.note.cget('text'))
+        self.assertEqual(self.book.tab(self.ui.plan_tab, 'text'), '前期流程')
 
     def test_reference_cards_fill_the_area_and_scroll_only_below_the_floor(self):
-        from types import SimpleNamespace
-        self.ui.open_reference('burgundians-arena-castle')
-        sheet = self.ui.reference_tabs['burgundians-arena-castle']
+        self.ui.open_sheet('burgundians-arena-castle')
+        sheet = self.ui.sheet_views['burgundians-arena-castle']
 
         def lay_out(width, height):
             sheet.reflow(SimpleNamespace(width=width, height=height))

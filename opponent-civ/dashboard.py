@@ -116,11 +116,7 @@ class Dashboard:
         self.status = tk.Label(detail, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
         self.status.pack(fill='x', padx=22, pady=(10, 4))
         self.meta = tk.Label(detail, text='選一場對局，看看對手的文明。', anchor='w', bg=PANEL, fg=MUTED, wraplength=740, justify='left')
-        self.meta.pack(fill='x', padx=22, pady=(0, 6))
-        quickbar = self.quickbar = tk.Frame(detail, bg=PANEL)
-        quickbar.pack(fill='x', padx=20, pady=(0, 12))
-        self.build_button = button(quickbar, '我的文明流程', lambda: self.library.open_picker(), True)
-        self.build_button.pack(side='left')
+        self.meta.pack(fill='x', padx=22, pady=(0, 12))
         self.workspace_book = ttk.Notebook(detail)
         self.workspace_book.pack(fill='both', expand=True)
         self.rp_frame = tk.Frame(self.workspace_book, bg=PANEL)
@@ -156,7 +152,6 @@ class Dashboard:
         SetupDialog(self.root, data)
 
     def close(self):
-        self.library.save_positions()
         self.stop.set()
         if self.drain_timer is not None:
             self.root.after_cancel(self.drain_timer)
@@ -173,10 +168,7 @@ class Dashboard:
 
     def resize(self, delta):
         self.font_size = max(11, min(24, self.font_size + delta))
-        for reader in self.library.readers.values():
-            reader.resize(self.font_size)
-        for sheet in self.library.reference_tabs.values():
-            sheet.resize(self.font_size)
+        self.library.resize(self.font_size)
         for text in [text for _, _, text in self.tabs] + self.counter_texts:
             self.style_text(text)
 
@@ -371,10 +363,9 @@ class Dashboard:
     def show(self, match, source, delay, preview):
         self.generation += 1
         generation = self.generation
-        self.library.save_positions()
-        self.library.back()
+        self.workspace_book.select(self.rp_frame)
         self.match = match
-        self.library.reset_context()
+        self.library.set_match(match, live=not preview)
         for tab in self.book.tabs():
             self.book.nametowidget(tab).destroy()
         self.tabs = []
@@ -510,7 +501,7 @@ def main():
         from build_library import load_library
         builds = load_library()
         report = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                      videos=sum(bool(b.video_url) for b in builds), bundled=bool(getattr(sys, 'frozen', False)))
+                      bundled=bool(getattr(sys, 'frozen', False)))
         Path(args.check_bundled_data).write_text(json.dumps(report), encoding='utf-8')
         return
     if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game
@@ -546,7 +537,7 @@ def main():
             if selected is None:
                 app.close()
                 parser.error(f'unknown build index: {args.demo_build}')
-            root.after(200, lambda: app.library.open_build(selected, True))
+            root.after(200, lambda: app.library.pick(selected))
     if args.with_game and not args.demo:
         root.after(1000, start_game)  # after our window is up, so the game ends up in front
     root.mainloop()

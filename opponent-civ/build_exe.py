@@ -44,8 +44,7 @@ def main():
     parser.add_argument('--desktop', action='store_true', help='also copy to the local desktop')
     args = parser.parse_args()
     builds = load_library()
-    expected = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                    videos=sum(bool(b.video_url) for b in builds), bundled=True)
+    expected = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds), bundled=True)
     BUILD.mkdir(exist_ok=True)
     icon = BUILD / 'app.ico'
     create_icon(icon)

@@ -69,6 +69,13 @@ class LibraryTests(unittest.TestCase):
         self.assertTrue(all(b.video is None and b.pdf is None for b in builds))
         self.assertIn('動物配置', read_catalog()['overview'])
 
+    def test_reference_sheets_reject_unknown_build_links(self):
+        data = read_catalog(self.catalog)
+        data['reference_sheets'][0]['build_ids'] = ['missing-build']
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        with self.assertRaises(LibraryError):
+            read_catalog(self.catalog)
+
     def test_optional_media_uses_known_filename_without_a_manifest(self):
         folder = self.directory/'Hera-會員流程影片'
         folder.mkdir()

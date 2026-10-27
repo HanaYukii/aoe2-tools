@@ -57,8 +57,61 @@ class ScrollArea(tk.Frame):
             self.bind_wheel(child)
 
 
+class ReferenceSheet(tk.Frame):
+    """A compact reference tab, with scrolling retained for small displays."""
+    def __init__(self, parent, sheet, font, size, close, open_build, builds):
+        super().__init__(parent, bg=PANEL)
+        self.sheet, self.font, self.size = sheet, font, size
+        top = tk.Frame(self, bg=PANEL)
+        top.pack(fill='x', padx=16, pady=(10, 4))
+        button(top, '關閉速查', close).pack(side='right')
+        tk.Label(top, text=sheet['title'], bg=PANEL, fg=FG, font=(font, 17, 'bold'),
+                 anchor='w').pack(side='left')
+        for build in builds:
+            button(top, build.title, lambda b=build: open_build(b)).pack(side='right', padx=(0, 6))
+        self.caption = tk.Label(self, text=sheet['subtitle'], bg=PANEL, fg=MUTED,
+                               font=(font, 10), anchor='w', justify='left', wraplength=1000)
+        self.caption.pack(fill='x', padx=16, pady=(0, 6))
+        self.scroll = ScrollArea(self)
+        self.scroll.pack(fill='both', expand=True, padx=10, pady=(0, 8))
+        self.cards, self.texts = [], []
+        for item in sheet['cards']:
+            card = tk.Frame(self.scroll.body, bg=BG, padx=10, pady=7)
+            tk.Label(card, text=item['title'], bg=BG, fg=ACCENT, anchor='w',
+                     font=(font, 12, 'bold')).pack(fill='x', pady=(0, 4))
+            label = tk.Label(card, text=item['body'], bg=BG, fg=FG, anchor='nw',
+                             justify='left', font=(font, max(10, size-1)), wraplength=520)
+            label.pack(fill='both', expand=True)
+            self.cards.append(card)
+            self.texts.append(label)
+        footer = tk.Frame(self, bg=PANEL)
+        footer.pack(fill='x', padx=16, pady=(0, 6))
+        for source in sheet.get('sources', []):
+            link = tk.Label(footer, text=source['title']+' ↗', bg=PANEL, fg=MUTED,
+                            font=(font, 9), cursor='hand2')
+            link.pack(side='left', padx=(0, 16))
+            link.bind('<Button-1>', lambda e, url=source['url']: webbrowser.open(url))
+        self.scroll.bind_wheel(self.scroll.body)
+        self.scroll.canvas.bind('<Configure>', self.reflow, add='+')
+
+    def reflow(self, event):
+        columns = 3 if event.width >= 1150 else 2 if event.width >= 850 else 1
+        for col in range(3):
+            self.scroll.body.columnconfigure(col, weight=1 if col < columns else 0,
+                                             uniform='cards' if col < columns else '')
+        for i, (card, label) in enumerate(zip(self.cards, self.texts)):
+            card.grid(row=i//columns, column=i%columns, sticky='nsew', padx=6, pady=4)
+            label.configure(wraplength=max(240, event.width//columns-42))
+        self.caption.configure(wraplength=max(240, event.width-24))
+
+    def resize(self, size):
+        self.size = size
+        for label in self.texts:
+            label.configure(font=(self.font, max(10, size-1)))
+
+
 class BuildReader(tk.Frame):
-    def __init__(self, parent, build, state, font, size, leave, leave_label='返回 RP'):
+    def __init__(self, parent, build, state, font, size, leave, leave_label='返回 RP', reference=None):
         super().__init__(parent, bg=PANEL)
         self.build, self.state, self.font, self.size = build, state, font, size
         saved = state.data['positions'].get(build.id, {})
@@ -117,6 +170,8 @@ class BuildReader(tk.Frame):
         jump.pack(side='left')
         for age in self.ages:
             button(jump, age, lambda a=age: self.jump(a)).pack(side='left', padx=(0, 6))
+        if reference:
+            button(jump, '城堡期速查', reference, True).pack(side='left', padx=(0, 6))
         self.scroll.bind_wheel(grid)
         self.scroll.canvas.bind('<Configure>', self.reflow, add='+')
         if isinstance(self.selected, int) and 0 <= self.selected < len(self.rows):
@@ -190,6 +245,7 @@ class BuildLibraryUI:
         self.state = LibraryState()
         self.builds, self.error, self.picker = [], '', None
         self.readers, self.direct, self.reader_frame = {}, None, None
+        self.reference_tabs, self.reference_sheets = {}, {}
         self.opened_menu = tk.Menu(app.root, tearoff=False)
         self.opened_button = ttk.Menubutton(app.quickbar, text='已開流程 ▾', menu=self.opened_menu, style='Build.TButton')
         # Old folder settings become optional media locations; never a source of steps.
@@ -203,9 +259,34 @@ class BuildLibraryUI:
     def reload(self):
         try:
             self.builds = load_library(self.directory)
+            self.reference_sheets = {s['id']: s for s in read_catalog().get('reference_sheets', [])}
             self.error = ''
         except (OSError, ValueError, TypeError, KeyError) as exc:
             self.builds, self.error = [], str(exc)
+            self.reference_sheets = {}
+
+    def open_reference(self, sheet_id):
+        self.save_positions()
+        if sheet_id not in self.reference_tabs:
+            sheet = self.reference_sheets[sheet_id]
+            builds = [b for b in self.builds if b.id in sheet['build_ids']]
+            tab = ReferenceSheet(self.app.workspace_book, sheet, self.app.font, self.app.font_size,
+                                 lambda: self.close_reference(sheet_id), self.open_build, builds)
+            self.reference_tabs[sheet_id] = tab
+            self.app.workspace_book.add(tab, text=sheet['title'])
+        self.app.workspace_book.select(self.reference_tabs[sheet_id])
+        self.update_opened_menu()
+
+    def close_reference(self, sheet_id):
+        self.reference_tabs.pop(sheet_id).destroy()
+        self.app.workspace_book.select(self.app.rp_frame)
+        self.update_opened_menu()
+
+    def reference_for(self, build):
+        for sheet in self.reference_sheets.values():
+            if build.id in sheet['build_ids']:
+                return lambda sid=sheet['id']: self.open_reference(sid)
+        return None
 
     def choose_folder(self):
         folder = filedialog.askdirectory(parent=self.app.root, title='選擇已下載的影片資料夾（選用）', initialdir=self.directory)
@@ -289,6 +370,8 @@ class BuildLibraryUI:
                            padx=18, pady=10, relief='flat').pack(side='left', padx=(0, 6))
         self.count = tk.Label(window, bg=PANEL, fg=MUTED, anchor='w')
         self.count.pack(fill='x', padx=24, pady=(0, 8))
+        self.reference_bar = tk.Frame(window, bg=PANEL)
+        self.reference_bar.pack(fill='x', padx=24)
         self.results = ScrollArea(window)
         self.results.pack(fill='both', expand=True, padx=24, pady=(0, 20))
         self.search.trace_add('write', lambda *a: self.refresh_picker())
@@ -301,6 +384,12 @@ class BuildLibraryUI:
         for child in self.results.body.winfo_children():
             child.destroy()
         civ = self.civ_options[self.civ_name.get()]
+        for child in self.reference_bar.winfo_children():
+            child.destroy()
+        for sheet in self.reference_sheets.values():
+            if sheet['civ'] == civ.casefold():
+                button(self.reference_bar, sheet['title'],
+                       lambda sid=sheet['id']: self.open_reference(sid), True).pack(side='left', pady=(0, 8))
         favorites = self.state.favorites(civ)
         mode = 'all' if self.search.get().strip() else self.mode.get()
         builds = filter_builds(self.builds, civ, self.context_map, self.search.get(), mode, favorites, self.use_map.get())
@@ -345,7 +434,7 @@ class BuildLibraryUI:
             token = ('tab', build.id)
             if token not in self.readers:
                 reader = BuildReader(app.workspace_book, build, self.state, app.font, app.font_size,
-                                     lambda: self.close_tab(token), '關閉分頁')
+                                     lambda: self.close_tab(token), '關閉分頁', self.reference_for(build))
                 self.readers[token] = reader
                 app.workspace_book.add(reader, text=build.title[:12] + ('…' if len(build.title) > 12 else ''))
             app.workspace_book.select(self.readers[token])
@@ -358,7 +447,8 @@ class BuildLibraryUI:
                 self.reader_frame = tk.Frame(app.workspace_book, bg=PANEL)
                 app.workspace_book.add(self.reader_frame, text='流程閱讀')
             if token not in self.readers:
-                self.readers[token] = BuildReader(self.reader_frame, build, self.state, app.font, app.font_size, self.back)
+                self.readers[token] = BuildReader(self.reader_frame, build, self.state, app.font, app.font_size,
+                                                 self.back, reference=self.reference_for(build))
             self.direct = self.readers[token]
             self.direct.pack(fill='both', expand=True)
             app.workspace_book.select(self.reader_frame)
@@ -381,6 +471,8 @@ class BuildLibraryUI:
         for (kind, _), reader in self.readers.items():
             if kind == 'tab':
                 self.opened_menu.add_command(label=reader.build.title, command=lambda r=reader: self.app.workspace_book.select(r))
+        for sheet in self.reference_tabs.values():
+            self.opened_menu.add_command(label=sheet.sheet['title'], command=lambda s=sheet: self.app.workspace_book.select(s))
         if self.opened_menu.index('end') is not None:
             self.opened_button.pack(side='left', padx=10)
         else:

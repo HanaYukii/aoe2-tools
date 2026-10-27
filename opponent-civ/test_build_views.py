@@ -178,8 +178,11 @@ class BuildViewTests(unittest.TestCase):
         self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
         self.assertEqual(self.ui.sheet_bar.winfo_manager(), 'pack')
         choices = self.ui.sheet_bar.winfo_children()
-        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・城堡期速查', '競技場・壓堡應對'])
+        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・城堡期速查', '勃根地競技場・防壓堡速查', '競技場・壓堡應對'])
         choices[1].invoke()
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
+        self.assertEqual(self.ui.sheet_views['burgundians-arena-defense'].winfo_manager(), 'pack')
+        self.ui.sheet_bar.winfo_children()[2].invoke()
         self.assertEqual(self.ui.sheet, 'arena-castle-drop')
         view = self.ui.sheet_views['arena-castle-drop']
         self.assertEqual(view.winfo_manager(), 'pack')

@@ -8,7 +8,7 @@ import webbrowser
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
-from build_library import LibraryState, key, load_library, map_kind, opening_for, read_catalog, search_builds
+from build_library import LibraryState, key, load_library, map_kind, opening_for, read_catalog, search_builds, sheets_for
 from mapdata import map_label
 from rec_header import split_sides
 
@@ -382,7 +382,7 @@ class LibraryView(tk.Frame):
             self.moved = None
         for child in (*self.results.body.winfo_children(), *self.sheet_bar.winfo_children()):
             child.destroy()
-        sheets = [s for s in ui.sheets.values() if s['civ'] == key(civ)]
+        sheets = sorted((s for s in ui.sheets.values() if s['civ'] in ('', key(civ))), key=lambda s: not s['civ'])
         if sheets:
             tk.Label(self.sheet_bar, text='中期速查', bg=PANEL, fg=MUTED).pack(side='left', padx=(0, 8))
         for sheet in sheets:
@@ -484,7 +484,8 @@ class BuildLibraryUI:
 
     前期流程 shows the build picked for that match, else the first of the civilization's
     recommendations that suits the map. 中期速查 shows the civilization's sheet, one linked to
-    that build first. Marks belong to a game: a new live match starts every build from the top.
+    that build first, then any sheet for every civilization on this map; a bar switches between
+    them. Marks belong to a game: a new live match starts every build from the top.
     """
     def __init__(self, app):
         self.app = app
@@ -515,6 +516,10 @@ class BuildLibraryUI:
         self.title = tk.Label(header, bg=PANEL, fg=FG, font=(app.font, 19, 'bold'), anchor='w', justify='left')
         self.title.pack(side='left', fill='x', expand=True)
         self.sheet_tab = tk.Frame(book, bg=PANEL)
+        self.sheet_choice = tk.StringVar()
+        self.sheet_bar = tk.Frame(self.sheet_tab, bg=PANEL)  # shown when several sheets apply
+        self.sheet_body = tk.Frame(self.sheet_tab, bg=PANEL)
+        self.sheet_body.pack(fill='both', expand=True)
         self.library_tab = LibraryView(book, self)
         book.add(self.plan_tab, text='前期流程')
         book.add(self.sheet_tab, text='中期速查')
@@ -570,25 +575,34 @@ class BuildLibraryUI:
         self.library_tab.refresh(top)
 
     def refresh_sheet(self):
-        def linked(sheet):
-            return self.build is not None and self.build.id in sheet['build_ids']
-        # Sheets are written for one civilization; without one, only a sheet for this build fits.
-        fitting = [s for s in self.sheets.values() if (s['civ'] == key(self.civ) if self.civ else linked(s))]
+        fitting = [s['id'] for s in sheets_for(self.sheets.values(), self.civ, self.build, self.map_label)]
         picked = self.sheet_picks.get(self.match)
-        self.sheet = picked if picked in self.sheets else next((s['id'] for s in sorted(fitting, key=lambda s: not linked(s))), None)
+        self.sheet = picked if picked in self.sheets else next(iter(fitting), None)
         view = None
         if self.sheet is not None:
             view = self.sheet_views.get(self.sheet)
             if view is None:
                 sheet = self.sheets[self.sheet]
                 view = self.sheet_views[self.sheet] = ReferenceSheet(
-                    self.sheet_tab, sheet, self.app.font, self.app.font_size, self.pick,
+                    self.sheet_body, sheet, self.app.font, self.app.font_size, self.pick,
                     [b for b in self.builds if b.id in sheet['build_ids']])
         for other in self.sheet_views.values():
             if other is not view and other.winfo_manager():
                 other.pack_forget()
         if view is not None and not view.winfo_manager():
             view.pack(fill='both', expand=True)
+        choices = fitting + [self.sheet] * (self.sheet is not None and self.sheet not in fitting)
+        for child in self.sheet_bar.winfo_children():
+            child.destroy()
+        self.sheet_choice.set(self.sheet or '')
+        for sheet_id in choices if len(choices) > 1 else ():
+            tk.Radiobutton(self.sheet_bar, text=self.sheets[sheet_id]['title'], variable=self.sheet_choice, value=sheet_id,
+                           command=lambda s=sheet_id: self.open_sheet(s), indicatoron=False, bg=BG, fg=FG,
+                           selectcolor=MARKED, activebackground=SURFACE, padx=14, pady=8, relief='flat').pack(side='left', padx=(0, 6))
+        if len(choices) > 1:
+            self.sheet_bar.pack(fill='x', padx=16, pady=(10, 0), before=self.sheet_body)
+        else:
+            self.sheet_bar.pack_forget()
         self.app.workspace_book.tab(self.sheet_tab, state='normal' if view else 'disabled')
         if view is None:
             self.next_button.pack_forget()

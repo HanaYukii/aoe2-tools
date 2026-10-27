@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from build_library import (DATA_PATH, LibraryError, LibraryState, default_order, load_library, media_file, opening_for,
-                           read_catalog, search_builds)
+                           read_catalog, search_builds, sheets_for)
 
 
 def write_fixture(directory):
@@ -85,6 +85,23 @@ class LibraryTests(unittest.TestCase):
         self.assertFalse([b for b in read_catalog()['builds'] if 'video_url' in b])  # no member video links
         self.assertTrue(all(b.video is None and b.pdf is None for b in builds))
         self.assertIn('動物配置', read_catalog()['overview'])
+
+    def test_sheets_for_a_match_by_civilization_build_and_map(self):
+        sheets = read_catalog(self.catalog)['reference_sheets']
+        def ids(civ, index=None, map_label=''):
+            build = self.builds[index - 1] if index else None
+            return [s['id'] for s in sheets_for(sheets, civ, build, map_label)]
+        self.assertEqual(ids('Britons', 1, '競技場'), ['arena-castle-drop'])  # every civilization, on Arena only
+        self.assertEqual(ids('Britons', 1, 'Arena 2'), ['arena-castle-drop'])
+        self.assertEqual(ids('Britons', 15, '阿拉伯'), [])  # the Burgundian sheet for build 15 is not theirs
+        self.assertEqual(ids('Burgundians', 15, '競技場'), ['burgundians-arena-castle', 'arena-castle-drop'])
+        self.assertEqual(ids('Romans', 1, ''), ['romans-castle-push'])
+        self.assertEqual(ids('', 16, '阿拉伯'), ['burgundians-arena-castle'])  # no civilization: the build's own
+        data = read_catalog(self.catalog)
+        data['reference_sheets'][-1]['maps'] = []  # a sheet for every civilization must name its maps
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        with self.assertRaises(LibraryError):
+            read_catalog(self.catalog)
 
     def test_reference_sheets_reject_unknown_build_links(self):
         data = read_catalog(self.catalog)

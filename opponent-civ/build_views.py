@@ -343,8 +343,9 @@ class LibraryView(tk.Frame):
                            indicatoron=False, bg=BG, fg=FG, selectcolor=MARKED, activebackground=SURFACE,
                            padx=18, pady=10, relief='flat').pack(side='left', padx=(0, 6))
         self.search = tk.StringVar()
+        tk.Label(bar, text='搜尋', bg=PANEL, fg=MUTED).pack(side='left', padx=(18, 0))
         tk.Entry(bar, textvariable=self.search, bg=BG, fg=FG, insertbackground=ACCENT, relief='flat',
-                 font=(font, 13)).pack(side='left', fill='x', expand=True, padx=(12, 0), ipady=8)
+                 font=(font, 13)).pack(side='left', fill='x', expand=True, padx=(8, 0), ipady=8)
         self.search.trace_add('write', lambda *a: self.searched())
         self.sheet_bar = tk.Frame(self, bg=PANEL)
         self.sheet_bar.pack(fill='x', padx=24)
@@ -425,7 +426,8 @@ class LibraryView(tk.Frame):
         button(actions, '看流程', lambda: ui.pick(build), True).pack(side='left', padx=(0, 8))
         if ordered:
             for label, offset, enabled in (('▲', -1, n > 0), ('▼', 1, n < count - 1)):
-                control = button(actions, label, lambda o=offset: self.move(civ, build, o))
+                control = ttk.Button(actions, text=label, command=lambda o=offset: self.move(civ, build, o),
+                                     style='Order.Build.TButton', cursor='hand2', width=0)
                 control.state(['!disabled' if enabled else 'disabled'])
                 control.pack(side='left', padx=(0, 4))
             button(actions, '移出', lambda: self.change(ui.state.remove, civ, build)).pack(side='left', padx=(4, 0))
@@ -491,6 +493,8 @@ class BuildLibraryUI:
                         padding=(16, 11), font=(app.font, 12), anchor='center')
         style.map('Build.TButton', background=[('active', '#344563')], foreground=[('disabled', MUTED)])
         style.configure('Accent.Build.TButton', foreground=ACCENT)
+        # The first ▲ and last ▼ do nothing; dim them well below the usual disabled grey.
+        style.map('Order.Build.TButton', background=[('active', '#344563')], foreground=[('disabled', '#4b5870')])
         self.state = LibraryState()
         # Old folder settings become optional media locations; never a source of steps.
         selected = (getattr(app.args, 'media_dir', None) or getattr(app.args, 'library_dir', None)

@@ -1,5 +1,6 @@
 """Local build picker and persistent, full-table reading views."""
 import os
+import re
 import sys
 import subprocess
 import webbrowser
@@ -27,6 +28,39 @@ def open_local(path):
             subprocess.Popen(['open' if sys.platform == 'darwin' else 'xdg-open', str(path)])
     except OSError as exc:
         messagebox.showerror('無法開啟', str(exc))
+
+
+WIDE_TOKEN = re.compile(r'[⺀-￿]| +|[^ ⺀-￿]+')
+NO_LINE_START = set('，。、；：！？）」』】〕》％%…')
+
+
+def wrap_text(text, measure, width):
+    """Break lines Chinese-style, as Tk only breaks at spaces and leaves long CJK runs ragged.
+
+    Any two wide characters may part; a Latin or number word ("30–35", "TC") stays whole; a
+    space at the break is dropped. Closing punctuation never opens a line: when it does not fit,
+    the word before it moves down with it, so no line runs past `width`.
+    """
+    lines = []
+    for paragraph in text.split('\n'):
+        line, used = [], 0
+        for token in WIDE_TOKEN.findall(paragraph):
+            size = measure(token)
+            if not line or used + size <= width:
+                line.append(token)
+                used += size
+            elif token.isspace():
+                lines.append(''.join(line).rstrip())
+                line, used = [], 0
+            elif token[0] in NO_LINE_START and len(line) > 1 and not line[-1].isspace():
+                carried = line.pop()
+                lines.append(''.join(line).rstrip())
+                line, used = [carried, token], measure(carried) + size
+            else:
+                lines.append(''.join(line).rstrip())
+                line, used = [token], size
+        lines.append(''.join(line).rstrip())
+    return '\n'.join(lines)
 
 
 class ScrollArea(tk.Frame):
@@ -58,10 +92,17 @@ class ScrollArea(tk.Frame):
 
 
 class ReferenceSheet(tk.Frame):
-    """A compact reference tab, with scrolling retained for small displays."""
+    """A glance-at-it reference tab: the cards fill the whole area and the text grows to fit.
+
+    Rows share the height equally and the font is the largest that fits every card. The app's
+    font size is the floor: below it the cards scroll instead of shrinking further.
+    """
+    MAX_SIZE = 30
+
     def __init__(self, parent, sheet, font, size, close, open_build, builds):
         super().__init__(parent, bg=PANEL)
         self.sheet, self.font, self.size = sheet, font, size
+        self.fit_job, self.area, self.fitted_size, self.metrics = None, (0, 0), None, {}
         top = tk.Frame(self, bg=PANEL)
         top.pack(fill='x', padx=16, pady=(10, 4))
         button(top, '關閉速查', close).pack(side='right')
@@ -74,15 +115,17 @@ class ReferenceSheet(tk.Frame):
         self.caption.pack(fill='x', padx=16, pady=(0, 6))
         self.scroll = ScrollArea(self)
         self.scroll.pack(fill='both', expand=True, padx=10, pady=(0, 8))
-        self.cards, self.texts = [], []
+        self.cards, self.titles, self.texts = [], [], []
         for item in sheet['cards']:
-            card = tk.Frame(self.scroll.body, bg=BG, padx=10, pady=7)
-            tk.Label(card, text=item['title'], bg=BG, fg=ACCENT, anchor='w',
-                     font=(font, 12, 'bold')).pack(fill='x', pady=(0, 4))
+            card = tk.Frame(self.scroll.body, bg=BG, padx=14, pady=10)
+            title = tk.Label(card, text=item['title'], bg=BG, fg=ACCENT, anchor='w', justify='left',
+                             font=(font, 12, 'bold'))
+            title.pack(fill='x', pady=(0, 6))
             label = tk.Label(card, text=item['body'], bg=BG, fg=FG, anchor='nw',
                              justify='left', font=(font, max(10, size-1)), wraplength=520)
             label.pack(fill='both', expand=True)
             self.cards.append(card)
+            self.titles.append(title)
             self.texts.append(label)
         footer = tk.Frame(self, bg=PANEL)
         footer.pack(fill='x', padx=16, pady=(0, 6))
@@ -95,19 +138,75 @@ class ReferenceSheet(tk.Frame):
         self.scroll.canvas.bind('<Configure>', self.reflow, add='+')
 
     def reflow(self, event):
-        columns = 3 if event.width >= 1150 else 2 if event.width >= 850 else 1
+        self.area = (event.width, event.height)
+        if self.fit_job is not None:  # resizing fires many events; fit once it settles
+            self.after_cancel(self.fit_job)
+        self.fit_job = self.after(40, self.fit)
+
+    def fit(self):
+        if self.fit_job is not None:  # called directly (font size change) while a resize is pending
+            self.after_cancel(self.fit_job)
+            self.fit_job = None
+        width, height = self.area
+        if width < 50 or height < 50 or not self.cards:
+            return
+        count = len(self.cards)
+        columns = min(count, 3 if width >= 1150 else 2 if width >= 850 else 1)
+        rows = -(-count // columns)
         for col in range(3):
             self.scroll.body.columnconfigure(col, weight=1 if col < columns else 0,
                                              uniform='cards' if col < columns else '')
-        for i, (card, label) in enumerate(zip(self.cards, self.texts)):
+        for row in range(count):
+            self.scroll.body.rowconfigure(row, weight=1 if row < rows else 0,
+                                          uniform='rows' if row < rows else '')
+        for i, card in enumerate(self.cards):
             card.grid(row=i//columns, column=i%columns, sticky='nsew', padx=6, pady=4)
-            label.configure(wraplength=max(240, event.width//columns-42))
-        self.caption.configure(wraplength=max(240, event.width-24))
+        label = self.texts[0]
+        inset = int(label.cget('borderwidth')) + int(label.cget('padx'))
+        chrome = 2 * (2 * (int(label.cget('borderwidth')) + int(label.cget('pady'))))  # title + body
+        wrap = max(200, width//columns - 12 - 28 - 2*inset - 4)   # grid padx, card padx, label inset, slack
+        room = (height - rows*8) / rows - 20 - 6 - chrome         # grid pady, card pady, title gap
+        floor = max(10, self.size - 1)
+        best, low, high = floor, floor + 1, self.MAX_SIZE
+        while low <= high:                                        # largest size whose tallest card fits
+            mid = (low + high) // 2
+            if self.layout(mid, wrap)[1] <= room:
+                best, low = mid, mid + 1
+            else:
+                high = mid - 1
+        wrapped, needed = self.layout(best, wrap)
+        for (title_text, body_text), title, body in zip(wrapped, self.titles, self.texts):
+            title.configure(text=title_text, font=(self.font, best + 1, 'bold'), wraplength=0)
+            body.configure(text=body_text, font=(self.font, best), wraplength=0)
+        self.fitted_size = best
+        # Fill the visible area; taller than it (scrolling) only when the floor size overflows.
+        self.scroll.canvas.itemconfigure(self.scroll.window, height=max(height, rows * (needed + 34 + chrome)))
+        self.caption.configure(wraplength=max(240, width-24))
+
+    def layout(self, size, wrap):
+        """Each card's title and body wrapped at `size`, and the tallest card's text height."""
+        title_measure, title_line = self.measurer((self.font, size + 1, 'bold'))
+        body_measure, body_line = self.measurer((self.font, size))
+        wrapped = [(wrap_text(item['title'], title_measure, wrap), wrap_text(item['body'], body_measure, wrap))
+                   for item in self.sheet['cards']]
+        tallest = max((t.count('\n') + 1) * title_line + (b.count('\n') + 1) * body_line for t, b in wrapped)
+        return wrapped, tallest
+
+    def measurer(self, spec):
+        """Cached text width and line height for a font spec, via Tcl (no Font objects to free)."""
+        if spec not in self.metrics:
+            cache = {}
+
+            def measure(token):
+                if token not in cache:
+                    cache[token] = int(self.tk.call('font', 'measure', spec, token))
+                return cache[token]
+            self.metrics[spec] = (measure, int(self.tk.call('font', 'metrics', spec, '-linespace')))
+        return self.metrics[spec]
 
     def resize(self, size):
         self.size = size
-        for label in self.texts:
-            label.configure(font=(self.font, max(10, size-1)))
+        self.fit()
 
 
 class BuildReader(tk.Frame):

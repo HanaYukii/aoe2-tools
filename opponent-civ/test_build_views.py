@@ -10,6 +10,7 @@ from unittest.mock import patch
 from civdata import Civ
 from dashboard import Dashboard
 from build_library import LibraryState
+from build_views import wrap_text
 from rec_header import Match, Player
 from test_build_library import write_fixture
 
@@ -186,20 +187,52 @@ class BuildViewTests(unittest.TestCase):
         self.ui.close_reference(sid)
         self.assertNotIn(sid, self.ui.reference_tabs)
 
-    def test_reference_reflows_and_stays_scrollable_at_large_font(self):
+    def test_reference_cards_fill_the_area_and_scroll_only_below_the_floor(self):
         from types import SimpleNamespace
         self.ui.open_reference('burgundians-arena-castle')
         sheet = self.ui.reference_tabs['burgundians-arena-castle']
-        sheet.reflow(SimpleNamespace(width=1200))
-        self.assertEqual(sheet.cards[1].grid_info()['column'], 1)
-        self.assertEqual(sheet.cards[2].grid_info()['column'], 2)
-        sheet.reflow(SimpleNamespace(width=1000))
+
+        def lay_out(width, height):
+            sheet.reflow(SimpleNamespace(width=width, height=height))
+            sheet.fit()
+            return float(sheet.scroll.canvas.itemcget(sheet.scroll.window, 'height'))
+
+        self.assertEqual(lay_out(1600, 1400), 1400)         # 3 x 2 cards fill the whole height
+        self.assertEqual([sheet.cards[i].grid_info()['column'] for i in (1, 2)], [1, 2])
+        self.assertEqual(sheet.cards[3].grid_info()['row'], 1)
+        roomy = sheet.fitted_size
+        self.assertGreater(roomy, sheet.size - 1)           # text grows past the floor to use the room
+        lay_out(1600, 700)
+        self.assertLessEqual(sheet.fitted_size, roomy)
+        lay_out(1000, 1400)
         self.assertEqual(sheet.cards[2].grid_info()['column'], 0)
-        sheet.reflow(SimpleNamespace(width=800))
+        self.assertGreater(lay_out(800, 300), 300)           # too small even at the floor: scroll
         self.assertEqual(sheet.cards[1].grid_info()['column'], 0)
+        self.assertEqual(sheet.fitted_size, max(10, sheet.size - 1))
         self.app.resize(10)
         self.assertEqual(len(sheet.texts), 6)
         self.assertEqual(sheet.size, 22)
+
+
+class WrapTextTests(unittest.TestCase):
+    @staticmethod
+    def measure(token):  # wide characters count 2, everything else 1
+        return sum(2 if ord(c) >= 0x2e80 else 1 for c in token)
+
+    def test_chinese_breaks_between_any_characters_and_fills_lines(self):
+        self.assertEqual(wrap_text('看到投石車 →弩砲散開暫緩加衝車', self.measure, 12),
+                         '看到投石車 →\n弩砲散開暫緩\n加衝車')
+
+    def test_number_words_stay_whole_and_the_break_space_is_dropped(self):
+        self.assertEqual(wrap_text('約 30–35 村', self.measure, 6), '約\n30–35\n村')
+
+    def test_closing_punctuation_takes_the_word_before_it_down(self):
+        wrapped = wrap_text('一二三四五六，七', self.measure, 12)
+        self.assertEqual(wrapped, '一二三四五\n六，七')  # no line opens with "，" or runs past the width
+        self.assertTrue(all(self.measure(line) <= 12 for line in wrapped.split('\n')))
+
+    def test_existing_line_breaks_are_kept(self):
+        self.assertEqual(wrap_text('甲乙\n丙丁', self.measure, 100), '甲乙\n丙丁')
 
 
 if __name__ == '__main__':

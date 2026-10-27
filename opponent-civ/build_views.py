@@ -576,6 +576,21 @@ class BuildLibraryUI:
 
     def refresh_sheet(self):
         fitting = [s['id'] for s in sheets_for(self.sheets.values(), self.civ, self.build, self.map_label)]
+        # Map/civilization eligibility also drives the right-hand shortcuts. A civilization's
+        # version wins over the generic sheet with the same action id; no tab is auto-selected.
+        bar = self.app.map_shortcuts
+        for child in bar.winfo_children():
+            child.destroy()
+        actions = set()
+        for sheet_id in fitting:
+            action = self.sheets[sheet_id].get('shortcut')
+            if action and action['id'] not in actions:
+                actions.add(action['id'])
+                button(bar, action['label'], lambda s=sheet_id: self.open_sheet(s), True).pack(side='left', padx=(6, 0))
+        if actions:
+            bar.pack(side='right', before=self.app.meta)
+        else:
+            bar.pack_forget()
         picked = self.sheet_picks.get(self.match)
         self.sheet = picked if picked in self.sheets else next(iter(fitting), None)
         view = None

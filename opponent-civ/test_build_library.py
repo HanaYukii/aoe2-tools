@@ -103,6 +103,13 @@ class LibraryTests(unittest.TestCase):
         with self.assertRaises(LibraryError):
             read_catalog(self.catalog)
 
+    def test_reference_shortcuts_reject_malformed_actions(self):
+        data = read_catalog(self.catalog)
+        data['reference_sheets'][-1]['shortcut'] = {'id': 'castle-drop-defense', 'label': ''}
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        with self.assertRaises(LibraryError):
+            read_catalog(self.catalog)
+
     def test_reference_sheets_reject_unknown_build_links(self):
         data = read_catalog(self.catalog)
         data['reference_sheets'][0]['build_ids'] = ['missing-build']

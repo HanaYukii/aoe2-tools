@@ -10135,7 +10135,11 @@
           "title": "玩家防守討論",
           "url": "https://www.reddit.com/r/aoe2/comments/1crf22m/"
         }
-      ]
+      ],
+      "shortcut": {
+        "id": "castle-drop-defense",
+        "label": "防壓堡速查 →"
+      }
     },
     {
       "id": "arena-castle-drop",
@@ -10182,7 +10186,11 @@
           "title": "壓堡應對討論",
           "url": "https://forums.ageofempires.com/t/how-best-to-counter-castledroppers/166096"
         }
-      ]
+      ],
+      "shortcut": {
+        "id": "castle-drop-defense",
+        "label": "防壓堡速查 →"
+      }
     }
   ]
 }

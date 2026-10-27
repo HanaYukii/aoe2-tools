@@ -191,6 +191,31 @@ class BuildViewTests(unittest.TestCase):
         self.game(35, 29, hour=1, live=True)  # the next game starts from its own sheet again
         self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
 
+    def test_map_shortcut_is_optional_and_never_auto_switches_tabs(self):
+        self.game(35, 29, live=True)
+        bar = self.app.map_shortcuts
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+        self.assertEqual(len(bar.winfo_children()), 1)  # dedicated version replaces generic
+        bar.winfo_children()[0].invoke()
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
+        self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
+        self.book.select(self.ui.plan_tab)
+        self.ui.refresh()
+        self.assertEqual(self.book.select(), str(self.ui.plan_tab))
+        self.game(1, 29, hour=1, live=True)
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+        bar.winfo_children()[0].invoke()
+        self.assertEqual(self.ui.sheet, 'arena-castle-drop')
+        for hour, map_id in enumerate((9, -1), 2):
+            self.game(35, map_id, hour=hour)
+            self.assertFalse(bar.winfo_children())
+            self.assertFalse(bar.winfo_manager())
+            self.ui.open_sheet('burgundians-arena-defense')  # manual library pick doesn't enable a map shortcut
+            self.assertFalse(bar.winfo_children())
+        self.game(35, 29, hour=4)  # history gets the same map-aware entry
+        self.assertEqual(len(bar.winfo_children()), 1)
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+
     def test_library_search_add_remove_and_overview(self):
         self.game(35, 9)
         library = self.ui.library_tab

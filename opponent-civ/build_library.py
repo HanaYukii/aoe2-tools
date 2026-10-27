@@ -93,6 +93,10 @@ def read_catalog(data_path=None):
             # A sheet for every civilization ('civ' empty) must name the maps it is for.
             if sheet['id'] in sheet_ids or not sheet.get('cards') or not isinstance(sheet.get('build_ids'), list) or not (sheet['civ'] or maps):
                 raise ValueError('invalid reference sheet')
+            shortcut = sheet.get('shortcut')
+            if shortcut is not None and (not isinstance(shortcut, dict) or
+                    not all(isinstance(shortcut.get(k), str) and shortcut[k].strip() for k in ('id', 'label'))):
+                raise ValueError('invalid reference shortcut')
             sheet_ids.add(sheet['id'])
             if any(i not in build_ids for i in sheet['build_ids']):
                 raise ValueError('unknown reference build')

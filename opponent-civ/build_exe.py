@@ -10,6 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 from build_library import load_library
+from ui_icons import CIVILIZATIONS
 
 HERE = Path(__file__).parent
 BUILD = HERE / 'build'
@@ -30,7 +31,7 @@ def main():
     args = parser.parse_args()
     builds = load_library()
     expected = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                    icons=len(list((HERE / 'assets').glob('*.png'))), bundled=True)
+                    icons=len(list((HERE / 'assets').rglob('*.png'))), civilizations=len(CIVILIZATIONS), bundled=True)
     BUILD.mkdir(exist_ok=True)
     icon = HERE / 'assets' / 'app.ico'
     destination = BUILD / 'release'

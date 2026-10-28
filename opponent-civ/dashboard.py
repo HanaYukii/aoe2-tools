@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import ttk
 
-from ui_icons import ASSETS, icon, install_window_icon
+from ui_icons import CIVILIZATIONS, civilization_icon, ASSETS, icon, install_window_icon
 from civdata import load_civs
 from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
@@ -98,8 +98,6 @@ class Dashboard:
         tk.Label(bar, text='字級', bg=BG, fg=MUTED).pack(side='right')
         self.sidebar_toggle = button(bar, '收起對局列表', self.toggle_sidebar)
         self.sidebar_toggle.pack(side='right', padx=16)
-        tk.Label(bar, text='記得蓋房子', font=(self.display_font, 26, 'bold'),
-                 bg=BG, fg=AMBER).pack(side='left', fill='x', expand=True, padx=12)
         footer = tk.Frame(root, bg=BG)
         footer.pack(side='bottom', fill='x', padx=28, pady=12)
         tk.Label(footer, text='●  展示對局 · 內建流程' if getattr(args, 'demo', False) else '●  本機錄影 · 自動監看', bg=BG, fg=ACCENT).pack(side='left')
@@ -115,8 +113,16 @@ class Dashboard:
         ribbon.pack(fill='x')
         for color in COLORS:
             tk.Frame(ribbon, bg=color, height=3).pack(side='left', fill='x', expand=True)
-        self.status = tk.Label(detail, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
-        self.status.pack(fill='x', padx=22, pady=(10, 4))
+        info_row = tk.Frame(detail, bg=PANEL)
+        info_row.pack(fill='x', padx=22, pady=(10, 4))
+        self.house_reminder = tk.Label(info_row, text='記得蓋房子',
+            image=icon(root, 'town-center', 32), compound='left', padx=6,
+            font=(self.display_font, 19, 'bold'), bg=PANEL, fg=AMBER)
+        self.house_reminder.pack(side='right', padx=(14, 0))
+        self.status = tk.Label(info_row, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
+        self.status.pack(side='left', fill='x', expand=True)
+        info_row.bind('<Configure>', lambda e: self.status.configure(
+            wraplength=max(180, e.width - self.house_reminder.winfo_reqwidth() - 20)))
         meta_row = tk.Frame(detail, bg=PANEL)
         meta_row.pack(fill='x', padx=22, pady=(0, 12))
         self.map_shortcuts = tk.Frame(meta_row, bg=PANEL)
@@ -168,7 +174,6 @@ class Dashboard:
 
     def reflow(self, event):
         if event.widget is self.root:
-            self.status.configure(wraplength=max(300, event.width - 470))
             self.meta.configure(wraplength=max(300, event.width - 470))
 
     def resize(self, delta):
@@ -388,14 +393,13 @@ class Dashboard:
                 civ = self.civs.get(player.civ_id)
                 name = civ.name if civ else f'未知文明 #{player.civ_id}'
                 frame = tk.Frame(self.book, bg=PANEL)
-                self.book.add(frame, text=f'{role} · {name}')
+                self.book.add(frame, text=f'{role} · {name}',
+                              image=civilization_icon(self.root, civ.key if civ else '', 24), compound='left')
                 color = COLORS[player.civ_id % len(COLORS)]
                 hero = tk.Frame(frame, bg=PANEL)
                 hero.pack(fill='x', padx=24, pady=(24, 16))
-                badge = tk.Canvas(hero, width=58, height=68, bg=PANEL, highlightthickness=0)
-                badge.pack(side='left', padx=(0, 18))
-                badge.create_polygon(4, 4, 54, 4, 54, 42, 29, 63, 4, 42, fill=SURFACE, outline=color, width=2)
-                badge.create_text(29, 28, text='II', font=('Georgia', 23, 'bold'), fill=color)
+                tk.Label(hero, image=civilization_icon(self.root, civ.key if civ else '', 64),
+                         bg=PANEL).pack(side='left', padx=(0, 18))
                 heading = tk.Frame(hero, bg=PANEL)
                 heading.pack(side='left', fill='x', expand=True)
                 tk.Label(heading, text=(civ.key.upper() if civ else 'UNKNOWN') + '  /  ' + role, font=('Segoe UI', 9), fg=color, bg=PANEL, anchor='w').pack(fill='x')
@@ -506,7 +510,7 @@ def main():
         from build_library import load_library
         builds = load_library()
         report = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                      icons=len(list(ASSETS.glob('*.png'))), bundled=bool(getattr(sys, 'frozen', False)))
+                      icons=len(list(ASSETS.rglob('*.png'))), civilizations=len(CIVILIZATIONS), bundled=bool(getattr(sys, 'frozen', False)))
         Path(args.check_bundled_data).write_text(json.dumps(report), encoding='utf-8')
         return
     if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game

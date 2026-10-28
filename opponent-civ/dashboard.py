@@ -115,14 +115,20 @@ class Dashboard:
             tk.Frame(ribbon, bg=color, height=3).pack(side='left', fill='x', expand=True)
         info_row = tk.Frame(detail, bg=PANEL)
         info_row.pack(fill='x', padx=22, pady=(10, 4))
-        self.house_reminder = tk.Label(info_row, text='記得蓋房子',
-            image=icon(root, 'town-center', 32), compound='left', padx=6,
-            font=(self.display_font, 19, 'bold'), bg=PANEL, fg=AMBER)
-        self.house_reminder.pack(side='right', padx=(14, 0))
         self.status = tk.Label(info_row, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
-        self.status.pack(side='left', fill='x', expand=True)
-        info_row.bind('<Configure>', lambda e: self.status.configure(
-            wraplength=max(180, e.width - self.house_reminder.winfo_reqwidth() - 20)))
+        self.status.pack(fill='x', expand=True)
+        info_row.bind('<Configure>', lambda e: self.status.configure(wraplength=max(180, e.width)))
+        reminders = tk.Frame(detail, bg=PANEL)
+        reminders.pack(fill='x', padx=22, pady=(0, 5))
+        self.reminders = []
+        for column, (text, artwork) in enumerate((
+                ('記得蓋房子', 'town-center'), ('注意 TC 閒置', 'hourglass'), ('記得圍家', 'wall'))):
+            reminder = tk.Label(reminders, text=text, image=icon(root, artwork, 24),
+                compound='left', padx=4, font=(self.display_font, 14, 'bold'), bg=PANEL, fg=AMBER)
+            reminder.grid(row=0, column=column, sticky='w', padx=(0, 12))
+            reminders.columnconfigure(column, weight=1)
+            self.reminders.append(reminder)
+        self.house_reminder = self.reminders[0]
         meta_row = tk.Frame(detail, bg=PANEL)
         meta_row.pack(fill='x', padx=22, pady=(0, 12))
         self.map_shortcuts = tk.Frame(meta_row, bg=PANEL)

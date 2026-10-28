@@ -1,0 +1,226 @@
+{
+  "armenians": {
+    "name": "亞美尼亞",
+    "motif": "杏紅琺瑯、石雕十字"
+  },
+  "aztecs": {
+    "name": "阿茲特克",
+    "motif": "黑曜石、豹紋圓盾"
+  },
+  "bengalis": {
+    "name": "孟加拉",
+    "motif": "蓮花、戰象"
+  },
+  "berbers": {
+    "name": "柏柏",
+    "motif": "沙漠、駱駝"
+  },
+  "bohemians": {
+    "name": "波希米亞",
+    "motif": "聖杯、車堡"
+  },
+  "britons": {
+    "name": "不列顛",
+    "motif": "長弓、雄獅"
+  },
+  "bulgarians": {
+    "name": "保加利亞",
+    "motif": "獅紋、騎兵"
+  },
+  "burgundians": {
+    "name": "勃根地",
+    "motif": "葡萄藤、騎士"
+  },
+  "burmese": {
+    "name": "緬甸",
+    "motif": "孔雀、金塔"
+  },
+  "byzantines": {
+    "name": "拜占庭",
+    "motif": "紫金、雙頭鷹"
+  },
+  "celts": {
+    "name": "塞爾特",
+    "motif": "繩結、野豬"
+  },
+  "chinese": {
+    "name": "中國",
+    "motif": "龍紋、連弩"
+  },
+  "cumans": {
+    "name": "庫曼",
+    "motif": "草原、面甲"
+  },
+  "danes": {
+    "name": "丹麥",
+    "motif": "戰斧、長船"
+  },
+  "dravidians": {
+    "name": "達羅毗荼",
+    "motif": "朱羅虎、航海"
+  },
+  "ethiopians": {
+    "name": "衣索比亞",
+    "motif": "獅子、雕花十字"
+  },
+  "franks": {
+    "name": "法蘭克",
+    "motif": "百合、騎士"
+  },
+  "georgians": {
+    "name": "喬治亞",
+    "motif": "高加索、守護騎士"
+  },
+  "goths": {
+    "name": "哥德",
+    "motif": "鐵盔、步兵盾"
+  },
+  "gurjaras": {
+    "name": "瞿折羅",
+    "motif": "太陽、輪刃"
+  },
+  "hindustanis": {
+    "name": "印度斯坦",
+    "motif": "拱門、彎刀"
+  },
+  "huns": {
+    "name": "匈",
+    "motif": "游牧、複合弓"
+  },
+  "incas": {
+    "name": "印加",
+    "motif": "太陽、安地斯"
+  },
+  "italians": {
+    "name": "義大利",
+    "motif": "城邦、十字弓"
+  },
+  "japanese": {
+    "name": "日本",
+    "motif": "武士盔、月牙"
+  },
+  "jurchens": {
+    "name": "女真",
+    "motif": "獵鷹、重甲"
+  },
+  "khitans": {
+    "name": "契丹",
+    "motif": "草原、鹿紋"
+  },
+  "khmer": {
+    "name": "高棉",
+    "motif": "吳哥、戰象"
+  },
+  "koreans": {
+    "name": "朝鮮",
+    "motif": "龜船、海防"
+  },
+  "lithuanians": {
+    "name": "立陶宛",
+    "motif": "白馬、騎士"
+  },
+  "magyars": {
+    "name": "馬札爾",
+    "motif": "圖魯爾鳥、馬弓"
+  },
+  "malay": {
+    "name": "馬來",
+    "motif": "短劍、海洋"
+  },
+  "malians": {
+    "name": "馬利",
+    "motif": "黃金、泥磚建築"
+  },
+  "mapuche": {
+    "name": "曼帕契",
+    "motif": "銀飾、智利南部"
+  },
+  "mayans": {
+    "name": "馬雅",
+    "motif": "玉石、階梯神廟"
+  },
+  "mongols": {
+    "name": "蒙古",
+    "motif": "馬尾旗、馬弓"
+  },
+  "muisca": {
+    "name": "穆伊斯卡",
+    "motif": "金工、木筏"
+  },
+  "persians": {
+    "name": "波斯",
+    "motif": "翼紋、戰象"
+  },
+  "poles": {
+    "name": "波蘭",
+    "motif": "白鷹、紅盾"
+  },
+  "portuguese": {
+    "name": "葡萄牙",
+    "motif": "渾天儀、帆船"
+  },
+  "romans": {
+    "name": "羅馬",
+    "motif": "紅金長盾、閃電"
+  },
+  "saracens": {
+    "name": "薩拉森",
+    "motif": "幾何紋、彎刀"
+  },
+  "saxons": {
+    "name": "撒克遜",
+    "motif": "海克斯刀、圓盾"
+  },
+  "shu": {
+    "name": "蜀",
+    "motif": "連弩、山地"
+  },
+  "sicilians": {
+    "name": "西西里",
+    "motif": "諾曼騎士、地中海"
+  },
+  "slavs": {
+    "name": "斯拉夫",
+    "motif": "木城、戰斧"
+  },
+  "spanish": {
+    "name": "西班牙",
+    "motif": "城堡、探險"
+  },
+  "tatars": {
+    "name": "韃靼",
+    "motif": "馬弓、絲路"
+  },
+  "teutons": {
+    "name": "條頓",
+    "motif": "黑十字、重甲"
+  },
+  "tupi": {
+    "name": "圖皮",
+    "motif": "長弓、木戰棍"
+  },
+  "turks": {
+    "name": "土耳其",
+    "motif": "火炮、鄂圖曼"
+  },
+  "varangians": {
+    "name": "瓦蘭吉",
+    "motif": "戰斧、河道遠征"
+  },
+  "vietnamese": {
+    "name": "越南",
+    "motif": "銅鼓、藤盾"
+  },
+  "vikings": {
+    "name": "維京",
+    "motif": "龍首長船、海洋"
+  },
+  "wei": {
+    "name": "魏",
+    "motif": "虎紋、重騎"
+  },
+  "wu": {
+    "name": "吳",
+    "motif": "江東、戰船"
+  }
+}

@@ -1,4 +1,5 @@
 """Bundled transparent artwork, cached per Tk interpreter (no runtime Pillow)."""
+import json
 from pathlib import Path
 import tkinter as tk
 
@@ -26,3 +27,14 @@ def sheet_icon(sheet):
     if 'drop' in ident or 'defense' in ident:
         return 'combat'
     return 'economy'
+
+
+CIVILIZATIONS = json.loads((ASSETS / 'civilizations' / 'catalog.json').read_text(encoding='utf-8'))
+
+
+def civilization_icon(widget, civ_key, size=32):
+    """Use internal civilization keys, never translated names or replay IDs."""
+    normalized = str(civ_key or '').strip().casefold()
+    if normalized not in CIVILIZATIONS:
+        return icon(widget, 'map', size)
+    return icon(widget, f'civilizations/{normalized}', size)

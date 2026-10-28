@@ -40,6 +40,17 @@ class DashboardTests(unittest.TestCase):
             self.assertIs(image, icon(self.root, name))
         self.assertTrue(self.app.workspace_book.tab(self.app.rp_frame, 'image'))
 
+    def test_all_civilization_icons_load_with_fallback(self):
+        from ui_icons import CIVILIZATIONS, civilization_icon, icon
+        self.assertEqual(len(CIVILIZATIONS), 56)
+        for key in CIVILIZATIONS:
+            for size in (24, 32, 64, 128):
+                image = civilization_icon(self.root, key, size)
+                self.assertEqual((image.width(), image.height()), (size, size))
+        self.assertIs(civilization_icon(self.root, 'Romans'), civilization_icon(self.root, 'romans'))
+        self.assertIs(civilization_icon(self.root, 'future-civ'), icon(self.root, 'map', 32))
+        self.assertIs(civilization_icon(self.root, None), icon(self.root, 'map', 32))
+
     def test_manual_drain_replaces_pending_timer(self):
         previous = self.app.drain_timer
         self.app.drain()

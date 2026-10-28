@@ -9,7 +9,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 from build_library import LibraryState, key, load_library, map_kind, opening_for, read_catalog, search_builds, sheets_for
-from ui_icons import icon, sheet_icon
+from ui_icons import icon, sheet_icon, civilization_icon
 from mapdata import map_label
 from rec_header import split_sides
 
@@ -117,7 +117,7 @@ class ReferenceSheet(tk.Frame):
         self.fit_job, self.area, self.fitted_size, self.metrics = None, (0, 0), None, {}
         top = tk.Frame(self, bg=PANEL)
         top.pack(fill='x', padx=16, pady=(10, 4))
-        tk.Label(top, text=sheet['title'], image=icon(self, sheet_icon(sheet), 32), compound='left', padx=6, bg=PANEL, fg=FG, font=(font, 17, 'bold'),
+        tk.Label(top, text=sheet['title'], image=(civilization_icon(self, sheet['civ'], 32) if sheet.get('civ') else icon(self, sheet_icon(sheet), 32)), compound='left', padx=6, bg=PANEL, fg=FG, font=(font, 17, 'bold'),
                  anchor='w').pack(side='left')
         for build in reversed(builds):
             button(top, build.title, lambda b=build: open_build(b)).pack(side='right', padx=(6, 0))
@@ -332,6 +332,8 @@ class LibraryView(tk.Frame):
         context.pack(fill='x', padx=24, pady=4)
         self.civ_name = tk.StringVar(value='未指定文明')
         self.selector = ttk.Combobox(context, textvariable=self.civ_name, values=list(self.options), state='readonly', width=15)
+        self.civ_badge = tk.Label(context, image=civilization_icon(self, ''), bg=PANEL)
+        self.civ_badge.pack(side='left', padx=(0, 8))
         self.selector.pack(side='left')
         self.selector.bind('<<ComboboxSelected>>', lambda e: self.refresh(top=True))
         self.map_note = tk.Label(context, bg=PANEL, fg=MUTED, anchor='w')
@@ -378,6 +380,7 @@ class LibraryView(tk.Frame):
 
     def refresh(self, top=False):
         ui, civ, mode = self.ui, self.civ(), self.mode.get()
+        self.civ_badge.configure(image=civilization_icon(self, civ))
         position = 0 if top else self.results.canvas.yview()[0]
         if top:
             self.moved = None

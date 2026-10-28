@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import ttk
 
-from ui_icons import icon, install_window_icon
+from ui_icons import ASSETS, icon, install_window_icon
 from civdata import load_civs
 from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
@@ -506,7 +506,7 @@ def main():
         from build_library import load_library
         builds = load_library()
         report = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                      bundled=bool(getattr(sys, 'frozen', False)))
+                      icons=len(list(ASSETS.glob('*.png'))), bundled=bool(getattr(sys, 'frozen', False)))
         Path(args.check_bundled_data).write_text(json.dumps(report), encoding='utf-8')
         return
     if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game

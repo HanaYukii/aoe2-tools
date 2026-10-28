@@ -163,15 +163,34 @@ class BuildViewTests(unittest.TestCase):
         library.civ_name.set('羅馬')
         library.refresh(top=True)
         sheet_buttons = [w for w in library.sheet_bar.winfo_children() if isinstance(w, ttk.Button)]
-        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・城堡長劍衝車速查', '競技場・壓堡應對'])
+        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・主線運營', '羅馬・對弓兵', '羅馬・對馬弓', '羅馬・對騎士', '競技場・壓堡應對'])
         sheet_buttons[0].invoke()
         self.assertEqual(self.ui.sheet, 'romans-castle-push')
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
         self.assertEqual([b.cget('text') for b in self.ui.sheet_bar.winfo_children()],
-                         ['競技場・壓堡應對', '羅馬・城堡長劍衝車速查'])  # the pick joins what applies here
+                         ['競技場・壓堡應對', '羅馬・主線運營'])  # the pick joins what applies here
         self.game(43, 9, hour=3)
         self.assertEqual(self.ui.sheet, 'romans-castle-push')
         self.assertEqual(len(self.ui.sheet_views), 3)
+
+    def test_roman_branches_switch_manually_and_keep_the_match_choice(self):
+        self.game(43, 9, live=True)
+        expected = ['羅馬・主線運營', '羅馬・對弓兵', '羅馬・對馬弓', '羅馬・對騎士']
+        self.assertEqual([b.cget('text') for b in self.ui.sheet_bar.winfo_children()], expected)
+        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        for index, ident in enumerate(['romans-vs-archers', 'romans-vs-cavalry-archers', 'romans-vs-knights'], 1):
+            self.ui.sheet_bar.winfo_children()[index].invoke()
+            self.assertEqual(self.ui.sheet, ident)
+            view = self.ui.sheet_views[ident]
+            self.assertEqual(len(view.cards), 6)
+            view.reflow(SimpleNamespace(width=1000, height=900))
+            view.fit()
+            self.assertTrue(any(body.tag_ranges('eco') for body in view.texts))
+        self.ui.refresh()
+        self.assertEqual(self.ui.sheet, 'romans-vs-knights')
+        self.assertEqual(self.ui.sheet_bar.winfo_children()[3].grid_info()['row'], 1)
+        self.game(43, 9, hour=1, live=True)
+        self.assertEqual(self.ui.sheet, 'romans-castle-push')
 
     def test_arena_adds_the_castle_drop_sheet_beside_the_civilization_sheet(self):
         self.game(35, 29)

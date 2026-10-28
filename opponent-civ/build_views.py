@@ -415,9 +415,10 @@ class LibraryView(tk.Frame):
             child.destroy()
         sheets = sorted((s for s in ui.sheets.values() if s['civ'] in ('', key(civ))), key=lambda s: not s['civ'])
         if sheets:
-            tk.Label(self.sheet_bar, text='中期速查', bg=PANEL, fg=MUTED).pack(side='left', padx=(0, 8))
-        for sheet in sheets:
-            button(self.sheet_bar, sheet['title'], lambda sid=sheet['id']: ui.open_sheet(sid), True).pack(side='left', padx=(0, 6), pady=4)
+            tk.Label(self.sheet_bar, text='中期速查', bg=PANEL, fg=MUTED).grid(row=0, column=0, columnspan=2, sticky='w')
+        for i, sheet in enumerate(sheets):
+            button(self.sheet_bar, sheet['title'], lambda sid=sheet['id']: ui.open_sheet(sid), True).grid(
+                row=1 + i // 2, column=i % 2, sticky='w', padx=(0, 6), pady=4)
         kind = map_kind(ui.map_label)
         self.map_note.configure(text=f'本場地圖：{ui.map_label}' + (f'（{MAP_TYPES[kind]}）' if kind else '') if ui.map_label else '本場地圖未知')
         if mode == 'overview':
@@ -641,10 +642,11 @@ class BuildLibraryUI:
         for child in self.sheet_bar.winfo_children():
             child.destroy()
         self.sheet_choice.set(self.sheet or '')
-        for sheet_id in choices if len(choices) > 1 else ():
+        for i, sheet_id in enumerate(choices if len(choices) > 1 else ()):
             tk.Radiobutton(self.sheet_bar, text=self.sheets[sheet_id]['title'], variable=self.sheet_choice, value=sheet_id,
                            command=lambda s=sheet_id: self.open_sheet(s), indicatoron=False, bg=BG, fg=FG,
-                           selectcolor=MARKED, activebackground=SURFACE, padx=14, pady=8, relief='flat').pack(side='left', padx=(0, 6))
+                           selectcolor=MARKED, activebackground=SURFACE, padx=10, pady=8, wraplength=150, relief='flat').grid(
+                               row=i // 3, column=i % 3, sticky='ew', padx=(0, 6), pady=(0, 4))
         if len(choices) > 1:
             self.sheet_bar.pack(fill='x', padx=16, pady=(10, 0), before=self.sheet_body)
         else:

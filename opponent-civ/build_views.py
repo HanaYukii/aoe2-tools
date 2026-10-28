@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 from build_library import LibraryState, key, load_library, map_kind, opening_for, read_catalog, search_builds, sheets_for
+from ui_icons import icon, sheet_icon
 from mapdata import map_label
 from rec_header import split_sides
 
@@ -116,7 +117,7 @@ class ReferenceSheet(tk.Frame):
         self.fit_job, self.area, self.fitted_size, self.metrics = None, (0, 0), None, {}
         top = tk.Frame(self, bg=PANEL)
         top.pack(fill='x', padx=16, pady=(10, 4))
-        tk.Label(top, text=sheet['title'], bg=PANEL, fg=FG, font=(font, 17, 'bold'),
+        tk.Label(top, text=sheet['title'], image=icon(self, sheet_icon(sheet), 32), compound='left', padx=6, bg=PANEL, fg=FG, font=(font, 17, 'bold'),
                  anchor='w').pack(side='left')
         for build in reversed(builds):
             button(top, build.title, lambda b=build: open_build(b)).pack(side='right', padx=(6, 0))
@@ -325,7 +326,7 @@ class LibraryView(tk.Frame):
         font = ui.app.font
         top = tk.Frame(self, bg=PANEL)
         top.pack(fill='x', padx=24, pady=(18, 8))
-        tk.Label(top, text='流程庫', bg=PANEL, fg=FG, font=(font, 20, 'bold')).pack(side='left')
+        tk.Label(top, text='流程庫', image=icon(self, 'scroll', 32), compound='left', padx=6, bg=PANEL, fg=FG, font=(font, 20, 'bold')).pack(side='left')
         button(top, '本機影片（選用）…', ui.choose_folder).pack(side='right')
         context = tk.Frame(self, bg=PANEL)
         context.pack(fill='x', padx=24, pady=4)
@@ -339,7 +340,7 @@ class LibraryView(tk.Frame):
         bar.pack(fill='x', padx=24, pady=(12, 6))
         self.mode = tk.StringVar(value='recommended')
         for label, value in self.MODES:
-            tk.Radiobutton(bar, text=label, variable=self.mode, value=value, command=lambda: self.refresh(top=True),
+            tk.Radiobutton(bar, text=label, image=icon(self, 'sheep' if value == 'overview' else 'scroll'), compound='left', variable=self.mode, value=value, command=lambda: self.refresh(top=True),
                            indicatoron=False, bg=BG, fg=FG, selectcolor=MARKED, activebackground=SURFACE,
                            padx=18, pady=10, relief='flat').pack(side='left', padx=(0, 6))
         self.search = tk.StringVar()
@@ -521,9 +522,9 @@ class BuildLibraryUI:
         self.sheet_body = tk.Frame(self.sheet_tab, bg=PANEL)
         self.sheet_body.pack(fill='both', expand=True)
         self.library_tab = LibraryView(book, self)
-        book.add(self.plan_tab, text='前期流程')
-        book.add(self.sheet_tab, text='中期速查')
-        book.add(self.library_tab, text='流程庫')
+        book.add(self.plan_tab, text='前期流程', image=icon(app.root, 'hourglass'), compound='left')
+        book.add(self.sheet_tab, text='中期速查', image=icon(app.root, 'combat'), compound='left')
+        book.add(self.library_tab, text='流程庫', image=icon(app.root, 'scroll'), compound='left')
         self.set_match(None)
 
     def reload(self):

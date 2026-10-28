@@ -32,6 +32,14 @@ class DashboardTests(unittest.TestCase):
         self.app = self.root = None  # free the dashboard's Tk objects on this thread (see test_build_views)
         gc.collect()
 
+    def test_bundled_icons_load_and_share_only_this_root(self):
+        from ui_icons import icon
+        for name in ('town-center', 'map', 'combat', 'sheep', 'scroll', 'economy', 'hourglass', 'ram'):
+            image = icon(self.root, name)
+            self.assertEqual((image.width(), image.height()), (24, 24))
+            self.assertIs(image, icon(self.root, name))
+        self.assertTrue(self.app.workspace_book.tab(self.app.rp_frame, 'image'))
+
     def test_manual_drain_replaces_pending_timer(self):
         previous = self.app.drain_timer
         self.app.drain()

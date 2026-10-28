@@ -13,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import ttk
 
+from ui_icons import ASSETS, icon, install_window_icon
 from civdata import load_civs
 from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
@@ -59,6 +60,7 @@ class Dashboard:
         self.history_request = 0
         self.history_rows = []
         root.title('AoE2 · 對局筆記')
+        install_window_icon(root)
         place(root, 1220, 860)
         root.minsize(960, 650)
         root.configure(bg=BG)
@@ -84,7 +86,7 @@ class Dashboard:
         root.option_add('*Button.highlightThickness', 0)
         bar = tk.Frame(root, bg=BG)
         bar.pack(fill='x', padx=28, pady=(10, 10))
-        tk.Label(bar, text='II', font=('Georgia', 30, 'bold'), bg=BG, fg=ACCENT).pack(side='left', padx=(0, 14))
+        tk.Label(bar, image=icon(root, 'town-center', 64), bg=BG).pack(side='left', padx=(0, 14))
         brand = tk.Frame(bar, bg=BG)
         brand.pack(side='left')
         tk.Label(brand, text='對局筆記', font=(self.display_font, 20, 'bold'), bg=BG, fg=FG, anchor='w').pack(anchor='w')
@@ -123,7 +125,7 @@ class Dashboard:
         self.workspace_book = ttk.Notebook(detail)
         self.workspace_book.pack(fill='both', expand=True)
         self.rp_frame = tk.Frame(self.workspace_book, bg=PANEL)
-        self.workspace_book.add(self.rp_frame, text='對局 RP')
+        self.workspace_book.add(self.rp_frame, text='對局 RP', image=icon(root, 'map'), compound='left')
         root.bind('<Configure>', lambda event: self.reflow(event))
         self.book = ttk.Notebook(self.rp_frame)
         self.book.pack(fill='both', expand=True, padx=20, pady=(0, 16))
@@ -504,7 +506,7 @@ def main():
         from build_library import load_library
         builds = load_library()
         report = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                      bundled=bool(getattr(sys, 'frozen', False)))
+                      icons=len(list(ASSETS.glob('*.png'))), bundled=bool(getattr(sys, 'frozen', False)))
         Path(args.check_bundled_data).write_text(json.dumps(report), encoding='utf-8')
         return
     if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game

@@ -4,7 +4,8 @@
 
 - town-center：程式、視窗及頁首識別
 - map：對局 RP
-- hourglass：前期流程
+- wall：第 01 款極簡城門，用於圍家提醒
+- hourglass：前期流程及 TC 閒置提醒
 - combat：中期速查及壓堡防守
 - scroll：流程庫
 - economy：經濟速查

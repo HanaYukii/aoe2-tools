@@ -103,6 +103,22 @@ class ScrollArea(tk.Frame):
             self.bind_wheel(child)
 
 
+REFERENCE_TECH = re.compile(
+    r'精銳|二級箭|二級射|[一二三]級(?:步防|弓防|馬防|金|石)|'
+    r'[一二三](?:木|農|防)|彈道(?:學)?|化學|織布|輪軸|手推車|'
+    r'銀冠(?:葡萄園)?|金冠|徵兵(?:技術)?|步防|弓防|馬防|戟兵|長槍升級')
+REFERENCE_ECO = re.compile(r'\d+(?:[–—~～-]\d+)?\s*(?:木村|金村|石村|村|木|食|金|石)')
+
+
+def reference_highlights(text):
+    """Locate emphasis even when the CJK wrapper inserts a line break inside a phrase."""
+    positions = [i for i, char in enumerate(text) if char != '\n']
+    flat = ''.join(text[i] for i in positions)
+    return [(tag, positions[m.start()], positions[m.end()-1] + 1)
+            for tag, pattern in [('tech', REFERENCE_TECH), ('eco', REFERENCE_ECO)]
+            for m in pattern.finditer(flat)]
+
+
 class ReferenceSheet(tk.Frame):
     """A glance-at-it reference tab: the cards fill the whole area and the text grows to fit.
 
@@ -134,8 +150,11 @@ class ReferenceSheet(tk.Frame):
             title = tk.Label(card, text=item['title'], bg=BG, fg=ACCENT, anchor='w', justify='left',
                              font=(font, 12, 'bold'))
             title.pack(fill='x', pady=(0, 6))
-            label = tk.Label(card, text=item['body'], bg=BG, fg=FG, anchor='nw',
-                             justify='left', font=(font, max(10, size-1)), wraplength=520)
+            label = tk.Text(card, bg=BG, fg=FG, font=(font, max(10, size-1)),
+                            width=1, height=1, wrap='none', borderwidth=0, highlightthickness=0,
+                            padx=0, pady=0, takefocus=False, cursor='arrow', exportselection=False)
+            label.insert('1.0', item['body'])
+            label.configure(state='disabled')
             label.pack(fill='both', expand=True)
             self.cards.append(card)
             self.titles.append(title)
@@ -190,7 +209,14 @@ class ReferenceSheet(tk.Frame):
         wrapped, needed = self.layout(best, wrap)
         for (title_text, body_text), title, body in zip(wrapped, self.titles, self.texts):
             title.configure(text=title_text, font=(self.font, best + 1, 'bold'), wraplength=0)
-            body.configure(text=body_text, font=(self.font, best), wraplength=0)
+            body.configure(state='normal', font=(self.font, best), height=body_text.count('\n') + 1)
+            body.delete('1.0', 'end')
+            body.insert('1.0', body_text)
+            body.tag_configure('tech', foreground='#8bcaff', font=(self.font, best, 'bold'))
+            body.tag_configure('eco', foreground='#f4cc78', font=(self.font, best, 'bold'))
+            for tag, start, end in reference_highlights(body_text):
+                body.tag_add(tag, f'1.0+{start}c', f'1.0+{end}c')
+            body.configure(state='disabled')
         self.fitted_size = best
         # Fill the visible area; taller than it (scrolling) only when the floor size overflows.
         self.scroll.canvas.itemconfigure(self.scroll.window, height=max(height, rows * (needed + 34 + chrome)))
@@ -199,7 +225,8 @@ class ReferenceSheet(tk.Frame):
     def layout(self, size, wrap):
         """Each card's title and body wrapped at `size`, and the tallest card's text height."""
         title_measure, title_line = self.measurer((self.font, size + 1, 'bold'))
-        body_measure, body_line = self.measurer((self.font, size))
+        # Reserve bold widths so emphasized spans cannot overflow the fitted card.
+        body_measure, body_line = self.measurer((self.font, size, 'bold'))
         wrapped = [(wrap_text(item['title'], title_measure, wrap), wrap_text(item['body'], body_measure, wrap))
                    for item in self.sheet['cards']]
         tallest = max((t.count('\n') + 1) * title_line + (b.count('\n') + 1) * body_line for t, b in wrapped)

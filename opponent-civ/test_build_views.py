@@ -11,7 +11,7 @@ from unittest.mock import patch
 from civdata import Civ
 from dashboard import Dashboard
 from build_library import LibraryState
-from build_views import wrap_text
+from build_views import wrap_text, reference_highlights
 from rec_header import Match, Player
 from test_build_library import write_fixture
 
@@ -282,6 +282,12 @@ class BuildViewTests(unittest.TestCase):
         self.assertEqual(lay_out(1600, 1400), 1400)         # 3 x 2 cards fill the whole height
         self.assertEqual([sheet.cards[i].grid_info()['column'] for i in (1, 2)], [1, 2])
         self.assertEqual(sheet.cards[3].grid_info()['row'], 1)
+        for body in sheet.texts:
+            self.assertEqual(str(body.cget('state')), 'disabled')
+        self.assertTrue(any(body.tag_ranges('tech') for body in sheet.texts))
+        self.assertTrue(any(body.tag_ranges('eco') for body in sheet.texts))
+        self.assertEqual([label.cget('text') for label in self.app.reminders],
+                         ['記得蓋房子', '注意 TC 閒置', '記得圍家'])
         roomy = sheet.fitted_size
         self.assertGreater(roomy, sheet.size - 1)           # text grows past the floor to use the room
         lay_out(1600, 700)
@@ -312,6 +318,12 @@ class WrapTextTests(unittest.TestCase):
         wrapped = wrap_text('一二三四五六，七', self.measure, 12)
         self.assertEqual(wrapped, '一二三四五\n六，七')  # no line opens with "，" or runs past the width
         self.assertTrue(all(self.measure(line) <= 12 for line in wrapped.split('\n')))
+
+    def test_reference_emphasis_survives_wrapping(self):
+        text = '先補二級\n射、彈道學；配 22–26\n木，其他依情況調整。'
+        spans = [(tag, text[start:end].replace('\n', ''))
+                 for tag, start, end in reference_highlights(text)]
+        self.assertEqual(spans, [('tech', '二級射'), ('tech', '彈道學'), ('eco', '22–26木')])
 
     def test_existing_line_breaks_are_kept(self):
         self.assertEqual(wrap_text('甲乙\n丙丁', self.measure, 100), '甲乙\n丙丁')

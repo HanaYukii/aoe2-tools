@@ -178,11 +178,11 @@ class BuildViewTests(unittest.TestCase):
         self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
         self.assertEqual(self.ui.sheet_bar.winfo_manager(), 'pack')
         choices = self.ui.sheet_bar.winfo_children()
-        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・城堡期速查', '勃根地競技場・防壓堡速查', '競技場・壓堡應對'])
+        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・城堡期速查', '勃根地競技場・防壓堡速查', '勃根地競技場・防塔攻保直城', '競技場・壓堡應對'])
         choices[1].invoke()
         self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
         self.assertEqual(self.ui.sheet_views['burgundians-arena-defense'].winfo_manager(), 'pack')
-        self.ui.sheet_bar.winfo_children()[2].invoke()
+        self.ui.sheet_bar.winfo_children()[3].invoke()
         self.assertEqual(self.ui.sheet, 'arena-castle-drop')
         view = self.ui.sheet_views['arena-castle-drop']
         self.assertEqual(view.winfo_manager(), 'pack')
@@ -195,10 +195,12 @@ class BuildViewTests(unittest.TestCase):
         self.game(35, 29, live=True)
         bar = self.app.map_shortcuts
         self.assertEqual(self.book.select(), str(self.app.rp_frame))
-        self.assertEqual(len(bar.winfo_children()), 1)  # dedicated version replaces generic
+        self.assertEqual(len(bar.winfo_children()), 2)  # castle defense is deduplicated; tower defense is separate
         bar.winfo_children()[0].invoke()
         self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
+        bar.winfo_children()[1].invoke()
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-tower-defense')
         self.book.select(self.ui.plan_tab)
         self.ui.refresh()
         self.assertEqual(self.book.select(), str(self.ui.plan_tab))
@@ -213,7 +215,7 @@ class BuildViewTests(unittest.TestCase):
             self.ui.open_sheet('burgundians-arena-defense')  # manual library pick doesn't enable a map shortcut
             self.assertFalse(bar.winfo_children())
         self.game(35, 29, hour=4)  # history gets the same map-aware entry
-        self.assertEqual(len(bar.winfo_children()), 1)
+        self.assertEqual(len(bar.winfo_children()), 2)
         self.assertEqual(self.book.select(), str(self.app.rp_frame))
 
     def test_library_search_add_remove_and_overview(self):

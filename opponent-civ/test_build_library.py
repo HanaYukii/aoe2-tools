@@ -94,11 +94,11 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(ids('Britons', 1, '競技場'), ['arena-castle-drop'])  # every civilization, on Arena only
         self.assertEqual(ids('Britons', 1, 'Arena 2'), ['arena-castle-drop'])
         self.assertEqual(ids('Britons', 15, '阿拉伯'), [])  # the Burgundian sheet for build 15 is not theirs
-        self.assertEqual(ids('Burgundians', 15, '競技場'), ['burgundians-arena-castle', 'burgundians-arena-defense', 'arena-castle-drop'])
+        self.assertEqual(ids('Burgundians', 15, '競技場'), ['burgundians-arena-castle', 'burgundians-arena-defense', 'burgundians-arena-tower-defense', 'arena-castle-drop'])
         self.assertEqual(ids('Romans', 1, ''), ['romans-castle-push'])
         self.assertEqual(ids('', 16, '阿拉伯'), ['burgundians-arena-castle'])  # no civilization: the build's own
         data = read_catalog(self.catalog)
-        data['reference_sheets'][-1]['maps'] = []  # a sheet for every civilization must name its maps
+        next(s for s in data['reference_sheets'] if s['id'] == 'arena-castle-drop')['maps'] = []  # a sheet for every civilization must name its maps
         self.catalog.write_text(json.dumps(data), encoding='utf-8')
         with self.assertRaises(LibraryError):
             read_catalog(self.catalog)

@@ -51,6 +51,29 @@ class DashboardTests(unittest.TestCase):
         self.assertIs(civilization_icon(self.root, 'future-civ'), icon(self.root, 'map', 32))
         self.assertIs(civilization_icon(self.root, None), icon(self.root, 'map', 32))
 
+    def test_history_rows_show_results(self):
+        rows = [(Path(f'{i}.aoe2record'), replace(self.match, timestamp=self.match.timestamp - i * 3600)) for i in range(3)]
+        self.app.render_history(self.app.history_request, rows, 0, None, [(True, 16), (False, None), None])
+        tree = self.app.history_tree
+        self.assertEqual([tree.item(row, 'tags')[0] for row in tree.get_children()], ['win', 'loss', 'even'])
+        self.assertTrue(tree.item('0', 'values')[0].endswith('勝 +16'))
+        self.assertTrue(tree.item('1', 'values')[0].endswith('敗'))
+        self.assertIn('1 勝 1 敗', self.app.history_summary.cget('text'))
+        self.app.render_history(self.app.history_request, rows, 0, None, None)  # lookup failed: plain rows
+        self.assertEqual(tree.item('0', 'tags')[0], 'even')
+        self.assertIn('勝敗暫時讀不到', self.app.history_summary.cget('text'))
+
+    def test_results_follow_the_rating_switch(self):
+        rows = [(Path('a.aoe2record'), self.match)]
+        with patch('dashboard.fetch_results') as fetch:
+            self.assertEqual(self.app.history_results(rows), [])  # ratings off: nothing is sent
+            fetch.assert_not_called()
+            self.app.args.no_elo = False
+            fetch.return_value = [(self.match.timestamp, {10: (1, 1200, 1215), 20: (0, 1210, 1195)})]
+            self.assertEqual(self.app.history_results(rows), [(True, 15)])
+            fetch.side_effect = OSError('offline')
+            self.assertIsNone(self.app.history_results(rows))
+
     def test_manual_drain_replaces_pending_timer(self):
         previous = self.app.drain_timer
         self.app.drain()

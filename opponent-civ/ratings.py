@@ -1,9 +1,10 @@
-"""Ladder ratings from the game's public API, the one its leaderboards use."""
+"""Ladder ratings and recent results from the game's public API, the one its leaderboards use."""
 import json
 import urllib.parse
 import urllib.request
 
 API = 'https://aoe-api.worldsedgelink.com/community/leaderboard/GetPersonalStat'
+HISTORY_API = 'https://aoe-api.worldsedgelink.com/community/leaderboard/getRecentMatchHistory'
 RM_1V1 = 3
 RM_TEAM = 4
 TIMEOUT_SECONDS = 3
@@ -25,3 +26,17 @@ def fetch_ratings(profile_ids, timeout=TIMEOUT_SECONDS):
         if profile_id is not None:
             ratings.setdefault(profile_id, {})[stat['leaderboard_id']] = stat['rating']
     return ratings
+
+
+def fetch_results(profile_id, timeout=10):
+    """One player's recent online games: [(start, {profile_id: (outcome, old rating, new rating)})], outcome 1 = won.
+
+    Raises OSError or ValueError."""
+    query = urllib.parse.urlencode({'title': 'age2', 'profile_ids': json.dumps([profile_id])})
+    with urllib.request.urlopen(f'{HISTORY_API}?{query}', timeout=timeout) as response:
+        data = json.load(response)
+    if data.get('result', {}).get('code') != 0:
+        raise ValueError(f'API result {data.get("result")}')
+    return [(game['startgametime'], {m['profile_id']: (m['outcome'], m['oldrating'], m['newrating'])
+                                     for m in game['matchhistorymember']})
+            for game in data.get('matchHistoryStats', [])]

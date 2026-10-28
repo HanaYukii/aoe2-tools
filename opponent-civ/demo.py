@@ -26,7 +26,8 @@ def populate(app):
     rows = [(Path(f'example-{i}.aoe2record'), replace(base, timestamp=base.timestamp-i*3600,
              players=(base.players[0], replace(base.players[1], civ_id=[11,35][i % 2], name=f'Opponent {i+1:02d}')))) for i in range(10)]
     app.show(rows[0][1], rows[0][0], None, True)
-    app.render_history(app.history_request, rows, 0, None)
+    app.render_history(app.history_request, rows, 0, None,
+                       [(True, 15), (False, -14), (True, 12), (True, 16), (False, -15), (True, 13), (False, -12), (True, 14), (True, 11), (False, -16)])
     app.history_tree.selection_set('0')
     app.meta.configure(text='展示用虛構玩家與對局 · 不讀取個人錄影、不連網')
     app.history_button.configure(state='disabled')

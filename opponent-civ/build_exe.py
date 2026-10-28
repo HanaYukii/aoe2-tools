@@ -6,7 +6,6 @@ import json
 import tempfile
 import os
 import shutil
-import struct
 import subprocess
 import sys
 from pathlib import Path
@@ -24,20 +23,6 @@ def desktop_dir():
     return Path(buffer.value)
 
 
-def create_icon(path):
-    """Original geometric II mark; no game artwork or third-party assets."""
-    size = 32
-    pixels = bytearray()
-    for y in reversed(range(size)):
-        for x in range(size):
-            ink = (x in range(9, 13) or x in range(19, 23)) and 7 <= y <= 24
-            ink |= (y in (7, 8, 23, 24) and (7 <= x <= 14 or 17 <= x <= 24))
-            red, green, blue = (101, 217, 194) if ink else (16, 20, 30)
-            pixels.extend((blue, green, red, 255))
-    bitmap = struct.pack('<IiiHHIIiiII', 40, size, size*2, 1, 32, 0, len(pixels), 0, 0, 0, 0)
-    bitmap += pixels + bytes(size*4)
-    path.write_bytes(struct.pack('<HHH', 0, 1, 1) + struct.pack('<BBBBHHII', size, size, 0, 0, 1, 32, len(bitmap), 22) + bitmap)
-
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -46,13 +31,13 @@ def main():
     builds = load_library()
     expected = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds), bundled=True)
     BUILD.mkdir(exist_ok=True)
-    icon = BUILD / 'app.ico'
-    create_icon(icon)
+    icon = HERE / 'assets' / 'app.ico'
     destination = BUILD / 'release'
     subprocess.run([
         sys.executable, '-m', 'PyInstaller', '--onefile', '--windowed', '--noconfirm', '--clean',
         '--name', EXE_NAME, '--icon', str(icon),
         '--add-data', f'{HERE / "data"}{os.pathsep}data',
+        '--add-data', f'{HERE / "assets"}{os.pathsep}assets',
         '--distpath', str(destination), '--workpath', str(BUILD / 'work'), '--specpath', str(BUILD),
         str(HERE / 'dashboard.py'),
     ], check=True)

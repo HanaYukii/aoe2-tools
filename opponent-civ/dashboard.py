@@ -513,10 +513,11 @@ def main():
     parser.add_argument('--check-bundled-data', metavar='REPORT', help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.check_bundled_data:
+        from map_notes import load_map_notes
         from build_library import load_library
         builds = load_library()
         report = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                      icons=len(list(ASSETS.rglob('*.png'))), civilizations=len(CIVILIZATIONS), bundled=bool(getattr(sys, 'frozen', False)))
+                      icons=len(list(ASSETS.rglob('*.png'))), civilizations=len(CIVILIZATIONS), map_notes=len(load_map_notes()), bundled=bool(getattr(sys, 'frozen', False)))
         Path(args.check_bundled_data).write_text(json.dumps(report), encoding='utf-8')
         return
     if not args.demo and not claim_single_instance() and args.with_game:  # dashboard already open: just start the game

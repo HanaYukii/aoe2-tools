@@ -11,6 +11,7 @@ from pathlib import Path
 from build_library import LibraryState, key, load_library, map_kind, opening_for, read_catalog, search_builds, sheets_for
 from ui_icons import icon, sheet_icon, civilization_icon
 from mapdata import map_label
+from map_notes import load_map_notes, note_for_map
 from rec_header import split_sides
 
 BG, PANEL, FG, MUTED, ACCENT, SURFACE = '#10141e', '#1a2030', '#e8edf7', '#9caac2', '#65d9c2', '#242e42'
@@ -119,6 +120,70 @@ def reference_highlights(text):
             for m in pattern.finditer(flat)]
 
 
+class MapNotesView(tk.Frame):
+    """Auto-follow a match's map, with a manual selector for pre-game study."""
+    def __init__(self, parent, app):
+        super().__init__(parent, bg=PANEL)
+        self.app, self.view = app, None
+        try:
+            self.notes = load_map_notes()
+            self.error = ''
+        except (OSError, ValueError, TypeError, KeyError) as exc:
+            self.notes, self.error = [], f'地圖注意資料無法載入：{exc}'
+        self.current = None
+        self.label = ''
+        bar = tk.Frame(self, bg=PANEL)
+        bar.pack(fill='x', padx=16, pady=10)
+        self.status = tk.Label(bar, bg=PANEL, fg=MUTED, anchor='w')
+        self.status.pack(side='left', fill='x', expand=True)
+        button(bar, '回到本場地圖', self.follow).pack(side='right', padx=6)
+        self.selector = ttk.Combobox(bar, state='readonly', width=24,
+                                    values=[n['title'].split(' · ')[0] for n in self.notes])
+        self.selector.pack(side='right')
+        self.selector.bind('<<ComboboxSelected>>', self.choose)
+        self.body = tk.Frame(self, bg=PANEL)
+        self.body.pack(fill='both', expand=True)
+        self.message = tk.Label(self.body, bg=PANEL, fg=MUTED, font=(app.font, 14))
+
+    def set_match(self, match, label):
+        self.label = label
+        self.current = note_for_map(self.notes, label, getattr(match, 'map_id', None),
+                                    getattr(match, 'map_file', '') or '')
+        self.follow()
+
+    def follow(self):
+        self.status.configure(text=self.error or ('本場：' + (self.label or '尚未載入對局')))
+        if self.current is None:
+            self.selector.set('選圖預習')
+            self.show(None)
+        else:
+            self.selector.current(self.notes.index(self.current))
+            self.show(self.current)
+
+    def choose(self, _event=None):
+        index = self.selector.current()
+        if index >= 0:
+            note = self.notes[index]
+            self.status.configure(text='手動預習｜本場：' + (self.label or '尚未載入對局'))
+            self.show(note)
+
+    def show(self, note):
+        if self.view is not None:
+            self.view.destroy()
+            self.view = None
+        self.message.pack_forget()
+        if note is None:
+            self.message.configure(text=self.error or '這張地圖尚未整理（或為自訂／快速開局）。可從右上選圖預習。')
+            self.message.pack(expand=True)
+            return
+        self.view = ReferenceSheet(self.body, note, self.app.font, self.app.font_size, lambda _: None, [])
+        self.view.pack(fill='both', expand=True)
+
+    def resize(self, size):
+        if self.view is not None:
+            self.view.resize(size)
+
+
 class ReferenceSheet(tk.Frame):
     """A glance-at-it reference tab: the cards fill the whole area and the text grows to fit.
 
@@ -169,6 +234,12 @@ class ReferenceSheet(tk.Frame):
         self.scroll.bind_wheel(self.scroll.body)
         self.scroll.canvas.bind('<Configure>', self.reflow, add='+')
 
+    def destroy(self):
+        if self.fit_job is not None:
+            self.after_cancel(self.fit_job)
+            self.fit_job = None
+        super().destroy()
+
     def reflow(self, event):
         self.area = (event.width, event.height)
         if self.fit_job is not None:  # resizing fires many events; fit once it settles
@@ -183,7 +254,7 @@ class ReferenceSheet(tk.Frame):
         if width < 50 or height < 50 or not self.cards:
             return
         count = len(self.cards)
-        columns = min(count, 3 if width >= 1150 else 2 if width >= 850 else 1)
+        columns = min(count, 3 if width >= 1150 and count != 4 else 2 if width >= 850 else 1)
         rows = -(-count // columns)
         for col in range(3):
             self.scroll.body.columnconfigure(col, weight=1 if col < columns else 0,
@@ -552,9 +623,11 @@ class BuildLibraryUI:
         self.sheet_bar = tk.Frame(self.sheet_tab, bg=PANEL)  # shown when several sheets apply
         self.sheet_body = tk.Frame(self.sheet_tab, bg=PANEL)
         self.sheet_body.pack(fill='both', expand=True)
+        self.map_tab = MapNotesView(book, app)
         self.library_tab = LibraryView(book, self)
         book.add(self.plan_tab, text='前期流程', image=icon(app.root, 'hourglass'), compound='left')
         book.add(self.sheet_tab, text='中期速查', image=icon(app.root, 'combat'), compound='left')
+        book.add(self.map_tab, text='地圖注意', image=icon(app.root, 'scroll'), compound='left')
         book.add(self.library_tab, text='流程庫', image=icon(app.root, 'scroll'), compound='left')
         self.set_match(None)
 
@@ -577,6 +650,7 @@ class BuildLibraryUI:
         civ = self.app.civs.get(me.civ_id) if me else None
         self.match, self.civ = match, civ.key if civ else ''
         self.map_label = map_label(match, self.app.maps) if match else ''
+        self.map_tab.set_match(match, self.map_label)
         if live:
             for reader in self.readers.values():
                 reader.destroy()
@@ -679,7 +753,7 @@ class BuildLibraryUI:
         menu.add_command(label='　 流程庫：排序、搜尋全部流程…', command=lambda: self.app.workspace_book.select(self.library_tab))
 
     def resize(self, size):
-        for view in (*self.readers.values(), *self.sheet_views.values()):
+        for view in (*self.readers.values(), *self.sheet_views.values(), self.map_tab):
             view.resize(size)
 
     def choose_folder(self):

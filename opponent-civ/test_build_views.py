@@ -15,7 +15,7 @@ from build_views import wrap_text, reference_highlights
 from rec_header import Match, Player
 from test_build_library import write_fixture
 
-TABS = ['對局 RP', '前期流程', '中期速查', '流程庫']
+TABS = ['對局 RP', '前期流程', '中期速查', '地圖注意', '流程庫']
 
 
 class BuildViewTests(unittest.TestCase):
@@ -99,6 +99,26 @@ class BuildViewTests(unittest.TestCase):
         self.game(43, 9, hour=2)
         self.assertEqual(self.ui.build.index, 33)
         self.assertIn('阿拉伯（開放地圖）', self.ui.library_tab.map_note.cget('text'))
+
+    def test_map_notes_follow_match_without_switching_tabs(self):
+        self.game(43, 9)
+        view = self.ui.map_tab
+        self.assertEqual(view.current['id'], 'arabia')
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+        index = next(i for i, n in enumerate(view.notes) if n['id'] == 'nomad')
+        view.selector.current(index)
+        view.choose()
+        self.assertEqual(view.view.sheet['id'], 'nomad')
+        self.assertIn('手動預習', view.status.cget('text'))
+        view.follow()
+        self.assertEqual(view.view.sheet['id'], 'arabia')
+        self.game(35, 29, hour=1)
+        self.assertEqual(view.current['id'], 'arena')
+        self.assertEqual(view.view.sheet['id'], 'arena')
+        self.game(43, 999, hour=2)
+        self.assertIsNone(view.current)
+        self.assertIsNone(view.view)
+        self.assertIn('尚未整理', view.message.cget('text'))
 
     def test_reordering_recommendations_moves_the_default_and_persists(self):
         self.game(35, 9)

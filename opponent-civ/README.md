@@ -74,3 +74,9 @@ python opponent-civ/dashboard.py --demo --demo-build 33
 預設使用明確標示的虛構對局與文明說明，流程使用完整內建資料；可用 `--game-dir` 載入自己的遊戲文字。macOS 預覽不驗證 Windows 錄影監看或雙螢幕 API。
 
 首頁截圖使用本機已下載 RP 載入介面，詳見 [截圖來源](../docs/images/README.md)。它們不是遊戲播放畫面，也不表示已實作自動復盤。
+
+## 地圖注意
+
+`data/map-notes.zh-TW.json` 獨立保存地圖提醒。一般內建圖優先比對 map ID；自訂圖依完整別名比對，避免套用到同名變體或 QS 快速開局。切換對局自動換內容，不搶選分頁；右上可手動預習或回到本場。資料隨 EXE 內建，打包驗證包含地圖頁數。
+
+[盤點、來源與待補地圖](../docs/map-notes-research.md)。

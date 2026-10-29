@@ -15,7 +15,7 @@ from build_views import wrap_text, reference_highlights
 from rec_header import Match, Player
 from test_build_library import write_fixture
 
-TABS = ['對局 RP', '前期流程', '中期速查', '地圖注意', '流程庫']
+TABS = ['對局 RP', '前期流程', '戰術速查', '地圖注意', '流程庫']
 
 
 class BuildViewTests(unittest.TestCase):
@@ -183,23 +183,28 @@ class BuildViewTests(unittest.TestCase):
         library.civ_name.set('羅馬')
         library.refresh(top=True)
         sheet_buttons = [w for w in library.sheet_bar.winfo_children() if isinstance(w, ttk.Button)]
-        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・主線運營', '羅馬・對弓兵', '羅馬・對馬弓', '羅馬・對騎士', '競技場・壓堡應對'])
+        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・封建速查', '羅馬・城堡速查', '羅馬・對弓兵', '羅馬・對馬弓', '羅馬・對騎士', '羅馬・帝王速查', '競技場・壓堡應對'])
         sheet_buttons[0].invoke()
-        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
         self.assertEqual([b.cget('text') for b in self.ui.sheet_bar.winfo_children()],
-                         ['競技場・壓堡應對', '羅馬・主線運營'])  # the pick joins what applies here
+                         ['封建速查', '競技場・壓堡應對'])
         self.game(43, 9, hour=3)
-        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
         self.assertEqual(len(self.ui.sheet_views), 3)
 
     def test_roman_branches_switch_manually_and_keep_the_match_choice(self):
         self.game(43, 9, live=True)
-        expected = ['羅馬・主線運營', '羅馬・對弓兵', '羅馬・對馬弓', '羅馬・對騎士']
-        self.assertEqual([b.cget('text') for b in self.ui.sheet_bar.winfo_children()], expected)
-        self.assertEqual(self.ui.sheet, 'romans-castle-push')
-        for index, ident in enumerate(['romans-vs-archers', 'romans-vs-cavalry-archers', 'romans-vs-knights'], 1):
-            self.ui.sheet_bar.winfo_children()[index].invoke()
+        def labels():
+            return [b.cget('text') for b in self.ui.sheet_bar.winfo_children()]
+        def choose(label):
+            next(b for b in self.ui.sheet_bar.winfo_children() if b.cget('text') == label).invoke()
+        self.assertEqual(labels(), ['封建速查', '城堡速查', '帝王速查'])
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
+        choose('城堡速查')
+        self.assertEqual(labels(), ['封建速查', '城堡速查', '帝王速查', '主線運營', '對弓兵', '對馬弓', '對騎士'])
+        for label, ident in [('對弓兵', 'romans-vs-archers'), ('對馬弓', 'romans-vs-cavalry-archers'), ('對騎士', 'romans-vs-knights')]:
+            choose(label)
             self.assertEqual(self.ui.sheet, ident)
             view = self.ui.sheet_views[ident]
             self.assertEqual(len(view.cards), 6)
@@ -208,9 +213,11 @@ class BuildViewTests(unittest.TestCase):
             self.assertTrue(any(body.tag_ranges('eco') for body in view.texts))
         self.ui.refresh()
         self.assertEqual(self.ui.sheet, 'romans-vs-knights')
-        self.assertEqual(self.ui.sheet_bar.winfo_children()[3].grid_info()['row'], 1)
+        choose('帝王速查')
+        self.assertEqual(self.ui.sheet, 'romans-imperial')
+        self.assertEqual(labels(), ['封建速查', '城堡速查', '帝王速查'])
         self.game(43, 9, hour=1, live=True)
-        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
 
     def test_arena_adds_the_castle_drop_sheet_beside_the_civilization_sheet(self):
         self.game(35, 29)

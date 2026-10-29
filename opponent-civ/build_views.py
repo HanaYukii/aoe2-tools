@@ -1,4 +1,4 @@
-"""Build tabs beside the RP: 前期流程 reads one build, 中期速查 shows the sheet that follows it,
+"""Build tabs beside the RP: 前期流程 reads one build, 戰術速查 shows the sheet that follows it,
 and 流程庫 is where builds are chosen, ordered and searched."""
 import os
 import re
@@ -486,7 +486,7 @@ class LibraryView(tk.Frame):
             child.destroy()
         sheets = sorted((s for s in ui.sheets.values() if s['civ'] in ('', key(civ))), key=lambda s: not s['civ'])
         if sheets:
-            tk.Label(self.sheet_bar, text='中期速查', bg=PANEL, fg=MUTED).grid(row=0, column=0, columnspan=2, sticky='w')
+            tk.Label(self.sheet_bar, text='戰術速查', bg=PANEL, fg=MUTED).grid(row=0, column=0, columnspan=2, sticky='w')
         for i, sheet in enumerate(sheets):
             button(self.sheet_bar, sheet['title'], lambda sid=sheet['id']: ui.open_sheet(sid), True).grid(
                 row=1 + i // 2, column=i % 2, sticky='w', padx=(0, 6), pady=4)
@@ -586,7 +586,7 @@ class BuildLibraryUI:
     """Three fixed tabs after the RP that follow the match on screen.
 
     前期流程 shows the build picked for that match, else the first of the civilization's
-    recommendations that suits the map. 中期速查 shows the civilization's sheet, one linked to
+    recommendations that suits the map. 戰術速查 shows the civilization's sheet, one linked to
     that build first, then any sheet for every civilization on this map; a bar switches between
     them. Marks belong to a game: a new live match starts every build from the top.
     """
@@ -615,7 +615,7 @@ class BuildLibraryUI:
         self.switch_menu = tk.Menu(self.switch, tearoff=False, font=(app.font, 11), postcommand=self.fill_switch)
         self.switch.configure(menu=self.switch_menu)
         self.switch.pack(side='right')
-        self.next_button = button(header, '中期速查 →', lambda: book.select(self.sheet_tab), True)
+        self.next_button = button(header, '戰術速查 →', lambda: book.select(self.sheet_tab), True)
         self.title = tk.Label(header, bg=PANEL, fg=FG, font=(app.font, 19, 'bold'), anchor='w', justify='left')
         self.title.pack(side='left', fill='x', expand=True)
         self.sheet_tab = tk.Frame(book, bg=PANEL)
@@ -626,7 +626,7 @@ class BuildLibraryUI:
         self.map_tab = MapNotesView(book, app)
         self.library_tab = LibraryView(book, self)
         book.add(self.plan_tab, text='前期流程', image=icon(app.root, 'hourglass'), compound='left')
-        book.add(self.sheet_tab, text='中期速查', image=icon(app.root, 'combat'), compound='left')
+        book.add(self.sheet_tab, text='戰術速查', image=icon(app.root, 'combat'), compound='left')
         book.add(self.map_tab, text='地圖注意', image=icon(app.root, 'scroll'), compound='left')
         book.add(self.library_tab, text='流程庫', image=icon(app.root, 'scroll'), compound='left')
         self.set_match(None)
@@ -716,11 +716,30 @@ class BuildLibraryUI:
         for child in self.sheet_bar.winfo_children():
             child.destroy()
         self.sheet_choice.set(self.sheet or '')
-        for i, sheet_id in enumerate(choices if len(choices) > 1 else ()):
-            tk.Radiobutton(self.sheet_bar, text=self.sheets[sheet_id]['title'], variable=self.sheet_choice, value=sheet_id,
-                           command=lambda s=sheet_id: self.open_sheet(s), indicatoron=False, bg=BG, fg=FG,
+        def choice(label, ident, row, col):
+            tk.Radiobutton(self.sheet_bar, text=label, variable=self.sheet_choice, value=ident,
+                           command=lambda: self.open_sheet(ident), indicatoron=False, bg=BG, fg=FG,
                            selectcolor=MARKED, activebackground=SURFACE, padx=10, pady=8, wraplength=150, relief='flat').grid(
-                               row=i // 3, column=i % 3, sticky='ew', padx=(0, 6), pady=(0, 4))
+                               row=row, column=col, sticky='ew', padx=(0, 6), pady=(0, 4))
+        # Era sheets are grouped by civilization; map-specific defenses remain accessible.
+        grouped = [i for i in choices if self.sheets[i].get('era')]
+        if grouped:
+            selected = self.sheets.get(self.sheet, {})
+            current_era = selected.get('era')
+            for col, (era, label) in enumerate((('feudal', '封建速查'), ('castle', '城堡速查'), ('imperial', '帝王速查'))):
+                members = [i for i in grouped if self.sheets[i]['era'] == era]
+                if members:
+                    target = self.sheet if self.sheet in members else members[0]
+                    choice(label, target, 0, col)
+            branches = [i for i in grouped if self.sheets[i]['era'] == current_era]
+            if len(branches) > 1:
+                for col, ident in enumerate(branches):
+                    choice(self.sheets[ident].get('nav_label', self.sheets[ident]['title']), ident, 1, col)
+            for n, ident in enumerate(i for i in choices if i not in grouped):
+                choice(self.sheets[ident]['title'], ident, 2 + n // 3, n % 3)
+        else:
+            for i, ident in enumerate(choices if len(choices) > 1 else ()):
+                choice(self.sheets[ident]['title'], ident, i // 3, i % 3)
         if len(choices) > 1:
             self.sheet_bar.pack(fill='x', padx=16, pady=(10, 0), before=self.sheet_body)
         else:

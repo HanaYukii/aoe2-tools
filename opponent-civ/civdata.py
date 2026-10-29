@@ -17,6 +17,9 @@ from pathlib import Path
 DEFAULT_GAME_DIR = Path(r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE')
 STRING_LINE = re.compile(r'^(\d+)\s+"((?:[^"\\]|\\.)*)"')
 ESCAPE = re.compile(r'\\(.)')
+# Newer civilizations.json omits description IDs. The game string table maps
+# civilization name 10271 (Britons) to description 120150, and so on.
+CIV_DESCRIPTION_OFFSET = 120150 - 10271
 
 
 @dataclass(frozen=True)
@@ -78,13 +81,17 @@ def load_civs(game_dir=None, lang='tw'):
 
     civs = {}
     for civ_id, entry in enumerate(listing):
-        description_id = entry.get('tech_tree_description_string_id')
-        if description_id is None:  # Gaia
+        if entry['internal_name'] == 'Gaia':
             continue
+        description_id = entry.get('tech_tree_description_string_id')
+        if description_id is None:
+            description_id = entry['name_string_id'] + CIV_DESCRIPTION_OFFSET
         civs[civ_id] = Civ(
             id=civ_id,
             key=entry['internal_name'],
             name=text(entry['name_string_id']) or entry['internal_name'],
-            description=text(description_id).replace('<b>', '').strip(),
+            description=(text(description_id).replace('<b>', '').strip()
+                         or ('Civilization description unavailable; check your game data version.'
+                             if lang == 'en' else '此文明尚無說明，請確認遊戲資料版本。')),
         )
     return civs

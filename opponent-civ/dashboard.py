@@ -118,16 +118,23 @@ class Dashboard:
         self.status = tk.Label(info_row, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
         self.status.pack(fill='x', expand=True)
         info_row.bind('<Configure>', lambda e: self.status.configure(wraplength=max(180, e.width)))
-        reminders = tk.Frame(detail, bg=PANEL)
-        reminders.pack(fill='x', padx=22, pady=(0, 5))
+        # Outside the notebook and its scroll areas: visible on every page.
+        self.reminder_bar = reminders = tk.Frame(detail, bg=SURFACE)
+        reminders.pack(fill='x', padx=22, pady=(2, 6))
         self.reminders = []
-        for column, (text, artwork) in enumerate((
-                ('記得蓋房子', 'town-center'), ('注意 TC 閒置', 'hourglass'), ('記得圍家', 'wall'))):
+        items = (
+            ('記得蓋房子', 'town-center'), ('注意 TC 閒置', 'hourglass'), ('資源記得調配', 'economy'),
+            ('記得圍家', 'wall'), ('看小地圖', 'map'), ('記得挖堡', 'wall'),
+            ('前後排分隊', 'combat'), ('偵查對手轉兵', 'map'), ('產兵建築充足', 'combat'),
+        )
+        for index, (text, artwork) in enumerate(items):
             reminder = tk.Label(reminders, text=text, image=icon(root, artwork, 24),
-                compound='left', padx=4, font=(self.display_font, 14, 'bold'), bg=PANEL, fg=AMBER)
-            reminder.grid(row=0, column=column, sticky='w', padx=(0, 12))
-            reminders.columnconfigure(column, weight=1)
+                compound='left', padx=4, font=(self.font, 10), bg=SURFACE,
+                fg=(AMBER, BLUE, ACCENT)[index // 3], anchor='center')
+            reminder.grid(row=index // 3, column=index % 3, sticky='ew', padx=6, pady=2)
             self.reminders.append(reminder)
+        for column in range(3):
+            reminders.columnconfigure(column, weight=1, uniform='reminders')
         self.house_reminder = self.reminders[0]
         meta_row = tk.Frame(detail, bg=PANEL)
         meta_row.pack(fill='x', padx=22, pady=(0, 12))

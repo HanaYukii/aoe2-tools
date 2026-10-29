@@ -93,6 +93,8 @@ def read_catalog(data_path=None):
             # A sheet for every civilization ('civ' empty) must name the maps it is for.
             if sheet['id'] in sheet_ids or not sheet.get('cards') or not isinstance(sheet.get('build_ids'), list) or not (sheet['civ'] or maps):
                 raise ValueError('invalid reference sheet')
+            if sheet.get('era') not in (None, 'feudal', 'castle', 'imperial'):
+                raise ValueError('invalid reference era')
             shortcut = sheet.get('shortcut')
             if shortcut is not None and (not isinstance(shortcut, dict) or
                     not all(isinstance(shortcut.get(k), str) and shortcut[k].strip() for k in ('id', 'label'))):
@@ -138,9 +140,11 @@ def load_library(media_dir=None, *, data_path=None):
                 raise ValueError('duplicate build')
             ids.add(item['id'])
             indices.add(item['index'])
-            for field in ('id', 'title', 'population', 'notes'):
+            for field in ('id', 'title', 'population'):
                 if not isinstance(item[field], str) or not item[field]:
                     raise ValueError('missing text')
+            if not isinstance(item['notes'], str):
+                raise ValueError('invalid notes')
             if item['map_type'] not in {'open', 'closed', 'water', 'fortress'}:
                 raise ValueError('invalid map')
             if not isinstance(item['civs'], list) or not all(isinstance(c, str) for c in item['civs']):

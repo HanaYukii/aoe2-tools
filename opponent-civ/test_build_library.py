@@ -81,10 +81,20 @@ class LibraryTests(unittest.TestCase):
     def test_bundled_content_is_complete_without_media(self):
         builds = load_library(self.directory/'does-not-exist')
         self.assertEqual(len(builds), 40)
-        self.assertEqual(sum(len(b.steps) for b in builds), 920)
+        self.assertEqual(sum(len(b.steps) for b in builds), 928)
         self.assertFalse([b for b in read_catalog()['builds'] if 'video_url' in b])  # no member video links
         self.assertTrue(all(b.video is None and b.pdf is None for b in builds))
         self.assertIn('動物配置', read_catalog()['overview'])
+
+    def test_notes_may_be_empty_when_guidance_is_in_steps(self):
+        data = read_catalog(self.catalog)
+        data['builds'][0]['notes'] = ''
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        self.assertEqual(load_library(data_path=self.catalog)[0].notes, '')
+        data['builds'][0]['notes'] = None
+        self.catalog.write_text(json.dumps(data), encoding='utf-8')
+        with self.assertRaises(LibraryError):
+            load_library(data_path=self.catalog)
 
     def test_sheets_for_a_match_by_civilization_build_and_map(self):
         sheets = read_catalog(self.catalog)['reference_sheets']
@@ -95,7 +105,7 @@ class LibraryTests(unittest.TestCase):
         self.assertEqual(ids('Britons', 1, 'Arena 2'), ['arena-castle-drop'])
         self.assertEqual(ids('Britons', 15, '阿拉伯'), [])  # the Burgundian sheet for build 15 is not theirs
         self.assertEqual(ids('Burgundians', 15, '競技場'), ['burgundians-arena-castle', 'burgundians-arena-defense', 'burgundians-arena-tower-defense', 'arena-castle-drop'])
-        self.assertEqual(ids('Romans', 1, ''), ['romans-castle-push', 'romans-vs-archers', 'romans-vs-cavalry-archers', 'romans-vs-knights'])
+        self.assertEqual(ids('Romans', 1, ''), ['romans-feudal', 'romans-castle-push', 'romans-vs-archers', 'romans-vs-cavalry-archers', 'romans-vs-knights', 'romans-imperial'])
         self.assertEqual(ids('', 16, '阿拉伯'), ['burgundians-arena-castle'])  # no civilization: the build's own
         data = read_catalog(self.catalog)
         next(s for s in data['reference_sheets'] if s['id'] == 'arena-castle-drop')['maps'] = []  # a sheet for every civilization must name its maps

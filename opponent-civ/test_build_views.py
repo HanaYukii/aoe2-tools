@@ -326,7 +326,9 @@ class BuildViewTests(unittest.TestCase):
         self.assertTrue(any(body.tag_ranges('tech') for body in sheet.texts))
         self.assertTrue(any(body.tag_ranges('eco') for body in sheet.texts))
         self.assertEqual([label.cget('text') for label in self.app.reminders],
-                         ['記得蓋房子', '注意 TC 閒置', '記得圍家'])
+                         ['記得蓋房子', '注意 TC 閒置', '資源記得調配',
+                          '記得圍家', '看小地圖', '記得挖堡',
+                          '前後排分隊', '偵查對手轉兵', '產兵建築充足'])
         roomy = sheet.fitted_size
         self.assertGreater(roomy, sheet.size - 1)           # text grows past the floor to use the room
         lay_out(1600, 700)

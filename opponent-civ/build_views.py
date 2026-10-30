@@ -220,6 +220,8 @@ class ReferenceSheet(tk.Frame):
                             padx=0, pady=0, takefocus=False, cursor='arrow', exportselection=False)
             label.insert('1.0', item['body'])
             label.configure(state='disabled')
+            # Read like a label: without the Text class bindings a drag or wheel cannot scroll lines out of the card.
+            label.bindtags((str(label), str(label.winfo_toplevel()), 'all'))
             label.pack(fill='both', expand=True)
             self.cards.append(card)
             self.titles.append(title)

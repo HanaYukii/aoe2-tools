@@ -48,6 +48,7 @@ class DashboardTests(unittest.TestCase):
                 image = civilization_icon(self.root, key, size)
                 self.assertEqual((image.width(), image.height()), (size, size))
         self.assertIs(civilization_icon(self.root, 'Romans'), civilization_icon(self.root, 'romans'))
+        self.assertIsNot(civilization_icon(self.root, 'Indians'), icon(self.root, 'map', 32))  # Hindustanis' internal name
         self.assertIs(civilization_icon(self.root, 'future-civ'), icon(self.root, 'map', 32))
         self.assertIs(civilization_icon(self.root, None), icon(self.root, 'map', 32))
 

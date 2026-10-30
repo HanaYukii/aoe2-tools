@@ -39,7 +39,7 @@ The window prefers a secondary display and remembers its position. You can keep 
 
 Counts and timings are practical starting points, not mandatory thresholds. Adapt to scouting, pressure and your economy.
 
-![Opening table — Traditional Chinese example](docs/images/opening.png)
+![English opening table and gameplay reminders](docs/images/opening-en.png)
 
 ![Roman tactical branches — Traditional Chinese example](docs/images/roman-reference.png)
 
@@ -50,7 +50,7 @@ Guides are bundled for offline use. Optional local videos/PDFs are not included 
 - Civilization and unit descriptions come from your installed game. The app also lists unique/regional unit counters from the game's descriptions; it does **not** detect the opponent's live army.
 - Settings and recordings stay local. Optional rating lookup sends player profile IDs to the official leaderboard API.
 - The app reads replay headers, not game memory. It does not currently provide automatic post-game reviews, live worker allocation, match results or duration analysis.
-- Screenshots show the existing Traditional Chinese macOS preview. Tactical content is bundled reference material, not analysis inferred from the displayed game.
+- Screenshots show macOS previews in English and Traditional Chinese. Tactical content is bundled reference material, not analysis inferred from the displayed game.
 - This is an unofficial community tool. The Windows executable is unsigned.
 
 [Development, offline preview and packaging](opponent-civ/README.en.md)

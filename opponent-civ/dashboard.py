@@ -124,8 +124,8 @@ class Dashboard:
         self.reminders = []
         items = (
             ('記得蓋房子', 'town-center'), ('注意 TC 閒置', 'hourglass'), ('資源記得調配', 'economy'),
-            ('記得圍家', 'wall'), ('看小地圖', 'map'), ('記得挖堡', 'wall'),
-            ('前後排分隊', 'combat'), ('偵查對手轉兵', 'map'), ('產兵建築充足', 'combat'),
+            ('記得圍家', 'wall'), ('看小地圖', 'map'), ('記得挖堡', 'stone-mining'),
+            ('前後排分隊', 'combat'), ('偵查對手轉兵', 'scouting'), ('產兵建築充足', 'barracks'),
         )
         for index, (text, artwork) in enumerate(items):
             reminder = tk.Label(reminders, text=text, image=icon(root, artwork, 24),

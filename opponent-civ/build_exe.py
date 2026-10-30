@@ -45,14 +45,16 @@ def main():
         str(HERE / 'dashboard.py'),
     ], check=True)
     exe = (destination / f'{EXE_NAME}.exe').resolve()
-    # Run the actual one-file EXE from an empty directory, with no game or media.
-    with tempfile.TemporaryDirectory() as folder:
-        report = Path(folder) / 'catalog-check.json'
-        subprocess.run([str(exe), '--check-bundled-data', str(report)], cwd=folder, check=True, timeout=60)
-        summary = json.loads(report.read_text(encoding='utf-8'))
-        if summary != expected:
-            raise RuntimeError(f'Packaged catalog verification failed: {summary}')
-        print(f'Packaged catalog verified: {summary}')
+    # Validate both language catalogs inside the actual one-file EXE.
+    for lang in ('tw', 'en'):
+        with tempfile.TemporaryDirectory() as folder:
+            report = Path(folder) / 'catalog-check.json'
+            subprocess.run([str(exe), '--lang', lang, '--check-bundled-data', str(report)],
+                           cwd=folder, check=True, timeout=60)
+            summary = json.loads(report.read_text(encoding='utf-8'))
+            if summary != expected:
+                raise RuntimeError(f'Packaged {lang} catalog verification failed: {summary}')
+            print(f'Packaged {lang} catalog verified: {summary}')
     (destination / 'SHA256SUMS.txt').write_text(f'{hashlib.sha256(exe.read_bytes()).hexdigest()}  {exe.name}\n', encoding='ascii')
     if args.desktop:
         shutil.copy2(exe, desktop_dir() / DESKTOP_NAME)

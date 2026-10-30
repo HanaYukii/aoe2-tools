@@ -1,4 +1,5 @@
 """Compact map guidance, independent from civilization-specific build orders."""
+from i18n import catalog_path, language
 import json
 import re
 from pathlib import Path
@@ -11,8 +12,8 @@ def normalized(value):
     return ''.join(c for c in re.sub(r'\.rms2?$', '', value, flags=re.I).casefold() if c.isalnum())
 
 
-def load_map_notes(path=DATA_PATH):
-    data = json.loads(Path(path).read_text(encoding='utf-8'))
+def load_map_notes(path=None, *, lang=None):
+    data = json.loads(Path(path or (catalog_path("map-notes", lang) if (lang or language()) == "en" else DATA_PATH)).read_text(encoding='utf-8'))
     if data.get('schema_version') != 1 or not isinstance(data.get('maps'), list):
         raise ValueError('invalid map notes catalog')
     seen_ids, seen_aliases, seen_maps = set(), set(), set()

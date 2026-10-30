@@ -1,58 +1,56 @@
-# AoE2 對局筆記
+# AoE2 Match Notes
 
-**遊戲進行中，在第二螢幕直接查看對手 Elo 與文明特性。**
+English | [繁體中文](README.zh-TW.md)
 
-從本機 RP 自動辨識對局，也能查前期流程、切換戰術提醒。適用《世紀帝國 II：決定版》。
+**See your opponents' Elo and civilization bonuses on a second screen while you play.**
 
-### [下載 Windows EXE](https://github.com/HanaYukii/aoe2-tools/releases/latest/download/aoe2-opponent-dashboard.exe)
+A desktop companion for Age of Empires II: Definitive Edition. It detects matches from local replay headers and puts build orders, unit counters and tactical reminders beside the game.
 
-Windows 64 位元，免安裝 Python。目前以 Windows Steam 版測試。
+### [Download for Windows](https://github.com/HanaYukii/aoe2-tools/releases/latest/download/aoe2-opponent-dashboard.exe)
 
-[版本與更新說明](https://github.com/HanaYukii/aoe2-tools/releases) · [問題回報](https://github.com/HanaYukii/aoe2-tools/issues)
+Windows 64-bit. No Python installation required. Primarily tested with the Steam version of AoE2 DE.
 
-## 開局就看對手
+[Release notes](https://github.com/HanaYukii/aoe2-tools/releases) · [Report an issue](https://github.com/HanaYukii/aoe2-tools/issues)
 
-自動辨識對手文明，顯示 **1v1／團戰 Elo、文明加成與特殊科技**，不用另外查網頁。Elo 為查詢當下的積分。
+English and Traditional Chinese are included from v0.4.0.
 
-![對手 Elo 與文明特性](docs/images/opponent-elo.png)
+## Know your opponent from the start
 
-## 開始使用
+See **current 1v1 and team-game Elo, civilization bonuses and unique technologies** without opening another website. Ratings reflect the time of lookup, not the historical match rating.
 
-1. 下載 EXE 並開啟，確認遊戲與錄影位置，選擇自己的玩家。
-2. 開始一場有錄影的對局，工具會偵測新 RP。
-3. 在「對局 RP、前期流程、中期速查、地圖注意、流程庫」切頁查看。
+![Opponent ratings and civilization bonuses — Traditional Chinese example](docs/images/opponent-elo.png)
 
-支援置頂、調整字級與收起對局列表；首次開啟優先使用副螢幕，之後記住視窗位置。
+## Get started
 
-## 前期流程
+1. Open the app, confirm your game and recording folders, and select your player identity.
+2. Choose `en` for English or `tw` for Traditional Chinese in Settings, then restart. Existing users keep their saved language; first-time users default to their system language where supported.
+3. Start a recorded game. The app detects the new replay and displays the match.
+4. Switch between **Match, Opening, Tactics, Map tips and Build library**.
 
-內建 40 套中文流程，依自己的文明與地圖選擇。可隨時換流程、點步驟標記進度；新對局重新開始。
+The window prefers a secondary display and remembers its position. You can keep it on top, adjust text size and collapse the match list. It does not register gameplay hotkeys.
 
-![羅馬前期流程與最近對局](docs/images/opening.png)
+## Build orders and quick references
 
-## 中期速查
+- **40 build orders**, recommended by civilization and map. Change builds at any time and click a step to mark your place.
+- **Tactical cards** for worker allocation, upgrades, army transitions and extra TCs. Roman guides separate Feudal, Castle and Imperial play, with branches against archers, cavalry archers and knights.
+- **Arena defense guides** for castle drops and tower rushes, plus a Burgundian economy reference.
+- **28 map guides** covering unusual starts, food sources, fishing, defensive adjustments and team-game coordination.
+- **Nine persistent reminders** for housing, TC uptime, resource balance, walls, minimap checks, stone, control groups, scouting and production capacity.
 
-用卡片整理配工、科技、轉兵與補 TC。羅馬可切換對弓兵、馬弓、騎士等分支；競技場提供對應的壓堡、防塔攻提醒。數量與時機是參考，依戰況調整。
+Counts and timings are practical starting points, not mandatory thresholds. Adapt to scouting, pressure and your economy.
 
-![羅馬中期速查與分支切換](docs/images/roman-reference.png)
+![English opening table and gameplay reminders](docs/images/opening-en.png)
 
-![勃根地競技場：四 TC 與帝王準備](docs/images/arena-reference.png)
+![Roman tactical branches — Traditional Chinese example](docs/images/roman-reference.png)
 
-## 文明與流程庫
+Guides are bundled for offline use. Optional local videos/PDFs are not included or required.
 
-- **對局 RP**：查看自己、對手與隊友的文明特性、特殊兵種應對，回顧最近 10 場。
-- **地圖注意**：依本場地圖顯示開局資源、配工、防守與團戰提醒；也能選圖預習，已整理 28 張。
-- **流程庫**：搜尋全部流程，調整各文明的推薦順序，查開局資源配置。
-- **隨時提醒**：記得蓋房子、注意 TC 閒置、記得圍家。
+## Data and limitations
 
-流程與速查隨程式內建，換電腦不必搬教材。影片為選用的本機檔案，未附影片或 PDF。
+- Civilization and unit descriptions come from your installed game. The app also lists unique/regional unit counters from the game's descriptions; it does **not** detect the opponent's live army.
+- Settings and recordings stay local. Optional rating lookup sends player profile IDs to the official leaderboard API.
+- The app reads replay headers, not game memory. It does not currently provide automatic post-game reviews, live worker allocation, match results or duration analysis.
+- Screenshots show macOS previews in English and Traditional Chinese. Tactical content is bundled reference material, not analysis inferred from the displayed game.
+- This is an unofficial community tool. The Windows executable is unsigned.
 
-## 資料與限制
-
-- 文明、兵種說明讀取自己的遊戲安裝；設定與 RP 留在本機。
-- 可選擇查詢目前積分，會將玩家 profile ID 傳給官方排行榜 API。
-- 只讀取 RP 檔頭，不讀取遊戲記憶體；目前不提供自動復盤、實際配工、勝敗或時長分析。
-- 截圖為 macOS 離線預覽，以已下載 RP 載入玩家、文明與地圖；流程與戰術卡是內建參考，不是從該場自動推導。
-- 非官方社群工具，Windows EXE 尚未簽章。
-
-[開發、離線預覽與自行打包](opponent-civ/README.md)
+[Development, offline preview and packaging](opponent-civ/README.en.md)

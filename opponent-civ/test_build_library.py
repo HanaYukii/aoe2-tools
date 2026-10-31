@@ -10,6 +10,12 @@ from build_library import (DATA_PATH, LibraryError, LibraryState, default_order,
 
 def write_fixture(directory):
     data = read_catalog()
+    data['builds'] = [b for b in data['builds'] if b['index'] <= 40]
+    # Keep legacy UI fixtures stable; bundled defaults are tested separately.
+    data['reference_sheets'] = [s for s in data['reference_sheets'] if s['id'] != 'burgundians-arena-boom']
+    next(s for s in data['reference_sheets'] if s['id'] == 'burgundians-arena-castle')['build_ids'] = ['hera-2026-10-15', 'hera-2026-10-16']
+    for sheet in data['reference_sheets']:
+        sheet['build_ids'] = [i for i in sheet['build_ids'] if i != 'burgundians-arena-relics']
     for item in data['builds']:
         item['title'] = f"測試流程 {item['index']}"
         item['notes'] = '測試筆記'
@@ -80,11 +86,28 @@ class LibraryTests(unittest.TestCase):
 
     def test_bundled_content_is_complete_without_media(self):
         builds = load_library(self.directory/'does-not-exist')
-        self.assertEqual(len(builds), 40)
-        self.assertEqual(sum(len(b.steps) for b in builds), 928)
+        self.assertEqual(len(builds), 41)
+        self.assertEqual(sum(len(b.steps) for b in builds), 953)
         self.assertFalse([b for b in read_catalog()['builds'] if 'video_url' in b])  # no member video links
         self.assertTrue(all(b.video is None and b.pdf is None for b in builds))
         self.assertIn('動物配置', read_catalog()['overview'])
+
+    def test_burgundians_arena_defaults_to_relic_control(self):
+        for lang in ('tw', 'en'):
+            builds = load_library(lang=lang)
+            ordered = default_order(builds, 'burgundians')
+            self.assertEqual(opening_for(ordered, 'Arena').id, 'burgundians-arena-relics')
+            self.assertIn('hera-2026-10-15', [b.id for b in ordered])
+            self.assertEqual(opening_for(list(reversed(ordered)), 'Arena').id, 'burgundians-arena-relics')
+            sheets = read_catalog(lang=lang)['reference_sheets']
+            linked = sheets_for(sheets, 'burgundians', opening_for(ordered, 'Arena'), 'Arena')
+            self.assertEqual(linked[0]['id'], 'burgundians-arena-castle')
+            self.assertIn('burgundians-arena-boom', [s['id'] for s in linked])
+            boom = next(b for b in builds if b.id == 'hera-2026-10-15')
+            self.assertEqual(sheets_for(sheets, 'burgundians', boom, 'Arena')[0]['id'], 'burgundians-arena-boom')
+            without_relics = [b for b in ordered if b.id != 'burgundians-arena-relics']
+            self.assertEqual(opening_for(without_relics, 'Arena').id, boom.id)
+            self.assertNotEqual(opening_for(default_order(builds, 'romans'), 'Arena').id, 'burgundians-arena-relics')
 
     def test_notes_may_be_empty_when_guidance_is_in_steps(self):
         data = read_catalog(self.catalog)
@@ -141,7 +164,7 @@ class LibraryTests(unittest.TestCase):
     def test_unreadable_optional_media_does_not_break_builtins(self):
         with patch('build_library.Path.resolve', side_effect=PermissionError('unavailable drive')):
             builds = load_library(self.directory)
-        self.assertEqual(len(builds), 40)
+        self.assertEqual(len(builds), 41)
         self.assertTrue(all(b.video is None for b in builds))
 
     def test_duplicate_ids_and_unsafe_links_are_rejected(self):

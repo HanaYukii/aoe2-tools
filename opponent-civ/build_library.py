@@ -212,8 +212,15 @@ def sheets_for(sheets, civ_key='', build=None, map_label=''):
 
 
 def opening_for(builds, map_label=''):
-    """The first build that suits the map; simply the first when the map is unknown or none suits."""
+    """Prefer Burgundian relic control on Arena, otherwise use the first matching build.
+
+    Explicit per-match picks are handled by the caller before this fallback.
+    """
     kind = map_kind(map_label)
+    if any(word in map_label.casefold() for word in ('arena', '競技場')):
+        relics = next((b for b in builds if b.id == 'burgundians-arena-relics'), None)
+        if relics is not None:
+            return relics
     return next((b for b in builds if b.map_type == kind), builds[0] if builds else None)
 
 

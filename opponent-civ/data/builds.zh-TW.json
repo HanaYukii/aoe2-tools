@@ -10060,6 +10060,276 @@
       "video_filename": "01-瓦蘭吉血統斥候快攻.mp4",
       "recommended_civs": "瓦蘭吉",
       "arrival": "封建 8:50"
+    },
+    {
+      "index": 41,
+      "id": "burgundians-arena-relics",
+      "title": "勃根地競技場・搶遺跡接多 TC",
+      "population": "26＋2",
+      "civs": [
+        "burgundians"
+      ],
+      "map_type": "closed",
+      "advanced": false,
+      "steps": [
+        {
+          "age": "黑暗",
+          "allocation": "6",
+          "task": "6 村吃羊。",
+          "wood": "",
+          "food": "6",
+          "gold": "",
+          "stone": "",
+          "population": "7"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "3",
+          "task": "3 村伐木。勃根地：第一座伐木場完成、資源夠就點一級木，別等到升城。",
+          "wood": "3",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": "10"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "1",
+          "task": "1 村引豬。",
+          "wood": "",
+          "food": "7",
+          "gold": "",
+          "stone": "",
+          "population": "11"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "1",
+          "task": "1 村先蓋房，再到果區蓋磨坊採果。",
+          "wood": "",
+          "food": "8",
+          "gold": "",
+          "stone": "",
+          "population": "12"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "【強烈建議】用斥候推 3 隻鹿到 TC 下。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "黑暗",
+          "allocation": "3",
+          "task": "再補 3 村吃 TC 下的獵物，並引第二隻豬。",
+          "wood": "",
+          "food": "11",
+          "gold": "",
+          "stone": "",
+          "population": "15"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "4",
+          "task": "再補 4 村採果，並多蓋一間房。",
+          "wood": "",
+          "food": "15",
+          "gold": "",
+          "stone": "",
+          "population": "19"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "豬吃完後，用吃羊村種 3 塊田。",
+          "wood": "3",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "19"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "5",
+          "task": "再補 5 村伐木，維持單伐木場。",
+          "wood": "8",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": "24"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "2",
+          "task": "2 村挖金。",
+          "wood": "",
+          "food": "",
+          "gold": "2",
+          "stone": "",
+          "population": "26"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "點封建；理想到達時間 11:20。",
+          "wood": "8",
+          "food": "15",
+          "gold": "2",
+          "stone": "0",
+          "population": "26"
+        },
+        {
+          "age": "升封途中",
+          "allocation": "-",
+          "task": "TC 下食物吃完後，剩下的村民去砍散木。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升封途中",
+          "allocation": "-",
+          "task": "蓋軍營。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "2 村蓋馬廄。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "1 村蓋兵工廠。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "2",
+          "task": "再補 2 村伐木，維持單伐木場。",
+          "wood": "10",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": "28"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "點城堡；理想到達時間 14:50。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "點城後補 3–4 隻斥候，連起始共 4–5 隻；出門找遺跡、看前置村。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "二木優先，一農、二農按餘裕補；約 8–10 田，留 175 木給修道院。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "到城立即下修道院、升輕騎兵；留金先出 2 僧侶，肉馬與僧侶分隊。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "接著補馴馬術；對手持續出肉馬爭奪，再補一攻、續兵。馬防看後續用途。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "控得住外面就補第 3 僧侶，分路收遺跡；爭取多數，優勢時全收。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "修道院後接第 2 TC（275 木／100 石）；約 12–14 田作參考，續肉馬就多補田。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "爭奪穩住再接第 3 TC，約 18–22 田作參考；仍需補兵就延後，不必等全收完。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "多 TC 續村穩定再接第 4 TC；預留 100 石，沿用運營速查接帝王。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 35,
+      "starter": true,
+      "requires_cavalry": true,
+      "video_filename": "",
+      "recommended_civs": "勃根地",
+      "arrival": "封建 11:20  /  城堡 14:50"
     }
   ],
   "reference_sheets": [
@@ -10067,10 +10337,59 @@
       "id": "burgundians-arena-castle",
       "civ": "burgundians",
       "title": "勃根地競技場・運營速查",
-      "subtitle": "預設 3 TC → 近處聖物 → 4 TC → 約 95P 點帝；受壓切防守頁。村數與配工僅供參考。",
+      "subtitle": "預設肉馬搶遺跡 → 2 TC → 穩住再接 3–4 TC；爭取多數，優勢時全收。配工與田數僅供參考。",
       "build_ids": [
-        "hera-2026-10-15",
+        "burgundians-arena-relics",
         "hera-2026-10-16"
+      ],
+      "cards": [
+        {
+          "title": "① 升城 → 輕騎兵、修道院",
+          "body": "升封備軍營，封建馬廄＋兵工廠，先點城再補斥候至總共 4–5 隻。二木優先，二農按餘裕補。\n到城立即修道院＋輕騎兵，先出 2 僧侶；接馴馬術，肉馬互打持續才補一攻。控得住再補第 3 僧侶，分路收遺跡。"
+        },
+        {
+          "title": "② 搶遺跡同時接多 TC",
+          "body": "羊果吃完轉木、開第二伐木場；約 14–18 木／3–5 金，其餘食。到城約 10–12 田，留修道院木與升級費。\n約 12–14 田接第 2 TC；控圖穩再接第 3 TC，約 18–22 田參考。續肉馬就多撒田、延後第三 TC，不按田數硬蓋。\n遺跡戰穩、出村順再補第四 TC：派 3–4 村採 100 石。純農開局改選「純農 4 TC」。"
+        },
+        {
+          "title": "③ 輪軸、手推車與金石科技",
+          "body": "輪軸：約 30 多村、新 TC 完工後點（105 食／50 木），其他 TC 繼續出村。\n手推車：約 50–60 村檢查（180 食／200 木）；不卡出村、和尚與第四 TC 就補。\n一金／一石各 60 食／75 木：2–4 村短採先緩，6–8 村長採再考慮；只挖第四 TC 的 100 石不必先點。"
+        },
+        {
+          "title": "④ 約 95P 點帝：學院、產能",
+          "body": "75–90 村抓 20–25 木／12–18 金，其餘食、石按需；約 95P 點帝。學院配修道院／BK，或城堡滿足建築需求。\n升帝抽 2–3 木村備 2 BK；火槍抓 4 靶場、續馬抓 3 馬廄，按軍費分批蓋。轉槍補軍營，攻防並行再補第二兵工廠。"
+        },
+        {
+          "title": "⑤ 到帝：化學、攻防、城堡科技",
+          "body": "立即化學（300 食／200 金，100 秒），好後先 1–2 火炮；火槍配少量馬，敵馬多先長槍、有餘裕接戟兵。\n火槍補弓防；槍兵補步防／近攻；精矛補精銳／箭攻／弓防。馬補馬防／近攻與升級：馬廄科技半價、無血統。\n有堡記得徵兵、銀冠葡萄園；金冠別順手點。彈道不加成火槍／巨投，無攻城工程師。"
+        },
+        {
+          "title": "⑥ 約 130 村：依續兵調配工",
+          "body": "130 村例：55 食／30 木／35 金／10 石；大量肉馬改 65–75 食、減金石，不急蓋堡就減石。\n缺火炮補木金、缺前排補食；前後排分隊，火炮留後，有人護車與修理。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "Sitaux：爆經濟",
+          "url": "https://sitaux.com/boom/"
+        },
+        {
+          "title": "Sitaux：搶聖物",
+          "url": "https://sitaux.com/light-cav-monks-relics-controls/"
+        },
+        {
+          "title": "科技樹",
+          "url": "https://aoe2techtree.net/#Burgundians"
+        }
+      ]
+    },
+    {
+      "id": "burgundians-arena-boom",
+      "civ": "burgundians",
+      "title": "勃根地競技場・純農 4 TC",
+      "subtitle": "另一選項：安全時純農 3 → 4 TC；遇前壓切防守頁。",
+      "build_ids": [
+        "hera-2026-10-15"
       ],
       "cards": [
         {
@@ -10079,7 +10398,7 @@
         },
         {
           "title": "② 修道院拿遺跡 → 第四 TC",
-          "body": "3 TC 下好、約 30–35 村：抽 1–2 木村蓋修道院，留 3–5 金先出 1 和尚；斥候探路，按需補少量佛萊明護送。\n再派 3–4 村挖 100 石；約 40–50 村、18–20 田且出村穩，抽 4–5 木村蓋第四 TC（275 木）。抓 16–20 木，其餘補田至 24–28 再加。\n可選馬廄搶遺跡：升封備軍營、封建馬廄＋兵工廠上城，到城先修道院再補 TC；肉馬投資多，第四 TC 延後。"
+          "body": "3 TC 下好、約 30–35 村：安全時可下修道院、先出 1 僧侶，斥候探路拿近處遺跡。\n派 3–4 村挖 100 石；約 40–50 村、出村穩，抽 4–5 木村蓋第四 TC（275 木）。抓 16–20 木，其餘補田至 24–28 再加。"
         },
         {
           "title": "③ 輪軸、手推車與金石科技",

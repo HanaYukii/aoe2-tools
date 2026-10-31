@@ -10060,6 +10060,276 @@
       "video_filename": "01-瓦蘭吉血統斥候快攻.mp4",
       "recommended_civs": "Varangians",
       "arrival": "Feudal 8:50"
+    },
+    {
+      "index": 41,
+      "id": "burgundians-arena-relics",
+      "title": "Burgundians Arena: Relic Control into Boom",
+      "population": "26＋2",
+      "civs": [
+        "burgundians"
+      ],
+      "map_type": "closed",
+      "advanced": false,
+      "steps": [
+        {
+          "age": "Dark Age",
+          "allocation": "6",
+          "task": "6 villagers on sheep.",
+          "wood": "",
+          "food": "6",
+          "gold": "",
+          "stone": "",
+          "population": "7"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "3",
+          "task": "3 villagers on wood. Burgundians: get Double-Bit Axe as soon as the first lumber camp is ready and resources allow; do not wait for the Castle transition.",
+          "wood": "3",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": "10"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "1",
+          "task": "1 villager lures a boar.",
+          "wood": "",
+          "food": "7",
+          "gold": "",
+          "stone": "",
+          "population": "11"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "1",
+          "task": "1 villager builds a house, then a mill on berries.",
+          "wood": "",
+          "food": "8",
+          "gold": "",
+          "stone": "",
+          "population": "12"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Strongly recommended: push 3 deer under the TC.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "3",
+          "task": "Add 3 hunters under the TC and lure the second boar.",
+          "wood": "",
+          "food": "11",
+          "gold": "",
+          "stone": "",
+          "population": "15"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "4",
+          "task": "Add 4 berry villagers and an extra house.",
+          "wood": "",
+          "food": "15",
+          "gold": "",
+          "stone": "",
+          "population": "19"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "After boars run out, move sheep villagers onto 3 farms.",
+          "wood": "3",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "19"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "5",
+          "task": "Add 5 woodcutters; keep one lumber camp.",
+          "wood": "8",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": "24"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "2",
+          "task": "2 villagers on gold.",
+          "wood": "",
+          "food": "",
+          "gold": "2",
+          "stone": "",
+          "population": "26"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Click Feudal Age; target arrival 11:20.",
+          "wood": "8",
+          "food": "15",
+          "gold": "2",
+          "stone": "0",
+          "population": "26"
+        },
+        {
+          "age": "To Feudal",
+          "allocation": "-",
+          "task": "When food under the TC runs out, remaining villagers chop stragglers.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "To Feudal",
+          "allocation": "-",
+          "task": "Build a barracks.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "2 villagers build a stable.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Build a Blacksmith with 1 villager.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "2",
+          "task": "Add 2 woodcutters; keep one lumber camp.",
+          "wood": "10",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": "28"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Click Castle Age; target arrival 14:50.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle transition",
+          "allocation": "-",
+          "task": "After clicking Castle Age, train 3–4 Scouts for 4–5 including the starting Scout. Locate relics and watch for forward villagers.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle transition",
+          "allocation": "-",
+          "task": "Prioritize Bow Saw; fit Horse Collar and Heavy Plow around military spending. Aim for 8–10 farms and reserve 175 wood for a Monastery.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Immediately build a Monastery and research Light Cavalry. Reserve gold for 2 Monks; keep cavalry and Monks in separate control groups.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add Husbandry next. If the opponent keeps contesting with Scouts, add Forging and more cavalry. Add cavalry armor as needed later.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add a third Monk when you control the approaches. Collect on separate routes; aim for most relics, or all five when ahead.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "After the Monastery, add TC #2 (275 wood / 100 stone). Around 12–14 farms is a guide; add more if cavalry production continues.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add TC #3 once relic control is stable; roughly 18–22 farms is a guide. Delay it for needed troops, without waiting for every relic to be returned.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add TC #4 once villager production is sustainable. Reserve another 100 stone and follow the economy reference toward Imperial Age.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 35,
+      "starter": true,
+      "requires_cavalry": true,
+      "video_filename": "",
+      "recommended_civs": "Burgundians",
+      "arrival": "Feudal 11:20  /  Castle 14:50"
     }
   ],
   "reference_sheets": [
@@ -10067,10 +10337,59 @@
       "id": "burgundians-arena-castle",
       "civ": "burgundians",
       "title": "Burgundians · Arena economy",
-      "subtitle": "Default: 3 TCs → nearby relics → 4 TCs → Imperial around 95 pop. Under pressure, use the defense guides. Counts are flexible references.",
+      "subtitle": "Default: contest relics with Light Cavalry, add TC #2, then expand to 3–4 TCs as control stabilizes. Farm counts are guides.",
       "build_ids": [
-        "hera-2026-10-15",
+        "burgundians-arena-relics",
         "hera-2026-10-16"
+      ],
+      "cards": [
+        {
+          "title": "① Castle transition: cavalry and Monastery",
+          "body": "Build a Barracks during the Feudal transition, then a Stable + Blacksmith. Click Castle before training Scouts to 4–5 total. Prioritize Bow Saw; fit in Heavy Plow.\nOn arrival: Monastery + Light Cavalry, then 2 Monks and Husbandry. Add Forging for sustained cavalry fighting. Add a third Monk when you can protect separate collection routes."
+        },
+        {
+          "title": "② Expand while contesting relics",
+          "body": "Move depleted-food villagers to wood and a second Lumber Camp: roughly 14–18 on wood, 3–5 on gold, the rest on food. Aim for 10–12 farms at Castle; reserve Monastery and upgrade costs.\nAdd TC #2 around 12–14 farms; TC #3 around 18–22 once control is stable. Continued cavalry production needs more farms and may delay TC #3.\nAdd TC #4 when relic control and villager production are stable; send 3–4 villagers to collect another 100 stone. Choose the 4-TC Boom reference for the pure-boom alternative."
+        },
+        {
+          "title": "3 · Wheelbarrow, Hand Cart and mining",
+          "body": "Wheelbarrow: around 30–39 villagers after the new TCs finish (105 food / 50 wood); keep the other TCs working.\nHand Cart: check at 50–60 villagers (180 food / 200 wood); avoid delaying villagers, monks or TC #4.\nGold Mining / Stone Mining: 60 food / 75 wood each. Delay for 2–4 short-term miners; consider with 6–8 long-term miners. Do not research Stone Mining just for TC #4's 100 stone."
+        },
+        {
+          "title": "4 · Imperial around 95 pop",
+          "body": "At 75–90 villagers: roughly 20–25 wood / 12–18 gold, rest food with stone as needed. Aim to click Imperial around 95 pop. A university with a monastery/workshop, or a castle, covers the building requirement.\nDuring the transition, use 2–3 woodcutters for 2 workshops. Plan about 4 ranges for Hand Cannoneers and 3 stables for cavalry, building in stages as funds allow. Add barracks for spears; a second blacksmith helps parallel upgrades."
+        },
+        {
+          "title": "5 · Imperial: Chemistry first",
+          "body": "Start Chemistry immediately (300 food / 200 gold, 100 seconds), then 1–2 Bombard Cannons. Pair Hand Cannoneers with some cavalry; against cavalry, start pikes and add Halberdier when affordable.\nUpgrade the units you use: archer armor for HC; infantry armor/attack for pikes; Elite Skirmisher, ranged attack and armor for skirms. Stable techs are half price; no Bloodlines.\nWith a castle, remember Conscription and Burgundian Vineyards; do not click Flemish Revolution casually. Ballistics does not improve HC or trebuchets; no Siege Engineers."
+        },
+        {
+          "title": "6 · Around 130 villagers",
+          "body": "Example: 55 food / 30 wood / 35 gold / 10 stone. For heavy light-cavalry production, use 65–75 food and reduce gold/stone. Reduce stone if no castle is needed.\nShort of cannons: add wood/gold. Short of frontline: add food. Use separate control groups and protect/repair your siege."
+        }
+      ],
+      "sources": [
+        {
+          "title": "Strategy reference",
+          "url": "https://sitaux.com/boom/"
+        },
+        {
+          "title": "Strategy reference",
+          "url": "https://sitaux.com/light-cav-monks-relics-controls/"
+        },
+        {
+          "title": "Tech tree",
+          "url": "https://aoe2techtree.net/#Burgundians"
+        }
+      ]
+    },
+    {
+      "id": "burgundians-arena-boom",
+      "civ": "burgundians",
+      "title": "Burgundians Arena: 4-TC Boom",
+      "subtitle": "Alternative: a safe 3-to-4-TC boom. Switch to the defensive reference under pressure.",
+      "build_ids": [
+        "hera-2026-10-15"
       ],
       "cards": [
         {
@@ -10079,7 +10398,7 @@
         },
         {
           "title": "2 · Nearby relics before TC #4",
-          "body": "Around 30–35 villagers, once the new TCs are placed: use 1–2 woodcutters for a monastery, keep 3–5 on gold and start with 1 monk. Scout the route; add a small Flemish Militia escort if needed.\nUse 3–4 villagers to mine 100 stone. Around 40–50 villagers and 18–20 farms, with steady TC production, use 4–5 builders for TC #4 (275 wood). Aim for 16–20 wood and grow toward 24–28 farms.\nOptional relic opening: barracks during the Feudal transition, stable + blacksmith to Castle, monastery before extra TCs. Cavalry spending delays TC #4."
+          "body": "With 3 TCs placed, around 30–35 villagers, optionally add a Monastery and 1 Monk for nearby safe relics; scout the route first.\nSend 3–4 villagers to collect another 100 stone. Around 40–50 villagers, once production is sustainable, use 4–5 builders for TC #4 (275 wood). Keep roughly 16–20 on wood and expand toward 24–28 farms, then continue adding farms."
         },
         {
           "title": "3 · Wheelbarrow, Hand Cart and mining",

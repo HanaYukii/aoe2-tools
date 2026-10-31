@@ -23,8 +23,8 @@ class TranslationTests(unittest.TestCase):
 
     def test_catalog_parity_and_translated_display_fields(self):
         zh, en = read_catalog(lang='tw'), read_catalog(lang='en')
-        self.assertEqual(len(en['builds']), 40)
-        self.assertEqual(sum(len(b['steps']) for b in en['builds']), 928)
+        self.assertEqual(len(en['builds']), 41)
+        self.assertEqual(sum(len(b['steps']) for b in en['builds']), 953)
         for a, b in zip(zh['builds'], en['builds']):
             for field in ('id', 'index', 'population', 'civs', 'map_type', 'starter', 'advanced', 'video_filename'):
                 self.assertEqual(a[field], b[field])

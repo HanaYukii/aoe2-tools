@@ -131,10 +131,11 @@ class Dashboard:
         )
         for index, (text, artwork) in enumerate(items):
             reminder = tk.Label(reminders, text=text, image=icon(root, artwork, 24),
-                compound='left', padx=4, font=(self.font, 10), bg=SURFACE,
+                compound='left', padx=6, font=(self.font, 14, 'bold'), bg=SURFACE,
                 fg=(AMBER, BLUE, ACCENT)[index // 3], anchor='center')
-            reminder.grid(row=index // 3, column=index % 3, sticky='ew', padx=6, pady=2)
+            reminder.grid(row=index // 3, column=index % 3, sticky='ew', padx=6, pady=3)
             self.reminders.append(reminder)
+            reminder.bind('<Configure>', lambda e, label=reminder: label.configure(wraplength=max(80, e.width - 48)))
         for column in range(3):
             reminders.columnconfigure(column, weight=1, uniform='reminders')
         self.house_reminder = self.reminders[0]
@@ -194,6 +195,10 @@ class Dashboard:
     def resize(self, delta):
         self.font_size = max(11, min(24, self.font_size + delta))
         self.library.resize(self.font_size)
+        for reminder in self.reminders:
+            reminder.configure(font=(self.font, self.font_size + 2, 'bold'))
+        for _, rating, _ in self.tabs:
+            rating.configure(font=(self.font, self.font_size + 6, 'bold'))
         for text in [text for _, _, text in self.tabs] + self.counter_texts:
             self.style_text(text)
 
@@ -420,8 +425,9 @@ class Dashboard:
                 tk.Label(heading, text=(civ.key.upper() if civ else 'UNKNOWN') + '  /  ' + role, font=('Segoe UI', 9), fg=color, bg=PANEL, anchor='w').pack(fill='x')
                 tk.Label(heading, text=name, font=(self.display_font, 28, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x')
                 tk.Label(heading, text=player.name, font=(self.font, 12), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x')
-                rating = tk.Label(frame, text=tr('積分查詢已關閉') if self.args.no_elo else tr('正在查詢積分…'), font=('Segoe UI', 12), fg=BLUE, bg=SURFACE, anchor='w', padx=14, pady=10)
+                rating = tk.Label(frame, text=tr('積分查詢已關閉') if self.args.no_elo else tr('正在查詢積分…'), font=(self.font, self.font_size + 6, 'bold'), fg=BLUE, bg=SURFACE, anchor='w', justify='left', padx=14, pady=10)
                 rating.pack(fill='x', padx=24, pady=(0, 20))
+                rating.bind('<Configure>', lambda e, label=rating: label.configure(wraplength=max(120, e.width - 28)))
                 body = tk.Frame(frame, bg=PANEL)
                 body.pack(fill='both', expand=True, padx=24, pady=(0, 20))
                 scrollbar = ttk.Scrollbar(body)

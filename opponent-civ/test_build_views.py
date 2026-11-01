@@ -167,6 +167,7 @@ class BuildViewTests(unittest.TestCase):
         self.ui.next_button.invoke()
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
         view = self.ui.sheet_views['burgundians-arena-castle']
+        self.assertTrue(all('Text' not in body.bindtags() for body in view.texts))  # card text cannot scroll itself
         header = view.winfo_children()[0]
         next(w for w in header.winfo_children() if w.cget('text') == '測試流程 16').invoke()
         self.assertEqual(self.ui.build.index, 16)

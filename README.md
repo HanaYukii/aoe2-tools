@@ -1,68 +1,59 @@
-# AoE2 對局筆記
+# AoE2 Match Notes
 
-開局看對手文明、回顧最近 10 場、查特殊兵種怎麼打。適合放在第二螢幕。
+English | [繁體中文](README.zh-TW.md)
 
-## 下載
+**See your opponents' Elo and civilization bonuses on a second screen while you play.**
 
-### [⬇ 下載 Windows EXE](https://github.com/HanaYukii/aoe2-tools/releases/latest/download/aoe2-opponent-dashboard.exe)
+A desktop companion for Age of Empires II: Definitive Edition. It detects matches from local replay headers and puts build orders, unit counters and tactical reminders beside the game.
 
-[所有版本與更新說明](https://github.com/HanaYukii/aoe2-tools/releases) · Windows 64 位元 · 免安裝 Python
+### [Download for Windows](https://github.com/HanaYukii/aoe2-tools/releases/latest/download/aoe2-opponent-dashboard.exe)
 
-需要先安裝 **Age of Empires II: Definitive Edition**。目前以 Windows Steam 版測試。
+Windows 64-bit. No Python installation required. Primarily tested with the Steam version of AoE2 DE.
 
-## 三步開始
+[Release notes](https://github.com/HanaYukii/aoe2-tools/releases) · [Report an issue](https://github.com/HanaYukii/aoe2-tools/issues)
 
-1. 下載 EXE，放到常用資料夾後雙擊開啟。
-2. 首次設定確認遊戲位置，從錄影偵測出的名單選「哪位玩家是你」，按「儲存並開始」。通常不必手填路徑或 ID；沒有錄影也可先使用自動判斷。
-3. 開始一場有錄影的對局。工具偵測到新錄影後，會自動顯示文明資訊。
+English and Traditional Chinese are included from v0.4.0.
 
-右下角「設定」可修改路徑、玩家、資料語言及積分查詢；儲存後重開生效。桌面捷徑可對 EXE 按右鍵 → 傳送到 → 桌面（建立捷徑）。
+## Know your opponent from the start
 
-## 畫面範例
+See **current 1v1 and team-game Elo, civilization bonuses and unique technologies** without opening another website. Ratings reflect the time of lookup, not the historical match rating.
 
-深色介面、可調字級與置頂。左側最近 10 場，右側切換對手、自己與隊友的文明。
+In team games a **Team bonuses** tab opens first: your team and the opponents side by side, with every player's civilization, team bonus and each team's average rating. Click a civilization to open that player's tab.
 
-![最近對局與文明特性](docs/images/dashboard.png)
+![Opponent ratings and civilization bonuses — Traditional Chinese example](docs/images/opponent-elo.png)
 
-點「看特殊兵種怎麼打」，直接跳到對手文明的兵種應對。
+## Get started
 
-![特殊兵種應對](docs/images/counters.png)
+1. Open the app, confirm your game and recording folders, and select your player identity.
+2. Choose `en` for English or `tw` for Traditional Chinese in Settings, then restart. Existing users keep their saved language; first-time users default to their system language where supported.
+3. Start a recorded game. The app detects the new replay and displays the match.
+4. Switch between **Match, Opening, Tactics, Map tips and Build library**.
 
-*截圖使用虛構玩家與範例對局。兵種應對來自遊戲說明，不代表對手實際出了這些兵。*
+The window prefers a secondary display and remembers its position. You can keep it on top, adjust text size and collapse the match list. It does not register gameplay hotkeys.
 
-## 資料與限制
+## Build orders and quick references
 
-- 文明與兵種說明讀取使用者自己的遊戲安裝；EXE 不包含遊戲資料、個人錄影或帳號設定。
-- 設定留在本機，不需要帳號密碼。積分與勝敗查詢會將對局玩家的 profile ID 傳給官方排行榜 API，可在設定關閉。
-- 最近 10 場來自本機錄影，可篩選多人／排名／全部。開啟積分查詢時，依官方對戰紀錄把勝場標綠、敗場標紅，排名賽附上積分變化；剛打完的對局按「重新整理對局」即可看到。尚不包含時長或歷史積分；對局資訊顯示的是目前文明資料與目前積分。
-- 只讀取錄影檔，不讀取遊戲記憶體、不注入。遊戲更新可能改變錄影格式；解析失敗時會提示。
-- 本工具為非官方社群工具。EXE 尚未做程式碼簽章。
+- **40 build orders**, recommended by civilization and map. Change builds at any time and click a step to mark your place.
+- **Tactical cards** for worker allocation, upgrades, army transitions and extra TCs. Roman guides separate Feudal, Castle and Imperial play, with branches against archers, cavalry archers and knights.
+- **Arena defense guides** for castle drops and tower rushes, plus a Burgundian economy reference.
+- **28 map guides** covering unusual starts, food sources, fishing, defensive adjustments and team-game coordination.
+- **Nine persistent reminders** for housing, TC uptime, resource balance, walls, minimap checks, stone, control groups, scouting and production capacity.
 
-遇到問題可到 [Issues](https://github.com/HanaYukii/aoe2-tools/issues) 回報版本與錯誤訊息。
+Counts and timings are practical starting points, not mandatory thresholds. Adapt to scouting, pressure and your economy.
 
-[開發、命令列與自行打包](opponent-civ/README.md)
+![English opening table and gameplay reminders](docs/images/opening-en.png)
 
+![Roman tactical branches — Traditional Chinese example](docs/images/roman-reference.png)
 
-### 參考流程
+Guides are bundled for offline use. Optional local videos/PDFs are not included or required.
 
-「對局 RP」右邊固定三個分頁，跟著畫面上的對局走；怎麼點都不會多開分頁：
+## Data and limitations
 
-- **前期流程**：自動開啟自己文明推薦清單中，第一個適合本場地圖的流程，例如勃根地在競技場開直城爆經濟、在阿拉伯開單射箭場弓兵。右上「換流程 ▾」可改看清單中的其他流程，這場對局會記住你的選擇。整張流程表依階段排列，點一列標記看到的位置，階段按鈕只跳到該段。標記只屬於這一場：新對局從第一步重新開始，中途翻看其他對局不會清掉。
-- **中期速查**：顯示自己文明的速查，接在這套前期流程後的優先；在競技場另外加上所有文明通用的「壓堡應對」，分頁上方可切換。都沒有時分頁變灰。流程頁右上的「中期速查 →」直接切過去。例如勃根地城堡速查整理田數、科技、聖物、第四 TC 與點帝準備。卡片填滿整個分頁，寬畫面三欄、較窄時兩欄或一欄；字級自動放大到剛好放得下全部卡片，上方「＋／－」設定的是最小字級，畫面太小放不下時才捲動。之後新增的速查都沿用這個版面。
-- **流程庫**：「推薦順序」用 ▲▼ 排每個文明的推薦清單，排在前面的優先成為前期流程，「移出」拿掉不用的流程；「全部流程」搜尋整個流程庫並「加入推薦」；「開局調整」整理動物配置與開局原則。切換文明可先排好其他文明的清單，或開啟該文明的中期速查。
+- Civilization and unit descriptions come from your installed game. The app also lists unique/regional unit counters from the game's descriptions; it does **not** detect the opponent's live army.
+- Settings and recordings stay local. Optional rating lookup sends player profile IDs to the official leaderboard API.
+- With rating lookup on, recent matches are colored by result from the official match history (green win, red loss, with the rating change for ranked games). Local matches appear first and colors follow; if the lookup is off or unavailable, the list still shows without them.
+- The app reads replay headers, not game memory. It does not currently provide automatic post-game reviews, live worker allocation or duration analysis.
+- Screenshots show macOS previews in English and Traditional Chinese. Tactical content is bundled reference material, not analysis inferred from the displayed game.
+- This is an unofficial community tool. The Windows executable is unsigned.
 
-一般文明的預設清單是單射箭場弓兵、單馬廄斥候、直城爆經濟、通用裝甲，以及適用的文明專屬流程；調整後的順序存在本機設定資料夾。左側最近對局可收起。首次使用新版時，視窗預設佔副螢幕工作區的九成；後續保留使用者調整的大小與位置。
-
-**參考流程、配工步驟、打法與轉型筆記隨程式內建**，開啟就能選流程，換電腦不用再搬教材或選資料夾。內容使用台灣玩家說法，人口與操作村數沿用中文版。
-
-影片與 PDF 檔案不包含在執行檔中。有下載影片時，可在流程庫選「本機影片（選用）…」，選影片所在資料夾或其上一層教材目錄；可辨識對應檔名，不需要額外準備影片清單或文字檔。選不到或找不到影片，不影響任何內建流程。舊版的教材目錄設定會沿用為選用的影片位置。
-
-後續可持續加入不同來源或自行整理的流程與速查。內建資料在 `opponent-civ/data/builds.zh-TW.json`，每套流程的固定 ID、人口、文明適用性與配工步驟獨立存放，速查用 `build_ids` 接在對應的前期流程後面；`civ` 留空並在 `maps` 列出地圖關鍵字（如「競技場」、arena），就是只在那些地圖出現、所有文明通用的速查。修改內容後隨新版程式一起發布；固定 ID 保留使用者的推薦順序。PyInstaller 將資料打包進單一 EXE，打包後會從空目錄執行該 EXE，比對流程與步驟數量，確認所有內建資料均可載入。
-
-沒有安裝遊戲的電腦也能離線預覽介面（Python 3.12+ 且含 Tk）：
-
-```sh
-python opponent-civ/dashboard.py --demo
-```
-
-對局與文明說明是明確標示的展示資料，流程表使用完整內建資料。加上 `--demo-build 33` 可直接查看羅馬流程。Windows 的正式監看模式仍讀取遊戲資料與錄影；macOS 預覽不模擬錄影偵測或 Windows 雙螢幕 API。
+[Development, offline preview and packaging](opponent-civ/README.en.md)

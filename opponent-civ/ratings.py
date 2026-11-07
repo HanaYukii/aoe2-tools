@@ -40,3 +40,14 @@ def fetch_results(profile_id, timeout=10):
     return [(game['startgametime'], {m['profile_id']: (m['outcome'], m['oldrating'], m['newrating'])
                                      for m in game['matchhistorymember']})
             for game in data.get('matchHistoryStats', [])]
+
+
+def team_average(players, ratings):
+    """{leaderboard_id: (mean rating, how many humans had one)} over the humans among `players`."""
+    averages = {}
+    for board in (RM_1V1, RM_TEAM):
+        values = [ratings[p.profile_id][board] for p in players
+                  if p.is_human and board in ratings.get(p.profile_id, {})]
+        if values:
+            averages[board] = (round(sum(values) / len(values)), len(values))
+    return averages

@@ -1,4 +1,5 @@
 """Bundled Chinese build orders with optional local media attachments."""
+from i18n import tr, catalog_path, language
 import json
 import re
 from dataclasses import dataclass
@@ -77,9 +78,9 @@ class LibraryError(ValueError):
     pass
 
 
-def read_catalog(data_path=None):
+def read_catalog(data_path=None, *, lang=None):
     try:
-        data = json.loads(Path(data_path or DATA_PATH).read_text(encoding='utf-8'))
+        data = json.loads(Path(data_path or (catalog_path("builds", lang) if (lang or language()) == "en" else DATA_PATH)).read_text(encoding='utf-8'))
         if data.get('schema_version') != 1 or not isinstance(data.get('builds'), list):
             raise ValueError('unsupported catalog')
         sheet_ids = set()
@@ -93,6 +94,8 @@ def read_catalog(data_path=None):
             # A sheet for every civilization ('civ' empty) must name the maps it is for.
             if sheet['id'] in sheet_ids or not sheet.get('cards') or not isinstance(sheet.get('build_ids'), list) or not (sheet['civ'] or maps):
                 raise ValueError('invalid reference sheet')
+            if sheet.get('era') not in (None, 'feudal', 'castle', 'imperial'):
+                raise ValueError('invalid reference era')
             shortcut = sheet.get('shortcut')
             if shortcut is not None and (not isinstance(shortcut, dict) or
                     not all(isinstance(shortcut.get(k), str) and shortcut[k].strip() for k in ('id', 'label'))):
@@ -108,7 +111,7 @@ def read_catalog(data_path=None):
                     raise ValueError('invalid reference source')
         return data
     except (OSError, ValueError, AttributeError, KeyError, TypeError) as exc:
-        raise LibraryError('內建流程資料無法讀取，請重新下載完整版本。') from exc
+        raise LibraryError(tr('內建流程資料無法讀取，請重新下載完整版本。')) from exc
 
 
 def media_file(directory, filename):
@@ -126,9 +129,9 @@ def media_file(directory, filename):
     return None
 
 
-def load_library(media_dir=None, *, data_path=None):
+def load_library(media_dir=None, *, data_path=None, lang=None):
     """Always read bundled steps. Missing optional videos/PDF never hide builds."""
-    data = read_catalog(data_path)
+    data = read_catalog(data_path, lang=lang)
     builds, ids, indices = [], set(), set()
     try:
         for item in data['builds']:
@@ -138,9 +141,11 @@ def load_library(media_dir=None, *, data_path=None):
                 raise ValueError('duplicate build')
             ids.add(item['id'])
             indices.add(item['index'])
-            for field in ('id', 'title', 'population', 'notes'):
+            for field in ('id', 'title', 'population'):
                 if not isinstance(item[field], str) or not item[field]:
                     raise ValueError('missing text')
+            if not isinstance(item['notes'], str):
+                raise ValueError('invalid notes')
             if item['map_type'] not in {'open', 'closed', 'water', 'fortress'}:
                 raise ValueError('invalid map')
             if not isinstance(item['civs'], list) or not all(isinstance(c, str) for c in item['civs']):
@@ -162,7 +167,7 @@ def load_library(media_dir=None, *, data_path=None):
         if not builds:
             raise ValueError('empty catalog')
     except (KeyError, TypeError, ValueError, AttributeError) as exc:
-        raise LibraryError('內建流程資料不完整，請重新下載完整版本。') from exc
+        raise LibraryError(tr('內建流程資料不完整，請重新下載完整版本。')) from exc
     return builds
 
 
@@ -182,8 +187,12 @@ def default_order(builds, civ_key='', favorites=()):
 
 def search_builds(builds, civ_key='', query=''):
     """Every build whose title or population matches; ones the civilization can play come first."""
-    terms = query.casefold().replace('maa', '裝甲').replace('fc', '直城').strip()
-    found = [b for b in builds if terms in (b.title+' '+b.population).casefold()]
+    terms = query.casefold().replace('＋', '+').strip()
+    if language() == 'en':
+        terms = terms.replace('maa', 'men-at-arms').replace('fc', 'fast castle')
+    else:
+        terms = terms.replace('maa', '裝甲').replace('fc', '直城')
+    found = [b for b in builds if terms in (b.title+' '+b.population).casefold().replace('＋', '+')]
     return sorted(found, key=lambda b: (b.compatibility(civ_key) in {'other', 'unavailable'}, b.index))
 
 
@@ -203,8 +212,15 @@ def sheets_for(sheets, civ_key='', build=None, map_label=''):
 
 
 def opening_for(builds, map_label=''):
-    """The first build that suits the map; simply the first when the map is unknown or none suits."""
+    """Prefer Burgundian relic control on Arena, otherwise use the first matching build.
+
+    Explicit per-match picks are handled by the caller before this fallback.
+    """
     kind = map_kind(map_label)
+    if any(word in map_label.casefold() for word in ('arena', '競技場')):
+        relics = next((b for b in builds if b.id == 'burgundians-arena-relics'), None)
+        if relics is not None:
+            return relics
     return next((b for b in builds if b.map_type == kind), builds[0] if builds else None)
 
 

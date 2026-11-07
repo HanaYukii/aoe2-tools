@@ -11,11 +11,11 @@ from unittest.mock import patch
 from civdata import Civ
 from dashboard import Dashboard
 from build_library import LibraryState
-from build_views import wrap_text
+from build_views import wrap_text, reference_highlights
 from rec_header import Match, Player
 from test_build_library import write_fixture
 
-TABS = ['對局 RP', '前期流程', '中期速查', '流程庫']
+TABS = ['對局 RP', '前期流程', '戰術速查', '地圖注意', '流程庫']
 
 
 class BuildViewTests(unittest.TestCase):
@@ -100,6 +100,26 @@ class BuildViewTests(unittest.TestCase):
         self.assertEqual(self.ui.build.index, 33)
         self.assertIn('阿拉伯（開放地圖）', self.ui.library_tab.map_note.cget('text'))
 
+    def test_map_notes_follow_match_without_switching_tabs(self):
+        self.game(43, 9)
+        view = self.ui.map_tab
+        self.assertEqual(view.current['id'], 'arabia')
+        self.assertEqual(self.book.select(), str(self.app.rp_frame))
+        index = next(i for i, n in enumerate(view.notes) if n['id'] == 'nomad')
+        view.selector.current(index)
+        view.choose()
+        self.assertEqual(view.view.sheet['id'], 'nomad')
+        self.assertIn('手動預習', view.status.cget('text'))
+        view.follow()
+        self.assertEqual(view.view.sheet['id'], 'arabia')
+        self.game(35, 29, hour=1)
+        self.assertEqual(view.current['id'], 'arena')
+        self.assertEqual(view.view.sheet['id'], 'arena')
+        self.game(43, 999, hour=2)
+        self.assertIsNone(view.current)
+        self.assertIsNone(view.view)
+        self.assertIn('尚未整理', view.message.cget('text'))
+
     def test_reordering_recommendations_moves_the_default_and_persists(self):
         self.game(35, 9)
         library = self.ui.library_tab
@@ -147,6 +167,7 @@ class BuildViewTests(unittest.TestCase):
         self.ui.next_button.invoke()
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
         view = self.ui.sheet_views['burgundians-arena-castle']
+        self.assertTrue(all('Text' not in body.bindtags() for body in view.texts))  # card text cannot scroll itself
         header = view.winfo_children()[0]
         next(w for w in header.winfo_children() if w.cget('text') == '測試流程 16').invoke()
         self.assertEqual(self.ui.build.index, 16)
@@ -163,26 +184,52 @@ class BuildViewTests(unittest.TestCase):
         library.civ_name.set('羅馬')
         library.refresh(top=True)
         sheet_buttons = [w for w in library.sheet_bar.winfo_children() if isinstance(w, ttk.Button)]
-        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・城堡長劍衝車速查', '競技場・壓堡應對'])
+        self.assertEqual([b.cget('text') for b in sheet_buttons], ['羅馬・封建速查', '羅馬・城堡速查', '羅馬・對弓兵', '羅馬・對馬弓', '羅馬・對騎士', '羅馬・帝王速查', '競技場・壓堡應對'])
         sheet_buttons[0].invoke()
-        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
         self.assertEqual([b.cget('text') for b in self.ui.sheet_bar.winfo_children()],
-                         ['競技場・壓堡應對', '羅馬・城堡長劍衝車速查'])  # the pick joins what applies here
+                         ['封建速查', '競技場・壓堡應對'])
         self.game(43, 9, hour=3)
-        self.assertEqual(self.ui.sheet, 'romans-castle-push')
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
         self.assertEqual(len(self.ui.sheet_views), 3)
+
+    def test_roman_branches_switch_manually_and_keep_the_match_choice(self):
+        self.game(43, 9, live=True)
+        def labels():
+            return [b.cget('text') for b in self.ui.sheet_bar.winfo_children()]
+        def choose(label):
+            next(b for b in self.ui.sheet_bar.winfo_children() if b.cget('text') == label).invoke()
+        self.assertEqual(labels(), ['封建速查', '城堡速查', '帝王速查'])
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
+        choose('城堡速查')
+        self.assertEqual(labels(), ['封建速查', '城堡速查', '帝王速查', '主線運營', '對弓兵', '對馬弓', '對騎士'])
+        for label, ident in [('對弓兵', 'romans-vs-archers'), ('對馬弓', 'romans-vs-cavalry-archers'), ('對騎士', 'romans-vs-knights')]:
+            choose(label)
+            self.assertEqual(self.ui.sheet, ident)
+            view = self.ui.sheet_views[ident]
+            self.assertEqual(len(view.cards), 6)
+            view.reflow(SimpleNamespace(width=1000, height=900))
+            view.fit()
+            self.assertTrue(any(body.tag_ranges('eco') for body in view.texts))
+        self.ui.refresh()
+        self.assertEqual(self.ui.sheet, 'romans-vs-knights')
+        choose('帝王速查')
+        self.assertEqual(self.ui.sheet, 'romans-imperial')
+        self.assertEqual(labels(), ['封建速查', '城堡速查', '帝王速查'])
+        self.game(43, 9, hour=1, live=True)
+        self.assertEqual(self.ui.sheet, 'romans-feudal')
 
     def test_arena_adds_the_castle_drop_sheet_beside_the_civilization_sheet(self):
         self.game(35, 29)
         self.assertEqual(self.ui.sheet, 'burgundians-arena-castle')
         self.assertEqual(self.ui.sheet_bar.winfo_manager(), 'pack')
         choices = self.ui.sheet_bar.winfo_children()
-        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・城堡期速查', '勃根地競技場・防壓堡速查', '競技場・壓堡應對'])
+        self.assertEqual([c.cget('text') for c in choices], ['勃根地競技場・運營速查', '勃根地競技場・防壓堡速查', '勃根地競技場・防塔攻保直城', '競技場・壓堡應對'])
         choices[1].invoke()
         self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
         self.assertEqual(self.ui.sheet_views['burgundians-arena-defense'].winfo_manager(), 'pack')
-        self.ui.sheet_bar.winfo_children()[2].invoke()
+        self.ui.sheet_bar.winfo_children()[3].invoke()
         self.assertEqual(self.ui.sheet, 'arena-castle-drop')
         view = self.ui.sheet_views['arena-castle-drop']
         self.assertEqual(view.winfo_manager(), 'pack')
@@ -195,10 +242,12 @@ class BuildViewTests(unittest.TestCase):
         self.game(35, 29, live=True)
         bar = self.app.map_shortcuts
         self.assertEqual(self.book.select(), str(self.app.rp_frame))
-        self.assertEqual(len(bar.winfo_children()), 1)  # dedicated version replaces generic
+        self.assertEqual(len(bar.winfo_children()), 2)  # castle defense is deduplicated; tower defense is separate
         bar.winfo_children()[0].invoke()
         self.assertEqual(self.ui.sheet, 'burgundians-arena-defense')
         self.assertEqual(self.book.select(), str(self.ui.sheet_tab))
+        bar.winfo_children()[1].invoke()
+        self.assertEqual(self.ui.sheet, 'burgundians-arena-tower-defense')
         self.book.select(self.ui.plan_tab)
         self.ui.refresh()
         self.assertEqual(self.book.select(), str(self.ui.plan_tab))
@@ -213,7 +262,7 @@ class BuildViewTests(unittest.TestCase):
             self.ui.open_sheet('burgundians-arena-defense')  # manual library pick doesn't enable a map shortcut
             self.assertFalse(bar.winfo_children())
         self.game(35, 29, hour=4)  # history gets the same map-aware entry
-        self.assertEqual(len(bar.winfo_children()), 1)
+        self.assertEqual(len(bar.winfo_children()), 2)
         self.assertEqual(self.book.select(), str(self.app.rp_frame))
 
     def test_library_search_add_remove_and_overview(self):
@@ -280,6 +329,14 @@ class BuildViewTests(unittest.TestCase):
         self.assertEqual(lay_out(1600, 1400), 1400)         # 3 x 2 cards fill the whole height
         self.assertEqual([sheet.cards[i].grid_info()['column'] for i in (1, 2)], [1, 2])
         self.assertEqual(sheet.cards[3].grid_info()['row'], 1)
+        for body in sheet.texts:
+            self.assertEqual(str(body.cget('state')), 'disabled')
+        self.assertTrue(any(body.tag_ranges('tech') for body in sheet.texts))
+        self.assertTrue(any(body.tag_ranges('eco') for body in sheet.texts))
+        self.assertEqual([label.cget('text') for label in self.app.reminders],
+                         ['記得蓋房子', '注意 TC 閒置', '資源記得調配',
+                          '記得圍家', '看小地圖', '記得挖堡',
+                          '前後排分隊', '偵查對手轉兵', '產兵建築充足'])
         roomy = sheet.fitted_size
         self.assertGreater(roomy, sheet.size - 1)           # text grows past the floor to use the room
         lay_out(1600, 700)
@@ -310,6 +367,12 @@ class WrapTextTests(unittest.TestCase):
         wrapped = wrap_text('一二三四五六，七', self.measure, 12)
         self.assertEqual(wrapped, '一二三四五\n六，七')  # no line opens with "，" or runs past the width
         self.assertTrue(all(self.measure(line) <= 12 for line in wrapped.split('\n')))
+
+    def test_reference_emphasis_survives_wrapping(self):
+        text = '先補二級\n射、彈道學；配 22–26\n木，其他依情況調整。'
+        spans = [(tag, text[start:end].replace('\n', ''))
+                 for tag, start, end in reference_highlights(text)]
+        self.assertEqual(spans, [('tech', '二級射'), ('tech', '彈道學'), ('eco', '22–26木')])
 
     def test_existing_line_breaks_are_kept(self):
         self.assertEqual(wrap_text('甲乙\n丙丁', self.measure, 100), '甲乙\n丙丁')

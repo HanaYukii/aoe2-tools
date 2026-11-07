@@ -5,12 +5,18 @@ from dataclasses import replace
 from pathlib import Path
 import tkinter as tk
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from civdata import Civ
 from dashboard import Dashboard
 from rec_header import Match, Player
 from units import UniqueUnit
+
+
+def descendants(widget):
+    for child in widget.winfo_children():
+        yield child
+        yield from descendants(child)
 
 
 class DashboardTests(unittest.TestCase):
@@ -39,6 +45,8 @@ class DashboardTests(unittest.TestCase):
             self.assertEqual((image.width(), image.height()), (24, 24))
             self.assertIs(image, icon(self.root, name))
         self.assertTrue(self.app.workspace_book.tab(self.app.rp_frame, 'image'))
+        pages = [str(self.app.workspace_book.tab(tab, 'image')) for tab in self.app.workspace_book.tabs()]
+        self.assertEqual(len(set(pages)), len(pages))  # every page tab has its own icon
 
     def test_all_civilization_icons_load_with_fallback(self):
         from ui_icons import CIVILIZATIONS, civilization_icon, icon
@@ -48,6 +56,7 @@ class DashboardTests(unittest.TestCase):
                 image = civilization_icon(self.root, key, size)
                 self.assertEqual((image.width(), image.height()), (size, size))
         self.assertIs(civilization_icon(self.root, 'Romans'), civilization_icon(self.root, 'romans'))
+        self.assertIsNot(civilization_icon(self.root, 'Indians'), icon(self.root, 'map', 32))  # Hindustanis' internal name
         self.assertIs(civilization_icon(self.root, 'future-civ'), icon(self.root, 'map', 32))
         self.assertIs(civilization_icon(self.root, None), icon(self.root, 'map', 32))
 
@@ -73,6 +82,32 @@ class DashboardTests(unittest.TestCase):
             self.assertEqual(self.app.history_results(rows), [(True, 15)])
             fetch.side_effect = OSError('offline')
             self.assertIsNone(self.app.history_results(rows))
+
+    def test_history_lists_local_matches_first_and_survives_a_failed_lookup(self):
+        rows = [(Path('a.aoe2record'), self.match)]
+        self.app.dirs, self.app.args.no_elo = [], False
+        def refresh(fetch):
+            while not self.app.events.empty():
+                self.app.events.get_nowait()
+            with patch('dashboard.recent_matches', return_value=(rows, 0)), patch('dashboard.fetch_results', fetch), \
+                    patch.object(self.app.pool, 'submit', side_effect=lambda work: work()):
+                self.app.refresh_history()
+            return [self.app.events.get_nowait() for _ in range(self.app.events.qsize())]
+        events = refresh(Mock(side_effect=OSError('offline')))
+        self.assertEqual([kind for kind, _ in events], ['history', 'history_results'])
+        self.app.render_history(*events[0][1])
+        self.assertIn('正在查詢勝敗', self.app.history_summary.cget('text'))
+        self.assertIn('對手', self.app.history_tree.item('0', 'values')[0])  # the local match shows while waiting
+        self.app.history_tree.selection_set('0')
+        self.app.show_history_results(*events[1][1])
+        self.assertIn('勝敗暫時讀不到', self.app.history_summary.cget('text'))
+        self.assertEqual(self.app.history_tree.item('0', 'tags')[0], 'even')
+        self.assertEqual(self.app.history_tree.selection(), ('0',))  # results never move the selection
+        self.app.args.no_elo = True
+        events = refresh(Mock())
+        self.assertEqual([kind for kind, _ in events], ['history'])  # ratings off: nothing is looked up
+        self.app.render_history(*events[0][1])
+        self.assertNotIn('勝敗', self.app.history_summary.cget('text'))
 
     def test_manual_drain_replaces_pending_timer(self):
         previous = self.app.drain_timer
@@ -127,12 +162,70 @@ class DashboardTests(unittest.TestCase):
         book = self.app.book
         self.assertEqual([book.tab(tab, 'text') for tab in book.tabs()], ['對手 · 不列顛人', '兵種應對', '你 · 不列顛人'])
         enemy_tab = book.nametowidget(book.tabs()[0])
-        next(w for w in enemy_tab.winfo_children() if isinstance(w, tk.Button)).invoke()
+        next(w for w in descendants(enemy_tab) if isinstance(w, tk.Button)).invoke()
+        self.root.update_idletasks()  # run jump's idle scroll now, not after this root is destroyed
         self.assertEqual(book.index('current'), 1)
         counters = self.app.counter_texts[0].get('1.0', 'end')
         self.assertIn('用這些打　騎兵、矛兵', counters)
         self.assertIn('它克制　步兵', counters)
 
+    def team_match(self):
+        self.app.civs[2] = Civ(2, 'Franks', '法蘭克人', '騎兵文明\n\n團隊加成：\n騎士視野 +2')
+        self.app.civs[3] = Civ(3, 'Teutons', '條頓人', '步兵文明\n\n團隊成分：\n步兵抗轉化')
+        return replace(self.match, players=(
+            Player(1, '自己', 1, 2, 0, 10, 2), Player(2, '敵一', 2, 3, 1, 20, 2),
+            Player(3, '盟友', 3, 2, 2, 30, 2), Player(4, '敵二', 1, 3, 3, 40, 2)))
+
+    def test_team_game_opens_on_both_teams_side_by_side(self):
+        team = self.team_match()
+        self.app.show(team, Path('team.aoe2record'), 0.5, False)
+        book = self.app.book
+        self.assertEqual([book.tab(tab, 'text') for tab in book.tabs()],
+                         ['團隊加成', '對手 · 法蘭克人', '對手 · 不列顛人', '你 · 不列顛人', '隊友 · 條頓人'])
+        self.assertEqual(book.index('current'), 0)
+        mine, theirs = (text.get('1.0', 'end') for text, _ in self.app.team_sides)
+        for words in ('我方隊伍', '自己（你）', '盟友', '步兵抗轉化'):
+            self.assertIn(words, mine)
+        for words in ('對手隊伍', '敵一', '騎士視野 +2', '敵二', '射箭場工作速度 +10%'):
+            self.assertIn(words, theirs)
+        self.assertNotIn('積分', mine + theirs)  # rating lookup is off in these tests
+        self.assertTrue(self.app.team_sides[0][0].tag_bind('player3', '<Button-1>', None))
+        self.app.my_id = None
+        self.app.show(team, Path('team.aoe2record'), 0.5, False)
+        self.assertEqual(len(self.app.team_sides), 1)
+        self.assertIn('所有玩家', self.app.team_sides[0][0].get('1.0', 'end'))
+        self.app.show(self.match, Path('duel.aoe2record'), 0.5, False)
+        self.assertNotIn('團隊加成', [book.tab(tab, 'text') for tab in book.tabs()])
+        self.assertEqual(self.app.team_sides, [])
+
+    def test_team_columns_show_each_side_average_rating(self):
+        self.app.args.no_elo = False
+        with patch.object(self.app.pool, 'submit'):  # no live lookup; the response is posted below
+            self.app.show(self.team_match(), Path('team.aoe2record'), 0.5, False)
+        mine, theirs = (text for text, _ in self.app.team_sides)
+        self.assertIn('正在查詢積分', theirs.get('1.0', 'end'))
+        self.app.events.put(('ratings', (self.app.generation, {10: {3: 1000, 4: 1100}, 30: {3: 1200},
+                                                               20: {4: 1500}, 40: {4: 1700}}, None)))
+        self.app.drain()
+        self.assertIn('平均 1v1  1100  ·  團戰  1100 (1/2)', mine.get('1.0', 'end'))
+        self.assertIn('平均 團戰  1600', theirs.get('1.0', 'end'))
+        self.assertNotIn('正在查詢積分', theirs.get('1.0', 'end'))
+
+    def test_team_columns_hide_idle_scrollbars_and_grow_emblems(self):
+        from tkinter import ttk
+        self.app.show(self.team_match(), Path('team.aoe2record'), 0.5, False)
+        text, _ = self.app.team_sides[0]
+        bar = next(w for w in text.master.winfo_children() if isinstance(w, ttk.Scrollbar))
+        self.assertFalse(bar.winfo_manager())  # nothing to scroll
+        Dashboard.toggle_scrollbar(bar, text, '0.0', '0.6')
+        self.assertEqual(bar.winfo_manager(), 'pack')
+        Dashboard.toggle_scrollbar(bar, text, '0.0', '1.0')
+        self.assertFalse(bar.winfo_manager())
+        self.app.fit_team_sides()  # off screen in tests: keeps the floor size without error
+        self.app.style_team(text, 20)  # large text: 32 px emblems, bonus lines indented past them
+        name, _ = self.app.team_icons[str(text)][0]
+        self.assertEqual(text.tk.call('image', 'width', text.image_cget(name, 'image')), 32)
+        self.assertEqual(int(str(text.tag_cget('bonus', 'lmargin1'))), 44)
 
 if __name__ == '__main__':
     unittest.main()

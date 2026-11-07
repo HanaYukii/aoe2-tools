@@ -10,6 +10,7 @@ import subprocess
 import sys
 from pathlib import Path
 from build_library import load_library
+from map_notes import load_map_notes
 from ui_icons import CIVILIZATIONS
 
 HERE = Path(__file__).parent
@@ -31,7 +32,7 @@ def main():
     args = parser.parse_args()
     builds = load_library()
     expected = dict(builds=len(builds), steps=sum(len(b.steps) for b in builds),
-                    icons=len(list((HERE / 'assets').rglob('*.png'))), civilizations=len(CIVILIZATIONS), bundled=True)
+                    icons=len(list((HERE / 'assets').rglob('*.png'))), civilizations=len(CIVILIZATIONS), map_notes=len(load_map_notes()), bundled=True)
     BUILD.mkdir(exist_ok=True)
     icon = HERE / 'assets' / 'app.ico'
     destination = BUILD / 'release'
@@ -44,14 +45,16 @@ def main():
         str(HERE / 'dashboard.py'),
     ], check=True)
     exe = (destination / f'{EXE_NAME}.exe').resolve()
-    # Run the actual one-file EXE from an empty directory, with no game or media.
-    with tempfile.TemporaryDirectory() as folder:
-        report = Path(folder) / 'catalog-check.json'
-        subprocess.run([str(exe), '--check-bundled-data', str(report)], cwd=folder, check=True, timeout=60)
-        summary = json.loads(report.read_text(encoding='utf-8'))
-        if summary != expected:
-            raise RuntimeError(f'Packaged catalog verification failed: {summary}')
-        print(f'Packaged catalog verified: {summary}')
+    # Validate both language catalogs inside the actual one-file EXE.
+    for lang in ('tw', 'en'):
+        with tempfile.TemporaryDirectory() as folder:
+            report = Path(folder) / 'catalog-check.json'
+            subprocess.run([str(exe), '--lang', lang, '--check-bundled-data', str(report)],
+                           cwd=folder, check=True, timeout=60)
+            summary = json.loads(report.read_text(encoding='utf-8'))
+            if summary != expected:
+                raise RuntimeError(f'Packaged {lang} catalog verification failed: {summary}')
+            print(f'Packaged {lang} catalog verified: {summary}')
     (destination / 'SHA256SUMS.txt').write_text(f'{hashlib.sha256(exe.read_bytes()).hexdigest()}  {exe.name}\n', encoding='ascii')
     if args.desktop:
         shutil.copy2(exe, desktop_dir() / DESKTOP_NAME)

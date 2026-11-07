@@ -241,7 +241,7 @@ def civ_special_units(entry, game_dir, local, english, lang):
         regional = node.get('Node Type') == 'RegionalUnit'
         building_ids = sorted(trained_at.get(name_en) or [node.get('Building ID')], key=lambda b: b != CASTLE)
         unit = build_unit({'name': name_id, 'description': description}, local, english, lang,
-                          building='、'.join(dict.fromkeys(filter(None, (text(buildings.get(b, 0)) for b in building_ids)))),
+                          building=(', ' if lang == 'en' else '、').join(dict.fromkeys(filter(None, (text(buildings.get(b, 0)) for b in building_ids)))),
                           age=text(AGE_NAMES.get(node.get('Age ID'), 0)), regional=regional)
         found.append(((regional, CASTLE not in building_ids, node.get('Age ID', 9), index), unit))
     return tuple(unit for _, unit in sorted(found, key=lambda pair: pair[0]))

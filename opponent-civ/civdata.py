@@ -17,6 +17,9 @@ from pathlib import Path
 DEFAULT_GAME_DIR = Path(r'C:\Program Files (x86)\Steam\steamapps\common\AoE2DE')
 STRING_LINE = re.compile(r'^(\d+)\s+"((?:[^"\\]|\\.)*)"')
 ESCAPE = re.compile(r'\\(.)')
+# Newer civilizations.json omits description IDs. The game string table maps
+# civilization name 10271 (Britons) to description 120150, and so on.
+CIV_DESCRIPTION_OFFSET = 120150 - 10271
 
 
 @dataclass(frozen=True)
@@ -25,6 +28,32 @@ class Civ:
     key: str           # internal English name, e.g. "Britons"
     name: str          # localized name
     description: str   # localized tech-tree description, plain text
+
+
+def heading_kind(line):
+    """'team', 'unit' or 'tech' for a section heading of a civ description; None for other lines.
+
+    The official text is not uniform (團隊加成 / 團隊成分, 特殊科技 / 獨特技術, full- and
+    half-width colons), so headings are told apart by keyword, team first.
+    """
+    line = line.strip()
+    if not line.endswith(('：', ':')):
+        return None
+    if any(word in line for word in ('團隊', '团队', 'Team')):
+        return 'team'
+    if any(word in line for word in ('單位', '单位', 'Unit')):
+        return 'unit'
+    return 'tech'
+
+
+def team_bonus(description):
+    """The text under a civ description's team-bonus heading; '' when it has none."""
+    lines = description.splitlines()
+    start = next((i + 1 for i, line in enumerate(lines) if heading_kind(line) == 'team'), None)
+    if start is None:
+        return ''
+    end = next((i for i in range(start, len(lines)) if heading_kind(lines[i])), len(lines))
+    return '\n'.join(lines[start:end]).strip()
 
 
 def find_game_dir():
@@ -78,13 +107,17 @@ def load_civs(game_dir=None, lang='tw'):
 
     civs = {}
     for civ_id, entry in enumerate(listing):
-        description_id = entry.get('tech_tree_description_string_id')
-        if description_id is None:  # Gaia
+        if entry['internal_name'] == 'Gaia':
             continue
+        description_id = entry.get('tech_tree_description_string_id')
+        if description_id is None:
+            description_id = entry['name_string_id'] + CIV_DESCRIPTION_OFFSET
         civs[civ_id] = Civ(
             id=civ_id,
             key=entry['internal_name'],
             name=text(entry['name_string_id']) or entry['internal_name'],
-            description=text(description_id).replace('<b>', '').strip(),
+            description=(text(description_id).replace('<b>', '').strip()
+                         or ('Civilization description unavailable; check your game data version.'
+                             if lang == 'en' else '此文明尚無說明，請確認遊戲資料版本。')),
         )
     return civs

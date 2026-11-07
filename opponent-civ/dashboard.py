@@ -15,13 +15,13 @@ from pathlib import Path
 from tkinter import ttk
 
 from ui_icons import CIVILIZATIONS, civilization_icon, ASSETS, icon, install_window_icon
-from civdata import load_civs
+from civdata import heading_kind, load_civs, team_bonus
 from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
 from collections import Counter
 from history import recent_matches
 from launcher import claim_single_instance, place, remember, start_game
-from ratings import RM_1V1, RM_TEAM, fetch_ratings
+from ratings import RM_1V1, RM_TEAM, fetch_ratings, team_average
 from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
 from mapdata import load_map_names, map_label
@@ -58,6 +58,7 @@ class Dashboard:
         self.match = None
         self.tabs = []
         self.counter_texts = []
+        self.team_sides = []
         self.history_window = None
         self.history_request = 0
         self.history_rows = []
@@ -199,7 +200,7 @@ class Dashboard:
             reminder.configure(font=(self.font, self.font_size + 2, 'bold'))
         for _, rating, _ in self.tabs:
             rating.configure(font=(self.font, self.font_size + 6, 'bold'))
-        for text in [text for _, _, text in self.tabs] + self.counter_texts:
+        for text in [text for _, _, text in self.tabs] + self.counter_texts + [text for text, _ in self.team_sides]:
             self.style_text(text)
 
     def style_text(self, text):
@@ -214,6 +215,9 @@ class Dashboard:
         text.tag_configure('bad', foreground=AMBER, font=(self.font, self.font_size, 'bold'))
         text.tag_configure('meta', foreground=MUTED, font=(self.font, max(9, self.font_size - 2)))
         text.tag_configure('group', foreground=BLUE, font=(self.font, self.font_size - 1, 'bold'), spacing1=18)
+        text.tag_configure('civ', foreground=FG, font=(self.font, self.font_size + 1, 'bold'), spacing1=10)
+        text.tag_configure('bonus', lmargin1=36, lmargin2=36)  # under the name: past the 24 px icon and its padding
+        text.tag_configure('average', foreground=BLUE, font=(self.font, self.font_size, 'bold'))
 
     def monitor(self):
         try:
@@ -386,6 +390,7 @@ class Dashboard:
                             board = ratings.get(player.profile_id, {})
                             summary = '  ·  '.join(f'{name}  {board[key]}' for key, name in ((RM_1V1, '1v1'), (RM_TEAM, tr('團戰'))) if key in board)
                             label.configure(text=tr('電腦玩家') if not player.is_human else error or (tr('目前積分 · ') + summary if summary else tr('沒有排名紀錄')))
+                        self.show_team_ratings(ratings, error)
         except queue.Empty:
             pass
         self.drain_timer = self.root.after(100, self.drain)
@@ -400,7 +405,9 @@ class Dashboard:
             self.book.nametowidget(tab).destroy()
         self.tabs = []
         self.counter_texts = []
+        self.team_sides = []
         jumps = []
+        frames = {}
         me, allies, enemies = split_sides(match, self.my_id)
         kind = tr('排名') if match.rated else tr('多人') if match.multiplayer else tr('單機')
         place_name = map_label(match, self.maps)
@@ -413,11 +420,12 @@ class Dashboard:
                 civ = self.civs.get(player.civ_id)
                 name = civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}')
                 frame = tk.Frame(self.book, bg=PANEL)
+                frames[player.number] = frame
                 self.book.add(frame, text=f'{role} · {name}',
                               image=civilization_icon(self.root, civ.key if civ else '', 24), compound='left')
                 color = COLORS[player.civ_id % len(COLORS)]
                 hero = tk.Frame(frame, bg=PANEL)
-                hero.pack(fill='x', padx=24, pady=(24, 16))
+                hero.pack(fill='x', padx=24, pady=(20, 12))
                 tk.Label(hero, image=civilization_icon(self.root, civ.key if civ else '', 64),
                          bg=PANEL).pack(side='left', padx=(0, 18))
                 heading = tk.Frame(hero, bg=PANEL)
@@ -438,19 +446,16 @@ class Dashboard:
                 self.style_text(text)
                 description = civ.description if civ else tr('此文明尚無官方說明，請確認遊戲資料版本。')
                 for index, line in enumerate(description.splitlines()):
-                    tag = 'intro' if index == 0 else ''
-                    if line.strip().endswith(('：', ':')):
-                        tag = 'unit' if any(word in line for word in ('單位', 'Unit')) else 'tech' if any(word in line for word in ('科技', 'Tech')) else 'team'
-                    start = text.index('end-1c')
-                    text.insert('end', line + '\n', tag)
-                    for number in re.finditer(r'[+−-]?\d+(?:[./]\d+)*(?:%|％)?', line):
-                        text.tag_add('number', f'{start}+{number.start()}c', f'{start}+{number.end()}c')
+                    if line.strip():  # the intro and headings carry their own spacing
+                        self.insert_text(text, line + '\n', heading_kind(line) or ('intro' if index == 0 else ''))
                 text.configure(state='disabled')
                 self.tabs.append((player, rating, text))
                 if players is enemies and player.civ_id in self.units:
-                    jumps.append((player.civ_id, frame, body))
+                    jumps.append((player.civ_id, hero, heading))
             if players is enemies and jumps:
                 self.add_counters(jumps)
+        if len(match.players) > 2:
+            self.add_team_bonuses(me, allies, enemies, frames)
         if not self.args.no_elo:
             def lookup():
                 try:
@@ -503,10 +508,89 @@ class Dashboard:
                     text.insert('end', unit.upgrades + '\n', 'intro')
         text.configure(state='disabled')
         self.counter_texts.append(text)
-        for civ_id, civ_frame, civ_body in jumps:
-            tk.Button(civ_frame, text=tr('看特殊兵種怎麼打\u3000→'), command=lambda c=civ_id: self.jump(frame, text, c),
+        for civ_id, hero, heading in jumps:
+            tk.Button(hero, text=tr('看特殊兵種怎麼打\u3000→'), command=lambda c=civ_id: self.jump(frame, text, c),
                       bg=SURFACE, fg=VIOLET, activeforeground=VIOLET, relief='flat', borderwidth=0, anchor='w',
-                      padx=14, pady=8, cursor='hand2', font=(self.font, 11, 'bold')).pack(fill='x', padx=24, pady=(0, 16), before=civ_body)
+                      padx=14, pady=8, cursor='hand2', font=(self.font, 11, 'bold')).pack(side='right', padx=(16, 0), before=heading)
+
+    def insert_text(self, text, words, tags=''):
+        """Insert game text with its numbers highlighted."""
+        start = text.index('end-1c')
+        text.insert('end', words, tags)
+        for number in re.finditer(r'[+−-]?\d+(?:[./]\d+)*(?:%|％)?', words):
+            text.tag_add('number', f'{start}+{number.start()}c', f'{start}+{number.end()}c')
+
+    def add_team_bonuses(self, me, allies, enemies, frames):
+        """Team games open on both teams side by side: civs, team bonuses, average ratings; clicking a player opens their tab."""
+        frame = tk.Frame(self.book, bg=PANEL)
+        self.book.insert(0, frame, text=tr('團隊加成'))
+        self.book.select(frame)
+        columns = tk.Frame(frame, bg=PANEL)
+        columns.pack(fill='both', expand=True, padx=24, pady=(12, 20))
+        columns.rowconfigure(0, weight=1)
+        columns.columnconfigure((0, 1), weight=1, uniform='side')
+        gap = '  ' if language() == 'en' else '　'
+        sides = [(tr('我方隊伍'), [me] + allies), (tr('對手隊伍'), enemies)] if me else [(tr('所有玩家'), enemies)]
+        for column, (title, players) in enumerate(sides):
+            side = tk.Frame(columns, bg=PANEL)
+            side.grid(row=0, column=column, columnspan=1 if me else 2, sticky='nsew',
+                      padx=(0, 0) if not me else (0, 12) if column == 0 else (12, 0))
+            scrollbar = ttk.Scrollbar(side)
+            scrollbar.pack(side='right', fill='y')
+            # width=1: let the grid split the tab evenly instead of honouring Text's 80-column request
+            text = tk.Text(side, width=1, bg=PANEL, fg=FG, relief='flat', wrap='word', padx=0, borderwidth=0, highlightthickness=0, yscrollcommand=scrollbar.set)
+            text.pack(fill='both', expand=True)
+            scrollbar.configure(command=text.yview)
+            self.style_text(text)
+            cursor = text.cget('cursor')
+            text.insert('end', title + '\n', 'heading')
+            if not self.args.no_elo:
+                text.mark_set('average-at', 'end-1c')
+                text.mark_gravity('average-at', 'left')
+                text.insert('end', tr('正在查詢積分…'), 'average')
+                text.insert('end', '\n')
+            for player in players:
+                civ = self.civs.get(player.civ_id)
+                start = text.index('end-1c')
+                text.image_create('end', image=civilization_icon(self.root, civ.key if civ else '', 24), padx=6, align='center')
+                text.insert('end', civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}'), 'civ')
+                text.insert('end', gap + player.name + (tr('（你）') if player is me else '') + '\n', 'meta')
+                text.tag_add('civ', start)  # the icon starts the line, so it carries the row spacing
+                bonus = team_bonus(civ.description) if civ else ''
+                if bonus:
+                    self.insert_text(text, bonus + '\n', 'bonus')
+                else:
+                    text.insert('end', tr('遊戲說明沒有列出團隊加成') + '\n', ('bonus', 'meta'))
+                row = f'player{player.number}'
+                text.tag_add(row, start, 'end-1c')
+                text.tag_bind(row, '<Button-1>', lambda e, f=frames[player.number]: self.book.select(f))
+                text.tag_bind(row, '<Enter>', lambda e, t=text: t.configure(cursor='hand2'))
+                text.tag_bind(row, '<Leave>', lambda e, t=text, c=cursor: t.configure(cursor=c))
+            text.configure(state='disabled')
+            self.team_sides.append((text, players))
+
+    def show_team_ratings(self, ratings, error):
+        """Each team's mean rating over its humans who have one; (n/m) when only some of them do."""
+        for text, players in self.team_sides:
+            if not text.tag_ranges('average'):
+                continue
+            humans = sum(p.is_human for p in players)
+            averages = team_average(players, ratings)
+            parts = []
+            for key, name in ((RM_1V1, '1v1'), (RM_TEAM, tr('團戰'))):
+                if key in averages:
+                    mean, count = averages[key]
+                    parts.append(f'{name}  {mean}' + ('' if count == humans else f' ({count}/{humans})'))
+            if error:
+                words = error
+            elif not humans:
+                words = tr('電腦玩家')
+            else:
+                words = (tr('平均 ') + '  ·  '.join(parts)) if parts else tr('沒有排名紀錄')
+            text.configure(state='normal')
+            text.delete(*text.tag_ranges('average'))
+            text.insert('average-at', words, 'average')
+            text.configure(state='disabled')
 
     def jump(self, frame, text, civ_id):
         self.book.select(frame)

@@ -18,6 +18,8 @@ English and Traditional Chinese are included from v0.4.0.
 
 See **current 1v1 and team-game Elo, civilization bonuses and unique technologies** without opening another website. Ratings reflect the time of lookup, not the historical match rating.
 
+In team games a **Team bonuses** tab opens first: your team and the opponents side by side, with every player's civilization, team bonus and each team's average rating. Click a civilization to open that player's tab.
+
 ![Opponent ratings and civilization bonuses — Traditional Chinese example](docs/images/opponent-elo.png)
 
 ## Get started

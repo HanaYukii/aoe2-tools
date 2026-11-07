@@ -628,7 +628,9 @@ class Dashboard:
             text.image_configure(name, image=civilization_icon(self.root, key, emblem))
 
     def fit_team_sides(self):
-        """Grow the team overview's text until the fuller column is filled, like the reference cards; 字級 is the floor."""
+        """Grow the team overview's text toward filling the fuller column: 字級 is the floor, 字級 + 6 the ceiling.
+
+        A 2v2 fills little of a tall column, so the ceiling, not the column, sets its size."""
         if self.team_fit_job is not None:  # called directly (字級): drop the pending fit
             self.root.after_cancel(self.team_fit_job)
         self.team_fit_job = None
@@ -648,7 +650,7 @@ class Dashboard:
                     return False
             return True
 
-        low, high, best = self.font_size + 1, 26, self.font_size
+        low, high, best = self.font_size + 1, self.font_size + 6, self.font_size
         while low <= high:
             middle = (low + high) // 2
             if fits(middle):

@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from civdata import load_civs
+from civdata import heading_kind, load_civs, team_bonus
 
 
 class CivilizationTests(unittest.TestCase):
@@ -47,3 +47,11 @@ class CivilizationTests(unittest.TestCase):
                          {19999: '新文明'})
         self.assertEqual(civs[0].name, '新文明')
         self.assertIn('確認遊戲資料版本', civs[0].description)
+
+    def test_team_bonus_survives_inconsistent_official_headings(self):
+        self.assertEqual([heading_kind(line) for line in ('特殊單位：', '獨特技術：', '特殊科技:', '團隊成分：', 'Team Bonus:', '• 馬廄科技成本 -50%')],
+                         ['unit', 'tech', 'tech', 'team', 'team', None])
+        burgundians = '騎兵文明\n\n• 馬廄科技成本 -50%\n\n特殊單位：\n庫斯提勒 (騎兵)\n\n團隊加成：\n聖物除了產生黃金，還會產生食物'
+        self.assertEqual(team_bonus(burgundians), '聖物除了產生黃金，還會產生食物')
+        self.assertEqual(team_bonus('Naval civilization\n\nUnique Techs:\n• Chieftains\n\nTeam Bonus:\nDocks cost -15%'), 'Docks cost -15%')
+        self.assertEqual(team_bonus('展示用文明頁。'), '')

@@ -913,11 +913,12 @@
     },
     {
       "id": "migration",
-      "title": "遷移 · 地圖注意",
+      "title": "遷徙 · 地圖注意",
       "civ": "",
       "subtitle": "開局與運營調整｜數字是練習起點，依文明、資源與戰況調整。",
       "aliases": [
         "Migration",
+        "遷徙",
         "遷移"
       ],
       "map_ids": [

@@ -17,6 +17,13 @@ class MapNotesTests(unittest.TestCase):
             for mid in note['map_ids']:
                 self.assertEqual(note_for_map(self.notes, '未知地圖', mid)['id'], note['id'])
 
+    def test_titles_use_the_game_names_and_the_map_icon(self):
+        from ui_icons import sheet_icon
+        migration = note_for_map(self.notes, '遷徙')  # the game's name for map 21
+        self.assertEqual(migration['id'], 'migration')
+        self.assertTrue(migration['title'].startswith('遷徙'))
+        self.assertTrue(all(sheet_icon(note) == 'map' for note in self.notes))
+
     def test_similar_names_do_not_overlap(self):
         self.assertEqual(note_for_map(self.notes, 'Nomad')['id'], 'nomad')
         self.assertEqual(note_for_map(self.notes, 'Land Nomad')['id'], 'land-nomad')

@@ -79,10 +79,6 @@
     "name": "瞿折羅",
     "motif": "太陽、輪刃"
   },
-  "hindustanis": {
-    "name": "印度斯坦",
-    "motif": "拱門、彎刀"
-  },
   "huns": {
     "name": "匈",
     "motif": "游牧、複合弓"
@@ -90,6 +86,10 @@
   "incas": {
     "name": "印加",
     "motif": "太陽、安地斯"
+  },
+  "indians": {
+    "name": "印度斯坦",
+    "motif": "拱門、彎刀"
   },
   "italians": {
     "name": "義大利",

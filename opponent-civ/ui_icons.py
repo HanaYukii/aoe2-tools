@@ -22,6 +22,8 @@ def install_window_icon(root):
 
 def sheet_icon(sheet):
     ident = sheet.get('id', '')
+    if 'map_ids' in sheet:  # a 地圖注意 note
+        return 'map'
     if 'romans' in ident:
         return 'ram'
     if 'drop' in ident or 'defense' in ident:

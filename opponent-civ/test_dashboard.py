@@ -5,7 +5,7 @@ from dataclasses import replace
 from pathlib import Path
 import tkinter as tk
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from civdata import Civ
 from dashboard import Dashboard
@@ -59,6 +59,55 @@ class DashboardTests(unittest.TestCase):
         self.assertIsNot(civilization_icon(self.root, 'Indians'), icon(self.root, 'map', 32))  # Hindustanis' internal name
         self.assertIs(civilization_icon(self.root, 'future-civ'), icon(self.root, 'map', 32))
         self.assertIs(civilization_icon(self.root, None), icon(self.root, 'map', 32))
+
+    def test_history_rows_show_results(self):
+        rows = [(Path(f'{i}.aoe2record'), replace(self.match, timestamp=self.match.timestamp - i * 3600)) for i in range(3)]
+        self.app.render_history(self.app.history_request, rows, 0, None, [(True, 16), (False, None), None])
+        tree = self.app.history_tree
+        self.assertEqual([tree.item(row, 'tags')[0] for row in tree.get_children()], ['win', 'loss', 'even'])
+        self.assertTrue(tree.item('0', 'values')[0].endswith('勝 +16'))
+        self.assertTrue(tree.item('1', 'values')[0].endswith('敗'))
+        self.assertIn('1 勝 1 敗', self.app.history_summary.cget('text'))
+        self.app.render_history(self.app.history_request, rows, 0, None, None)  # lookup failed: plain rows
+        self.assertEqual(tree.item('0', 'tags')[0], 'even')
+        self.assertIn('勝敗暫時讀不到', self.app.history_summary.cget('text'))
+
+    def test_results_follow_the_rating_switch(self):
+        rows = [(Path('a.aoe2record'), self.match)]
+        with patch('dashboard.fetch_results') as fetch:
+            self.assertEqual(self.app.history_results(rows), [])  # ratings off: nothing is sent
+            fetch.assert_not_called()
+            self.app.args.no_elo = False
+            fetch.return_value = [(self.match.timestamp, {10: (1, 1200, 1215), 20: (0, 1210, 1195)})]
+            self.assertEqual(self.app.history_results(rows), [(True, 15)])
+            fetch.side_effect = OSError('offline')
+            self.assertIsNone(self.app.history_results(rows))
+
+    def test_history_lists_local_matches_first_and_survives_a_failed_lookup(self):
+        rows = [(Path('a.aoe2record'), self.match)]
+        self.app.dirs, self.app.args.no_elo = [], False
+        def refresh(fetch):
+            while not self.app.events.empty():
+                self.app.events.get_nowait()
+            with patch('dashboard.recent_matches', return_value=(rows, 0)), patch('dashboard.fetch_results', fetch), \
+                    patch.object(self.app.pool, 'submit', side_effect=lambda work: work()):
+                self.app.refresh_history()
+            return [self.app.events.get_nowait() for _ in range(self.app.events.qsize())]
+        events = refresh(Mock(side_effect=OSError('offline')))
+        self.assertEqual([kind for kind, _ in events], ['history', 'history_results'])
+        self.app.render_history(*events[0][1])
+        self.assertIn('正在查詢勝敗', self.app.history_summary.cget('text'))
+        self.assertIn('對手', self.app.history_tree.item('0', 'values')[0])  # the local match shows while waiting
+        self.app.history_tree.selection_set('0')
+        self.app.show_history_results(*events[1][1])
+        self.assertIn('勝敗暫時讀不到', self.app.history_summary.cget('text'))
+        self.assertEqual(self.app.history_tree.item('0', 'tags')[0], 'even')
+        self.assertEqual(self.app.history_tree.selection(), ('0',))  # results never move the selection
+        self.app.args.no_elo = True
+        events = refresh(Mock())
+        self.assertEqual([kind for kind, _ in events], ['history'])  # ratings off: nothing is looked up
+        self.app.render_history(*events[0][1])
+        self.assertNotIn('勝敗', self.app.history_summary.cget('text'))
 
     def test_manual_drain_replaces_pending_timer(self):
         previous = self.app.drain_timer

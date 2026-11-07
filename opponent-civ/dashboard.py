@@ -19,9 +19,9 @@ from civdata import heading_kind, load_civs, team_bonus
 from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
 from collections import Counter
-from history import recent_matches
+from history import match_results, recent_matches
 from launcher import claim_single_instance, place, remember, start_game
-from ratings import RM_1V1, RM_TEAM, fetch_ratings, team_average
+from ratings import RM_1V1, RM_TEAM, fetch_ratings, fetch_results, team_average
 from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
 from mapdata import load_map_names, map_label
@@ -62,7 +62,7 @@ class Dashboard:
         self.team_icons, self.team_fit_job = {}, None
         self.history_window = None
         self.history_request = 0
-        self.history_rows = []
+        self.history_rows, self.history_skipped = [], 0
         root.title(tr('AoE2 · 對局筆記'))
         install_window_icon(root)
         place(root, 1220, 860)
@@ -296,6 +296,8 @@ class Dashboard:
         self.history_tree = ttk.Treeview(body, columns=('match',), show='', selectmode='browse', height=7, style='History.Treeview')
         self.history_tree.tag_configure('even', background='#171e2d')
         self.history_tree.tag_configure('odd', background=BG)
+        self.history_tree.tag_configure('win', background='#163a30')
+        self.history_tree.tag_configure('loss', background='#3c1f29')
         self.history_tree.column('match', width=312, minwidth=260)
         vertical = ttk.Scrollbar(body, command=self.history_tree.yview)
         vertical.pack(side='right', fill='y')
@@ -306,7 +308,8 @@ class Dashboard:
         self.history_button = button(window, tr('重新整理對局'), self.refresh_history, True)
         self.history_button.configure(state='disabled')
         self.history_button.pack(fill='x', pady=(10, 0))
-        tk.Label(window, text=tr('錄影檔頭未含勝敗與時長'), bg=BG, fg=MUTED, font=(self.font, 9)).pack(anchor='w', pady=8)
+        tk.Label(window, text=tr('開啟積分查詢後可顯示勝敗') if self.args.no_elo else tr('勝敗與積分變化取自官方對戰紀錄'),
+                 bg=BG, fg=MUTED, font=(self.font, 9)).pack(anchor='w', pady=8)
 
     def refresh_history(self):
         self.history_request += 1
@@ -316,17 +319,48 @@ class Dashboard:
         def work():
             try:
                 rows, skipped = recent_matches(self.dirs, mode)
-                self.events.put(('history', (request, rows, skipped, None)))
             except Exception as exc:
                 self.events.put(('history', (request, [], 0, str(exc))))
+                return
+            lookup = bool(rows and self.my_id and not self.args.no_elo)
+            # Local recordings show at once; wins and losses follow when the official history answers.
+            self.events.put(('history', (request, rows, skipped, None, 'pending' if lookup else ())))
+            if lookup:
+                self.events.put(('history_results', (request, self.history_results(rows))))
         self.pool.submit(work)
 
-    def render_history(self, request, rows, skipped, error):
+    def history_results(self, rows):
+        """Per row (won, rating change) from the official match history; [] when not looked up, None if it failed."""
+        if not rows or not self.my_id or self.args.no_elo:
+            return []
+        try:
+            return match_results(rows, fetch_results(self.my_id), self.my_id)
+        except (OSError, ValueError, KeyError, TypeError):
+            return None
+
+    def render_history(self, request, rows, skipped, error, results=()):
         if request != self.history_request or self.history_window is None or not self.history_window.winfo_exists():
             return
-        self.history_rows = rows
+        self.history_rows, self.history_skipped = rows, skipped
         self.history_tree.delete(*self.history_tree.get_children())
-        counts = Counter()
+        for index in range(len(rows)):
+            self.history_tree.insert('', 'end', iid=str(index))
+        self.show_history_results(request, results)
+        if rows and self.generation == 0:
+            self.history_tree.selection_set('0')
+        if error or not rows:
+            self.history_summary.configure(text=tr('讀取失敗：{0}' ,f'{error}') if error else tr('沒有符合條件的錄影。') + (tr(' 略過 {0} 個無法解析的錄影。' ,f'{skipped}') if skipped else ''))
+
+    def show_history_results(self, request, results):
+        """Write each row, coloured by its result, and the summary above them.
+
+        `results`: one (won, rating change) or None per row; 'pending' while the lookup runs; None when
+        it failed; () when ratings are off. Rows are rewritten in place, so the selection stays."""
+        if request != self.history_request or self.history_window is None or not self.history_window.winfo_exists():
+            return
+        rows = self.history_rows
+        counts, record = Counter(), Counter()
+        outcomes = (list(results) if isinstance(results, list) else []) + [None] * len(rows)
         def civ_name(player):
             civ = self.civs.get(player.civ_id)
             return civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}')
@@ -342,15 +376,27 @@ class Dashboard:
                 opponent_label = opponent_label[:21] + '…'
             mine = civ_name(me) if me else tr('身分不明')
             place_name = map_label(match, self.maps)
-            self.history_tree.insert('', 'end', iid=str(index), tags=('even' if index % 2 == 0 else 'odd',), values=(tr('{0}   ·   {1} {2} 人' ,f'{stamp}', f'{kind}', f'{len(match.players)}') + (f' · {place_name}' if place_name else '') + tr('\n{0}\n我的文明  /  {1}' ,f'{opponent_label}', f'{mine}'),))
+            tag, result = 'even' if index % 2 == 0 else 'odd', ''
+            if outcomes[index]:
+                won, change = outcomes[index]
+                record[won] += 1
+                tag = 'win' if won else 'loss'
+                result = '   ·   ' + (tr('勝') if won else tr('敗')) + (f' {change:+d}' if change is not None else '')
+            self.history_tree.item(str(index), tags=(tag,), values=(tr('{0}   ·   {1} {2} 人' ,f'{stamp}', f'{kind}', f'{len(match.players)}') + (f' · {place_name}' if place_name else '') + tr('\n{0}\n我的文明  /  {1}' ,f'{opponent_label}', f'{mine}') + result,))
+        if not rows:
+            return
         summary = tr('最近 {0} 場' ,f'{len(rows)}')
+        if record:
+            summary += tr(' · {0} 勝 {1} 敗' ,f'{record[True]}', f'{record[False]}')
         if counts:
             summary += tr(' · 我的文明：') + '、'.join(tr('{0} {1} 場' ,f'{name}', f'{count}') for name, count in counts.most_common())
-        if skipped:
-            summary += tr(' · 略過 {0} 個暫時無法解析的錄影' ,f'{skipped}')
-        if rows and self.generation == 0:
-            self.history_tree.selection_set('0')
-        self.history_summary.configure(text=tr('讀取失敗：{0}' ,f'{error}') if error else summary if rows else tr('沒有符合條件的錄影。') + (tr(' 略過 {0} 個無法解析的錄影。' ,f'{skipped}') if skipped else ''))
+        if self.history_skipped:
+            summary += tr(' · 略過 {0} 個暫時無法解析的錄影' ,f'{self.history_skipped}')
+        if results == 'pending':
+            summary += tr(' · 正在查詢勝敗…')
+        elif results is None:
+            summary += tr(' · 勝敗暫時讀不到')
+        self.history_summary.configure(text=summary)
 
     def select_history(self):
         selected = self.history_tree.selection()
@@ -385,6 +431,8 @@ class Dashboard:
                         self.refresh_history()
                 elif event == 'history':
                     self.render_history(*value)
+                elif event == 'history_results':
+                    self.show_history_results(*value)
                 elif event == 'preview_match':
                     generation, match_data = value
                     if generation == self.generation:

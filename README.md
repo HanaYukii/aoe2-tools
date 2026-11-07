@@ -51,7 +51,8 @@ Guides are bundled for offline use. Optional local videos/PDFs are not included 
 
 - Civilization and unit descriptions come from your installed game. The app also lists unique/regional unit counters from the game's descriptions; it does **not** detect the opponent's live army.
 - Settings and recordings stay local. Optional rating lookup sends player profile IDs to the official leaderboard API.
-- The app reads replay headers, not game memory. It does not currently provide automatic post-game reviews, live worker allocation, match results or duration analysis.
+- With rating lookup on, recent matches are colored by result from the official match history (green win, red loss, with the rating change for ranked games). Local matches appear first and colors follow; if the lookup is off or unavailable, the list still shows without them.
+- The app reads replay headers, not game memory. It does not currently provide automatic post-game reviews, live worker allocation or duration analysis.
 - Screenshots show macOS previews in English and Traditional Chinese. Tactical content is bundled reference material, not analysis inferred from the displayed game.
 - This is an unofficial community tool. The Windows executable is unsigned.
 

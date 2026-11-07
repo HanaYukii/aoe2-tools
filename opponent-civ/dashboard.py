@@ -292,12 +292,13 @@ class Dashboard:
         body.pack(fill='both', expand=True)
         style = ttk.Style(window)
         style.configure('History.Treeview', background=BG, fieldbackground=BG, foreground=FG, rowheight=84, borderwidth=0, bordercolor=BG, lightcolor=BG, darkcolor=BG, font=(self.font, 10))
-        style.map('History.Treeview', background=[('selected', '#293d50')], foreground=[('selected', '#a5f2df')])
+        style.map('History.Treeview', background=[('selected', '#3a6ea5')], foreground=[('selected', '#ffffff')])
         self.history_tree = ttk.Treeview(body, columns=('match',), show='', selectmode='browse', height=7, style='History.Treeview')
         self.history_tree.tag_configure('even', background='#171e2d')
         self.history_tree.tag_configure('odd', background=BG)
-        self.history_tree.tag_configure('win', background='#163a30')
-        self.history_tree.tag_configure('loss', background='#3c1f29')
+        # Results: pale green and pale red with one dark text colour; the -alt shade keeps runs of wins or losses apart.
+        for tag, colour in (('win', '#d6f0df'), ('win-alt', '#c6e8d2'), ('loss', '#f8dade'), ('loss-alt', '#f0cbd1')):
+            self.history_tree.tag_configure(tag, background=colour, foreground='#1c2633')
         self.history_tree.column('match', width=312, minwidth=260)
         vertical = ttk.Scrollbar(body, command=self.history_tree.yview)
         vertical.pack(side='right', fill='y')
@@ -380,7 +381,7 @@ class Dashboard:
             if outcomes[index]:
                 won, change = outcomes[index]
                 record[won] += 1
-                tag = 'win' if won else 'loss'
+                tag = ('win' if won else 'loss') + ('' if index % 2 == 0 else '-alt')
                 result = '   ·   ' + (tr('勝') if won else tr('敗')) + (f' {change:+d}' if change is not None else '')
             self.history_tree.item(str(index), tags=(tag,), values=(tr('{0}   ·   {1} {2} 人' ,f'{stamp}', f'{kind}', f'{len(match.players)}') + (f' · {place_name}' if place_name else '') + tr('\n{0}\n我的文明  /  {1}' ,f'{opponent_label}', f'{mine}') + result,))
         if not rows:

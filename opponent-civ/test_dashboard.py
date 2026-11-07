@@ -64,7 +64,8 @@ class DashboardTests(unittest.TestCase):
         rows = [(Path(f'{i}.aoe2record'), replace(self.match, timestamp=self.match.timestamp - i * 3600)) for i in range(3)]
         self.app.render_history(self.app.history_request, rows, 0, None, [(True, 16), (False, None), None])
         tree = self.app.history_tree
-        self.assertEqual([tree.item(row, 'tags')[0] for row in tree.get_children()], ['win', 'loss', 'even'])
+        self.assertEqual([tree.item(row, 'tags')[0] for row in tree.get_children()], ['win', 'loss-alt', 'even'])
+        self.assertEqual(tree.tag_configure('loss-alt', 'foreground'), tree.tag_configure('win', 'foreground'))  # one text colour
         self.assertTrue(tree.item('0', 'values')[0].endswith('勝 +16'))
         self.assertTrue(tree.item('1', 'values')[0].endswith('敗'))
         self.assertIn('1 勝 1 敗', self.app.history_summary.cget('text'))

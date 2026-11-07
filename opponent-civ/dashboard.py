@@ -59,6 +59,7 @@ class Dashboard:
         self.tabs = []
         self.counter_texts = []
         self.team_sides = []
+        self.team_icons, self.team_fit_job = {}, None
         self.history_window = None
         self.history_request = 0
         self.history_rows = []
@@ -184,6 +185,9 @@ class Dashboard:
         if self.drain_timer is not None:
             self.root.after_cancel(self.drain_timer)
             self.drain_timer = None
+        if self.team_fit_job is not None:
+            self.root.after_cancel(self.team_fit_job)
+            self.team_fit_job = None
         self.pool.shutdown(wait=False, cancel_futures=True)
         if not getattr(self.args, 'demo', False):
             remember(self.root)
@@ -202,22 +206,24 @@ class Dashboard:
             rating.configure(font=(self.font, self.font_size + 6, 'bold'))
         for text in [text for _, _, text in self.tabs] + self.counter_texts + [text for text, _ in self.team_sides]:
             self.style_text(text)
+        self.fit_team_sides()  # 字級 is the floor; the team overview grows from it
 
-    def style_text(self, text):
-        text.configure(font=(self.font, self.font_size), spacing1=3, spacing3=5, selectbackground='#3c506a', selectforeground=FG)
+    def style_text(self, text, size=None):
+        size = size or self.font_size
+        text.configure(font=(self.font, size), spacing1=3, spacing3=5, selectbackground='#3c506a', selectforeground=FG)
         text.tag_configure('number', foreground=AMBER)
-        text.tag_configure('unit', foreground=VIOLET, font=(self.font, self.font_size, 'bold'), spacing1=14)
-        text.tag_configure('tech', foreground=BLUE, font=(self.font, self.font_size, 'bold'), spacing1=14)
-        text.tag_configure('team', foreground=ACCENT, font=(self.font, self.font_size, 'bold'), spacing1=14)
+        text.tag_configure('unit', foreground=VIOLET, font=(self.font, size, 'bold'), spacing1=14)
+        text.tag_configure('tech', foreground=BLUE, font=(self.font, size, 'bold'), spacing1=14)
+        text.tag_configure('team', foreground=ACCENT, font=(self.font, size, 'bold'), spacing1=14)
         text.tag_configure('intro', foreground=MUTED, spacing3=16)
-        text.tag_configure('heading', foreground=ACCENT, font=(self.font, self.font_size + 1, 'bold'), spacing1=16)
-        text.tag_configure('good', foreground=ACCENT, font=(self.font, self.font_size, 'bold'))
-        text.tag_configure('bad', foreground=AMBER, font=(self.font, self.font_size, 'bold'))
-        text.tag_configure('meta', foreground=MUTED, font=(self.font, max(9, self.font_size - 2)))
-        text.tag_configure('group', foreground=BLUE, font=(self.font, self.font_size - 1, 'bold'), spacing1=18)
-        text.tag_configure('civ', foreground=FG, font=(self.font, self.font_size + 1, 'bold'), spacing1=10)
+        text.tag_configure('heading', foreground=ACCENT, font=(self.font, size + 1, 'bold'), spacing1=16)
+        text.tag_configure('good', foreground=ACCENT, font=(self.font, size, 'bold'))
+        text.tag_configure('bad', foreground=AMBER, font=(self.font, size, 'bold'))
+        text.tag_configure('meta', foreground=MUTED, font=(self.font, max(9, size - 2)))
+        text.tag_configure('group', foreground=BLUE, font=(self.font, size - 1, 'bold'), spacing1=18)
+        text.tag_configure('civ', foreground=FG, font=(self.font, size + 1, 'bold'), spacing1=10)
         text.tag_configure('bonus', lmargin1=36, lmargin2=36)  # under the name: past the 24 px icon and its padding
-        text.tag_configure('average', foreground=BLUE, font=(self.font, self.font_size, 'bold'))
+        text.tag_configure('average', foreground=BLUE, font=(self.font, size, 'bold'))
 
     def monitor(self):
         try:
@@ -406,6 +412,7 @@ class Dashboard:
         self.tabs = []
         self.counter_texts = []
         self.team_sides = []
+        self.team_icons = {}
         jumps = []
         frames = {}
         me, allies, enemies = split_sides(match, self.my_id)
@@ -535,12 +542,13 @@ class Dashboard:
             side = tk.Frame(columns, bg=PANEL)
             side.grid(row=0, column=column, columnspan=1 if me else 2, sticky='nsew',
                       padx=(0, 0) if not me else (0, 12) if column == 0 else (12, 0))
-            scrollbar = ttk.Scrollbar(side)
-            scrollbar.pack(side='right', fill='y')
+            scrollbar = ttk.Scrollbar(side)  # packed only while the column overflows
             # width=1: let the grid split the tab evenly instead of honouring Text's 80-column request
-            text = tk.Text(side, width=1, bg=PANEL, fg=FG, relief='flat', wrap='word', padx=0, borderwidth=0, highlightthickness=0, yscrollcommand=scrollbar.set)
+            text = tk.Text(side, width=1, bg=PANEL, fg=FG, relief='flat', wrap='word', padx=0, borderwidth=0, highlightthickness=0)
+            text.configure(yscrollcommand=lambda first, last, s=scrollbar, t=text: self.toggle_scrollbar(s, t, first, last))
             text.pack(fill='both', expand=True)
             scrollbar.configure(command=text.yview)
+            emblems = self.team_icons[str(text)] = []
             self.style_text(text)
             cursor = text.cget('cursor')
             text.insert('end', title + '\n', 'heading')
@@ -552,7 +560,8 @@ class Dashboard:
             for player in players:
                 civ = self.civs.get(player.civ_id)
                 start = text.index('end-1c')
-                text.image_create('end', image=civilization_icon(self.root, civ.key if civ else '', 24), padx=6, align='center')
+                key = civ.key if civ else ''
+                emblems.append((text.image_create('end', image=civilization_icon(self.root, key, 24), padx=6, align='center'), key))
                 text.insert('end', civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}'), 'civ')
                 text.insert('end', gap + player.name + (tr('（你）') if player is me else '') + '\n', 'meta')
                 text.tag_add('civ', start)  # the icon starts the line, so it carries the row spacing
@@ -568,6 +577,9 @@ class Dashboard:
                 text.tag_bind(row, '<Leave>', lambda e, t=text, c=cursor: t.configure(cursor=c))
             text.configure(state='disabled')
             self.team_sides.append((text, players))
+        for event in ('<Configure>', '<Map>'):  # resized, or shown again after 字級 changed on another tab
+            columns.bind(event, lambda e: self.schedule_team_fit())
+        self.schedule_team_fit()
 
     def show_team_ratings(self, ratings, error):
         """Each team's mean rating over its humans who have one; (n/m) when only some of them do."""
@@ -591,6 +603,60 @@ class Dashboard:
             text.delete(*text.tag_ranges('average'))
             text.insert('average-at', words, 'average')
             text.configure(state='disabled')
+        self.schedule_team_fit()
+
+    @staticmethod
+    def toggle_scrollbar(scrollbar, text, first, last):
+        """A team column shows its scrollbar only while its text overflows."""
+        if float(first) <= 0 and float(last) >= 1:
+            scrollbar.pack_forget()
+        elif not scrollbar.winfo_manager():
+            scrollbar.pack(side='right', fill='y', before=text)
+        scrollbar.set(first, last)
+
+    def schedule_team_fit(self):
+        if self.team_fit_job is not None:  # resizing fires many events; fit once it settles
+            self.root.after_cancel(self.team_fit_job)
+        self.team_fit_job = self.root.after(80, self.fit_team_sides)
+
+    def style_team(self, text, size):
+        """A team column at `size`, with 32 px emblems once the text is large."""
+        self.style_text(text, size)
+        emblem = 32 if size >= 18 else 24
+        text.tag_configure('bonus', lmargin1=emblem + 12, lmargin2=emblem + 12)  # past the emblem and its padding
+        for name, key in self.team_icons.get(str(text), ()):
+            text.image_configure(name, image=civilization_icon(self.root, key, emblem))
+
+    def fit_team_sides(self):
+        """Grow the team overview's text until the fuller column is filled, like the reference cards; 字級 is the floor."""
+        if self.team_fit_job is not None:  # called directly (字級): drop the pending fit
+            self.root.after_cancel(self.team_fit_job)
+        self.team_fit_job = None
+        texts = [text for text, _ in self.team_sides if text.winfo_exists()]
+        if not texts or not texts[0].winfo_viewable():
+            return  # not on screen: the next <Configure> fits it
+        for text in texts:  # measure at full width; a column that still overflows gets its bar back
+            bar = next(w for w in text.master.winfo_children() if isinstance(w, ttk.Scrollbar))
+            self.toggle_scrollbar(bar, text, 0, 1)
+        self.root.update_idletasks()
+        room = [text.winfo_height() - 8 for text in texts]
+
+        def fits(size):
+            for text, height in zip(texts, room):
+                self.style_team(text, size)
+                if int(text.tk.call(text._w, 'count', '-update', '-ypixels', '1.0', 'end')) > height:
+                    return False
+            return True
+
+        low, high, best = self.font_size + 1, 26, self.font_size
+        while low <= high:
+            middle = (low + high) // 2
+            if fits(middle):
+                best, low = middle, middle + 1
+            else:
+                high = middle - 1
+        for text in texts:
+            self.style_team(text, best)
 
     def jump(self, frame, text, civ_id):
         self.book.select(frame)

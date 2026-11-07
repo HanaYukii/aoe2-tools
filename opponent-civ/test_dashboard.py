@@ -161,5 +161,21 @@ class DashboardTests(unittest.TestCase):
         self.assertIn('平均 團戰  1600', theirs.get('1.0', 'end'))
         self.assertNotIn('正在查詢積分', theirs.get('1.0', 'end'))
 
+    def test_team_columns_hide_idle_scrollbars_and_grow_emblems(self):
+        from tkinter import ttk
+        self.app.show(self.team_match(), Path('team.aoe2record'), 0.5, False)
+        text, _ = self.app.team_sides[0]
+        bar = next(w for w in text.master.winfo_children() if isinstance(w, ttk.Scrollbar))
+        self.assertFalse(bar.winfo_manager())  # nothing to scroll
+        Dashboard.toggle_scrollbar(bar, text, '0.0', '0.6')
+        self.assertEqual(bar.winfo_manager(), 'pack')
+        Dashboard.toggle_scrollbar(bar, text, '0.0', '1.0')
+        self.assertFalse(bar.winfo_manager())
+        self.app.fit_team_sides()  # off screen in tests: keeps the floor size without error
+        self.app.style_team(text, 20)  # large text: 32 px emblems, bonus lines indented past them
+        name, _ = self.app.team_icons[str(text)][0]
+        self.assertEqual(text.tk.call('image', 'width', text.image_cget(name, 'image')), 32)
+        self.assertEqual(int(str(text.tag_cget('bonus', 'lmargin1'))), 44)
+
 if __name__ == '__main__':
     unittest.main()

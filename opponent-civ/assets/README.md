@@ -3,7 +3,8 @@
 主圖示採用第 04 款等距市鎮中心。原圖由 OpenAI image_gen 生成，非遊戲擷取素材。
 
 - town-center：程式、視窗及頁首識別
-- map：對局 RP
+- scouting：對局 RP 及偵查提醒
+- map：地圖注意、看小地圖提醒及未知文明
 - wall：第 01 款極簡城門，用於圍家提醒
 - hourglass：前期流程及 TC 閒置提醒
 - combat：中期速查及壓堡防守

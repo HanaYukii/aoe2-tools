@@ -1,4 +1,5 @@
 """Second-screen desktop dashboard. Run with --no-elo for offline use."""
+from i18n import tr, set_language, default_language, language
 import argparse
 import json
 import sys
@@ -14,13 +15,13 @@ from pathlib import Path
 from tkinter import ttk
 
 from ui_icons import CIVILIZATIONS, civilization_icon, ASSETS, icon, install_window_icon
-from civdata import load_civs
+from civdata import heading_kind, load_civs, team_bonus
 from build_views import BuildLibraryUI, button
 from settings import SetupDialog, read_settings, validate_settings
 from collections import Counter
 from history import recent_matches
 from launcher import claim_single_instance, place, remember, start_game
-from ratings import RM_1V1, RM_TEAM, fetch_ratings
+from ratings import RM_1V1, RM_TEAM, fetch_ratings, team_average
 from rec_header import read_match, split_sides
 from savegames import infer_my_profile_id, recordings, savegame_dirs
 from mapdata import load_map_names, map_label
@@ -42,6 +43,7 @@ COLORS = (ACCENT, VIOLET, AMBER, BLUE)
 class Dashboard:
     def __init__(self, root, args):
         self.root, self.args = root, args
+        set_language(getattr(args, "lang", None) or "tw")
         self.events = queue.Queue()
         self.stop = threading.Event()
         self.pool = ThreadPoolExecutor(max_workers=2)
@@ -56,10 +58,12 @@ class Dashboard:
         self.match = None
         self.tabs = []
         self.counter_texts = []
+        self.team_sides = []
+        self.team_icons, self.team_fit_job = {}, None
         self.history_window = None
         self.history_request = 0
         self.history_rows = []
-        root.title('AoE2 · 對局筆記')
+        root.title(tr('AoE2 · 對局筆記'))
         install_window_icon(root)
         place(root, 1220, 860)
         root.minsize(960, 650)
@@ -67,7 +71,7 @@ class Dashboard:
         root.option_add('*Font', (self.font, 10))
         style = ttk.Style(root)
         style.theme_use('clam')
-        style.configure('Build.TButton', background=SURFACE, foreground=FG, padding=(16, 11), borderwidth=0, font=(self.font, 12))
+        style.configure('Build.TButton', background=SURFACE, foreground=FG, padding=(10, 9), borderwidth=0, font=(self.font, 11))
         style.map('Build.TButton', background=[('active', '#344563')], foreground=[('disabled', MUTED)])
         style.configure('Accent.Build.TButton', foreground=ACCENT)
         style.configure('TNotebook', background=PANEL, borderwidth=0, bordercolor=PANEL, lightcolor=PANEL, darkcolor=PANEL)
@@ -89,19 +93,19 @@ class Dashboard:
         tk.Label(bar, image=icon(root, 'town-center', 64), bg=BG).pack(side='left', padx=(0, 14))
         brand = tk.Frame(bar, bg=BG)
         brand.pack(side='left')
-        tk.Label(brand, text='對局筆記', font=(self.display_font, 20, 'bold'), bg=BG, fg=FG, anchor='w').pack(anchor='w')
+        tk.Label(brand, text=tr('對局筆記'), font=(self.display_font, 20, 'bold'), bg=BG, fg=FG, anchor='w').pack(anchor='w')
         tk.Label(brand, text='AGE OF EMPIRES II   /   FIELD NOTES', font=('Segoe UI', 9), bg=BG, fg=MUTED).pack(anchor='w')
         self.pin = tk.BooleanVar()
-        tk.Checkbutton(bar, text='保持置頂', variable=self.pin, command=lambda: root.attributes('-topmost', self.pin.get()), bg=BG, fg=MUTED, selectcolor=PANEL, activebackground=BG).pack(side='right', padx=(20, 0))
+        tk.Checkbutton(bar, text=tr('保持置頂'), variable=self.pin, command=lambda: root.attributes('-topmost', self.pin.get()), bg=BG, fg=MUTED, selectcolor=PANEL, activebackground=BG).pack(side='right', padx=(20, 0))
         for label, delta in [('＋', 1), ('－', -1)]:
             button(bar, label, lambda d=delta: self.resize(d)).pack(side='right')
-        tk.Label(bar, text='字級', bg=BG, fg=MUTED).pack(side='right')
-        self.sidebar_toggle = button(bar, '收起對局列表', self.toggle_sidebar)
+        tk.Label(bar, text=tr('字級'), bg=BG, fg=MUTED).pack(side='right')
+        self.sidebar_toggle = button(bar, tr('收起對局列表'), self.toggle_sidebar)
         self.sidebar_toggle.pack(side='right', padx=16)
         footer = tk.Frame(root, bg=BG)
         footer.pack(side='bottom', fill='x', padx=28, pady=12)
-        tk.Label(footer, text='●  展示對局 · 內建流程' if getattr(args, 'demo', False) else '●  本機錄影 · 自動監看', bg=BG, fg=ACCENT).pack(side='left')
-        tk.Label(footer, text='離線模式' if args.no_elo else '排行榜顯示目前積分', bg=BG, fg=MUTED).pack(side='right')
+        tk.Label(footer, text=tr('●  展示對局 · 內建流程') if getattr(args, 'demo', False) else tr('●  本機錄影 · 自動監看'), bg=BG, fg=ACCENT).pack(side='left')
+        tk.Label(footer, text=tr('離線模式') if args.no_elo else tr('排行榜顯示目前積分'), bg=BG, fg=MUTED).pack(side='right')
         workspace = tk.Frame(root, bg=BG)
         workspace.pack(fill='both', expand=True, padx=28)
         self.sidebar = tk.Frame(workspace, bg=BG, width=300)
@@ -115,7 +119,7 @@ class Dashboard:
             tk.Frame(ribbon, bg=color, height=3).pack(side='left', fill='x', expand=True)
         info_row = tk.Frame(detail, bg=PANEL)
         info_row.pack(fill='x', padx=22, pady=(10, 4))
-        self.status = tk.Label(info_row, text='正在讀取遊戲資料…', anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
+        self.status = tk.Label(info_row, text=tr('正在讀取遊戲資料…'), anchor='w', bg=PANEL, fg=ACCENT, font=(self.font, 11), wraplength=740, justify='left')
         self.status.pack(fill='x', expand=True)
         info_row.bind('<Configure>', lambda e: self.status.configure(wraplength=max(180, e.width)))
         # Outside the notebook and its scroll areas: visible on every page.
@@ -123,39 +127,40 @@ class Dashboard:
         reminders.pack(fill='x', padx=22, pady=(2, 6))
         self.reminders = []
         items = (
-            ('記得蓋房子', 'town-center'), ('注意 TC 閒置', 'hourglass'), ('資源記得調配', 'economy'),
-            ('記得圍家', 'wall'), ('看小地圖', 'map'), ('記得挖堡', 'stone-mining'),
-            ('前後排分隊', 'combat'), ('偵查對手轉兵', 'scouting'), ('產兵建築充足', 'barracks'),
+            (tr('記得蓋房子'), 'town-center'), (tr('注意 TC 閒置'), 'hourglass'), (tr('資源記得調配'), 'economy'),
+            (tr('記得圍家'), 'wall'), (tr('看小地圖'), 'map'), (tr('記得挖堡'), 'stone-mining'),
+            (tr('前後排分隊'), 'combat'), (tr('偵查對手轉兵'), 'scouting'), (tr('產兵建築充足'), 'barracks'),
         )
         for index, (text, artwork) in enumerate(items):
             reminder = tk.Label(reminders, text=text, image=icon(root, artwork, 24),
-                compound='left', padx=4, font=(self.font, 10), bg=SURFACE,
+                compound='left', padx=6, font=(self.font, 14, 'bold'), bg=SURFACE,
                 fg=(AMBER, BLUE, ACCENT)[index // 3], anchor='center')
-            reminder.grid(row=index // 3, column=index % 3, sticky='ew', padx=6, pady=2)
+            reminder.grid(row=index // 3, column=index % 3, sticky='ew', padx=6, pady=3)
             self.reminders.append(reminder)
+            reminder.bind('<Configure>', lambda e, label=reminder: label.configure(wraplength=max(80, e.width - 48)))
         for column in range(3):
             reminders.columnconfigure(column, weight=1, uniform='reminders')
         self.house_reminder = self.reminders[0]
         meta_row = tk.Frame(detail, bg=PANEL)
         meta_row.pack(fill='x', padx=22, pady=(0, 12))
         self.map_shortcuts = tk.Frame(meta_row, bg=PANEL)
-        self.meta = tk.Label(meta_row, text='選一場對局，看看對手的文明。', anchor='w', bg=PANEL, fg=MUTED, wraplength=740, justify='left')
+        self.meta = tk.Label(meta_row, text=tr('選一場對局，看看對手的文明。'), anchor='w', bg=PANEL, fg=MUTED, wraplength=740, justify='left')
         self.meta.pack(side='left', fill='x', expand=True)
         self.workspace_book = ttk.Notebook(detail)
         self.workspace_book.pack(fill='both', expand=True)
         self.rp_frame = tk.Frame(self.workspace_book, bg=PANEL)
-        self.workspace_book.add(self.rp_frame, text='對局 RP', image=icon(root, 'map'), compound='left')
+        self.workspace_book.add(self.rp_frame, text=tr('對局 RP'), image=icon(root, 'scouting'), compound='left')
         root.bind('<Configure>', lambda event: self.reflow(event))
         self.book = ttk.Notebook(self.rp_frame)
         self.book.pack(fill='both', expand=True, padx=20, pady=(0, 16))
         self.empty = tk.Frame(self.book, bg=PANEL)
-        self.book.add(self.empty, text='文明情報')
-        tk.Label(self.empty, text='下一場，知己知彼。', bg=PANEL, fg=FG, font=(self.font, 23, 'bold')).pack(pady=(100, 20))
-        tk.Label(self.empty, text='左側回顧最近 10 場對局。\n新對局開始時，這裡會自動更新。', bg=PANEL, fg=MUTED, font=(self.font, 13), justify='center').pack()
-        self.preview = button(footer, '最近一場', self.preview_latest)
+        self.book.add(self.empty, text=tr('文明情報'))
+        tk.Label(self.empty, text=tr('下一場，知己知彼。'), bg=PANEL, fg=FG, font=(self.font, 23, 'bold')).pack(pady=(100, 20))
+        tk.Label(self.empty, text=tr('左側回顧最近 10 場對局。\n新對局開始時，這裡會自動更新。'), bg=PANEL, fg=MUTED, font=(self.font, 13), justify='center').pack()
+        self.preview = button(footer, tr('最近一場'), self.preview_latest)
         self.preview.configure(state='disabled')
         self.preview.pack(side='left', padx=20)
-        button(footer, '設定', self.configure_app, True).pack(side='right', padx=16)
+        button(footer, tr('設定'), self.configure_app, True).pack(side='right', padx=16)
         self.library = BuildLibraryUI(self)
         self.open_history()
         root.protocol('WM_DELETE_WINDOW', self.close)
@@ -166,10 +171,10 @@ class Dashboard:
     def toggle_sidebar(self):
         if self.sidebar.winfo_manager():
             self.sidebar.pack_forget()
-            self.sidebar_toggle.configure(text='展開對局列表')
+            self.sidebar_toggle.configure(text=tr('展開對局列表'))
         else:
             self.sidebar.pack(side='left', fill='y', padx=(0, 22), before=self.detail)
-            self.sidebar_toggle.configure(text='收起對局列表')
+            self.sidebar_toggle.configure(text=tr('收起對局列表'))
 
     def configure_app(self):
         data = read_settings()
@@ -180,6 +185,9 @@ class Dashboard:
         if self.drain_timer is not None:
             self.root.after_cancel(self.drain_timer)
             self.drain_timer = None
+        if self.team_fit_job is not None:
+            self.root.after_cancel(self.team_fit_job)
+            self.team_fit_job = None
         self.pool.shutdown(wait=False, cancel_futures=True)
         if not getattr(self.args, 'demo', False):
             remember(self.root)
@@ -192,21 +200,30 @@ class Dashboard:
     def resize(self, delta):
         self.font_size = max(11, min(24, self.font_size + delta))
         self.library.resize(self.font_size)
-        for text in [text for _, _, text in self.tabs] + self.counter_texts:
+        for reminder in self.reminders:
+            reminder.configure(font=(self.font, self.font_size + 2, 'bold'))
+        for _, rating, _ in self.tabs:
+            rating.configure(font=(self.font, self.font_size + 6, 'bold'))
+        for text in [text for _, _, text in self.tabs] + self.counter_texts + [text for text, _ in self.team_sides]:
             self.style_text(text)
+        self.fit_team_sides()  # 字級 is the floor; the team overview grows from it
 
-    def style_text(self, text):
-        text.configure(font=(self.font, self.font_size), spacing1=3, spacing3=5, selectbackground='#3c506a', selectforeground=FG)
+    def style_text(self, text, size=None):
+        size = size or self.font_size
+        text.configure(font=(self.font, size), spacing1=3, spacing3=5, selectbackground='#3c506a', selectforeground=FG)
         text.tag_configure('number', foreground=AMBER)
-        text.tag_configure('unit', foreground=VIOLET, font=(self.font, self.font_size, 'bold'), spacing1=14)
-        text.tag_configure('tech', foreground=BLUE, font=(self.font, self.font_size, 'bold'), spacing1=14)
-        text.tag_configure('team', foreground=ACCENT, font=(self.font, self.font_size, 'bold'), spacing1=14)
+        text.tag_configure('unit', foreground=VIOLET, font=(self.font, size, 'bold'), spacing1=14)
+        text.tag_configure('tech', foreground=BLUE, font=(self.font, size, 'bold'), spacing1=14)
+        text.tag_configure('team', foreground=ACCENT, font=(self.font, size, 'bold'), spacing1=14)
         text.tag_configure('intro', foreground=MUTED, spacing3=16)
-        text.tag_configure('heading', foreground=ACCENT, font=(self.font, self.font_size + 1, 'bold'), spacing1=16)
-        text.tag_configure('good', foreground=ACCENT, font=(self.font, self.font_size, 'bold'))
-        text.tag_configure('bad', foreground=AMBER, font=(self.font, self.font_size, 'bold'))
-        text.tag_configure('meta', foreground=MUTED, font=(self.font, max(9, self.font_size - 2)))
-        text.tag_configure('group', foreground=BLUE, font=(self.font, self.font_size - 1, 'bold'), spacing1=18)
+        text.tag_configure('heading', foreground=ACCENT, font=(self.font, size + 1, 'bold'), spacing1=16)
+        text.tag_configure('good', foreground=ACCENT, font=(self.font, size, 'bold'))
+        text.tag_configure('bad', foreground=AMBER, font=(self.font, size, 'bold'))
+        text.tag_configure('meta', foreground=MUTED, font=(self.font, max(9, size - 2)))
+        text.tag_configure('group', foreground=BLUE, font=(self.font, size - 1, 'bold'), spacing1=18)
+        text.tag_configure('civ', foreground=FG, font=(self.font, size + 1, 'bold'), spacing1=10)
+        text.tag_configure('bonus', lmargin1=36, lmargin2=36)  # under the name: past the 24 px icon and its padding
+        text.tag_configure('average', foreground=BLUE, font=(self.font, size, 'bold'))
 
     def monitor(self):
         try:
@@ -215,7 +232,7 @@ class Dashboard:
             self.maps = load_map_names(self.args.game_dir, self.args.lang)
             self.dirs =[Path(d) for d in self.args.dir] if self.args.dir else savegame_dirs()
             if any(not d.is_dir() for d in self.dirs):
-                raise ValueError('找不到錄影資料夾，請用 --dir 指定 savegame 資料夾。')
+                raise ValueError(tr('找不到錄影資料夾，請用 --dir 指定 savegame 資料夾。'))
             self.my_id = self.args.profile_id or infer_my_profile_id(self.dirs)
             seen = list_files(self.dirs)
             latest = next(iter(recordings(self.dirs)), None)
@@ -230,7 +247,7 @@ class Dashboard:
                 for path in sorted(current - seen):
                     if path.suffix.lower() == '.aoe2record':
                         pending[path] = Pending(path)
-                        self.events.put(('status', '偵測到新對局，正在等待檔頭寫入…'))
+                        self.events.put(('status', tr('偵測到新對局，正在等待檔頭寫入…')))
                 seen = current
                 for path in list(pending):
                     shown = []
@@ -240,10 +257,10 @@ class Dashboard:
                     if try_parse(pending[path], self.civs, self.my_id, False, presenter=present):
                         del pending[path]
                         if not shown:
-                            self.events.put(('status', '無法讀取新對局；監看仍持續，請檢查 watch_log.jsonl。'))
+                            self.events.put(('status', tr('無法讀取新對局；監看仍持續，請檢查 watch_log.jsonl。')))
                 self.stop.wait(POLL_SECONDS)
         except Exception as exc:
-            self.events.put(('status', f'監看停止：{exc}'))
+            self.events.put(('status', tr('監看停止：{0}' ,f'{exc}')))
 
     def preview_latest(self):
         self.preview.configure(state='disabled')
@@ -252,10 +269,10 @@ class Dashboard:
             try:
                 latest = next(iter(recordings(self.dirs)), None)
                 if latest is None:
-                    raise ValueError('目前沒有錄影檔，開一場對戰後再試。')
+                    raise ValueError(tr('目前沒有錄影檔，開一場對戰後再試。'))
                 self.events.put(('preview_match', (generation, (read_match(latest), latest, None, True))))
             except Exception as exc:
-                self.events.put(('status', f'預覽失敗：{exc}'))
+                self.events.put(('status', tr('預覽失敗：{0}' ,f'{exc}')))
             finally:
                 self.events.put(('preview_done', None))
         self.pool.submit(work)
@@ -264,12 +281,12 @@ class Dashboard:
         window = self.history_window = self.sidebar
         bar = tk.Frame(window, bg=BG)
         bar.pack(fill='x', pady=(0, 12))
-        tk.Label(bar, text='最近對局', bg=BG, fg=FG, font=(self.font, 14, 'bold')).pack(side='left')
-        self.history_mode = tk.StringVar(value='多人')
-        mode = ttk.Combobox(bar, textvariable=self.history_mode, values=('多人', '排名', '全部'), state='readonly', width=6)
+        tk.Label(bar, text=tr('最近對局'), bg=BG, fg=FG, font=(self.font, 14, 'bold')).pack(side='left')
+        self.history_mode = tk.StringVar(value=tr('多人'))
+        mode = ttk.Combobox(bar, textvariable=self.history_mode, values=(tr('多人'), tr('排名'), tr('全部')), state='readonly', width=11 if language() == 'en' else 6)
         mode.pack(side='right')
         mode.bind('<<ComboboxSelected>>', lambda event: self.refresh_history() if hasattr(self, 'dirs') else None)
-        self.history_summary = tk.Label(window, text='最近 10 場 · 依開局時間排序', bg=BG, fg=MUTED, anchor='w', justify='left', wraplength=330)
+        self.history_summary = tk.Label(window, text=tr('最近 10 場 · 依開局時間排序'), bg=BG, fg=MUTED, anchor='w', justify='left', wraplength=280)
         self.history_summary.pack(fill='x', pady=(0, 14))
         body = tk.Frame(window, bg=BG)
         body.pack(fill='both', expand=True)
@@ -286,16 +303,16 @@ class Dashboard:
         self.history_tree.pack(fill='both', expand=True)
         self.history_tree.bind('<<TreeviewSelect>>', lambda event: self.select_history())
         self.history_tree.bind('<Return>', lambda event: self.select_history())
-        self.history_button = button(window, '重新整理對局', self.refresh_history, True)
+        self.history_button = button(window, tr('重新整理對局'), self.refresh_history, True)
         self.history_button.configure(state='disabled')
         self.history_button.pack(fill='x', pady=(10, 0))
-        tk.Label(window, text='錄影檔頭未含勝敗與時長', bg=BG, fg=MUTED, font=(self.font, 9)).pack(anchor='w', pady=8)
+        tk.Label(window, text=tr('錄影檔頭未含勝敗與時長'), bg=BG, fg=MUTED, font=(self.font, 9)).pack(anchor='w', pady=8)
 
     def refresh_history(self):
         self.history_request += 1
         request = self.history_request
-        mode = self.history_mode.get()
-        self.history_summary.configure(text='正在讀取本機錄影…')
+        mode = {tr('多人'): '多人', tr('排名'): '排名', tr('全部'): '全部'}[self.history_mode.get()]
+        self.history_summary.configure(text=tr('正在讀取本機錄影…'))
         def work():
             try:
                 rows, skipped = recent_matches(self.dirs, mode)
@@ -312,28 +329,28 @@ class Dashboard:
         counts = Counter()
         def civ_name(player):
             civ = self.civs.get(player.civ_id)
-            return civ.name if civ else f'未知文明 #{player.civ_id}'
+            return civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}')
         for index, (path, match) in enumerate(rows):
             me, _, enemies = split_sides(match, self.my_id)
             if me:
                 counts[civ_name(me)] += 1
             opponents = '、'.join(f'{p.name}（{civ_name(p)}）' for p in enemies)
-            kind = '排名' if match.rated else '多人' if match.multiplayer else '單機'
+            kind = tr('排名') if match.rated else tr('多人') if match.multiplayer else tr('單機')
             stamp = datetime.fromtimestamp(match.timestamp).strftime('%m/%d  %H:%M')
-            opponent_label = opponents or '無對手'
+            opponent_label = opponents or tr('無對手')
             if len(opponent_label) > 22:
                 opponent_label = opponent_label[:21] + '…'
-            mine = civ_name(me) if me else '身分不明'
+            mine = civ_name(me) if me else tr('身分不明')
             place_name = map_label(match, self.maps)
-            self.history_tree.insert('', 'end', iid=str(index), tags=('even' if index % 2 == 0 else 'odd',), values=(f'{stamp}   ·   {kind} {len(match.players)} 人' + (f' · {place_name}' if place_name else '') + f'\n{opponent_label}\n我的文明  /  {mine}',))
-        summary = f'最近 {len(rows)} 場'
+            self.history_tree.insert('', 'end', iid=str(index), tags=('even' if index % 2 == 0 else 'odd',), values=(tr('{0}   ·   {1} {2} 人' ,f'{stamp}', f'{kind}', f'{len(match.players)}') + (f' · {place_name}' if place_name else '') + tr('\n{0}\n我的文明  /  {1}' ,f'{opponent_label}', f'{mine}'),))
+        summary = tr('最近 {0} 場' ,f'{len(rows)}')
         if counts:
-            summary += ' · 我的文明：' + '、'.join(f'{name} {count} 場' for name, count in counts.most_common())
+            summary += tr(' · 我的文明：') + '、'.join(tr('{0} {1} 場' ,f'{name}', f'{count}') for name, count in counts.most_common())
         if skipped:
-            summary += f' · 略過 {skipped} 個暫時無法解析的錄影'
+            summary += tr(' · 略過 {0} 個暫時無法解析的錄影' ,f'{skipped}')
         if rows and self.generation == 0:
             self.history_tree.selection_set('0')
-        self.history_summary.configure(text=f'讀取失敗：{error}' if error else summary if rows else '沒有符合條件的錄影。' + (f' 略過 {skipped} 個無法解析的錄影。' if skipped else ''))
+        self.history_summary.configure(text=tr('讀取失敗：{0}' ,f'{error}') if error else summary if rows else tr('沒有符合條件的錄影。') + (tr(' 略過 {0} 個無法解析的錄影。' ,f'{skipped}') if skipped else ''))
 
     def select_history(self):
         selected = self.history_tree.selection()
@@ -353,8 +370,8 @@ class Dashboard:
             while True:
                 event, value = self.events.get_nowait()
                 if event == 'ready':
-                    identity = f'你的 profile ID：{self.my_id}' if self.my_id else '無法確認你的身分，將列出所有玩家；可用 --profile-id 指定'
-                    self.status.configure(text=f'監看中 · {len(self.civs)} 個文明 · {identity}')
+                    identity = tr('你的 profile ID：{0}' ,f'{self.my_id}') if self.my_id else tr('無法確認你的身分，將列出所有玩家；可用 --profile-id 指定')
+                    self.status.configure(text=tr('監看中 · {0} 個文明 · {1}' ,f'{len(self.civs)}', f'{identity}'))
                     self.preview.configure(state='normal')
                     self.history_button.configure(state='normal')
                     self.refresh_history()
@@ -377,8 +394,9 @@ class Dashboard:
                     if generation == self.generation:
                         for player, label, _ in self.tabs:
                             board = ratings.get(player.profile_id, {})
-                            summary = '  ·  '.join(f'{name}  {board[key]}' for key, name in ((RM_1V1, '1v1'), (RM_TEAM, '團戰')) if key in board)
-                            label.configure(text='電腦玩家' if not player.is_human else error or ('目前積分 · ' + summary if summary else '沒有排名紀錄'))
+                            summary = '  ·  '.join(f'{name}  {board[key]}' for key, name in ((RM_1V1, '1v1'), (RM_TEAM, tr('團戰'))) if key in board)
+                            label.configure(text=tr('電腦玩家') if not player.is_human else error or (tr('目前積分 · ') + summary if summary else tr('沒有排名紀錄')))
+                        self.show_team_ratings(ratings, error)
         except queue.Empty:
             pass
         self.drain_timer = self.root.after(100, self.drain)
@@ -393,24 +411,28 @@ class Dashboard:
             self.book.nametowidget(tab).destroy()
         self.tabs = []
         self.counter_texts = []
+        self.team_sides = []
+        self.team_icons = {}
         jumps = []
+        frames = {}
         me, allies, enemies = split_sides(match, self.my_id)
-        kind = '排名' if match.rated else '多人' if match.multiplayer else '單機'
+        kind = tr('排名') if match.rated else tr('多人') if match.multiplayer else tr('單機')
         place_name = map_label(match, self.maps)
-        self.status.configure(text=('歷史預覽' if preview else '已讀取新對局') + f' · {kind}' + (f' · {place_name}' if place_name else '') + f' · {len(match.players)} 人 · {datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}')
-        self.meta.configure(text=('歷史對局 · 文明說明與積分為目前資料' if preview else f'開局後 {delay:.1f} 秒讀到') + ' · 新對局將自動顯示')
+        self.status.configure(text=(tr('歷史預覽') if preview else tr('已讀取新對局')) + f' · {kind}' + (f' · {place_name}' if place_name else '') + tr(' · {0} 人 · {1}' ,f'{len(match.players)}', f'{datetime.fromtimestamp(match.timestamp):%m/%d %H:%M}'))
+        self.meta.configure(text=(tr('歷史對局 · 文明說明與積分為目前資料') if preview else tr('開局後 {0} 秒讀到' ,f'{delay:.1f}')) + tr(' · 新對局將自動顯示'))
         if getattr(self.args, 'demo', False):
-            self.meta.configure(text=f'展示用虛構對局 · {len(self.library.builds)} 套參考流程已內建')
-        for role, players in [('對手' if me else '玩家', enemies), ('你', [me] if me else []), ('隊友', allies)]:
+            self.meta.configure(text=tr('展示用虛構對局 · {0} 套參考流程已內建' ,f'{len(self.library.builds)}'))
+        for role, players in [(tr('對手') if me else tr('玩家'), enemies), (tr('你'), [me] if me else []), (tr('隊友'), allies)]:
             for player in players:
                 civ = self.civs.get(player.civ_id)
-                name = civ.name if civ else f'未知文明 #{player.civ_id}'
+                name = civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}')
                 frame = tk.Frame(self.book, bg=PANEL)
+                frames[player.number] = frame
                 self.book.add(frame, text=f'{role} · {name}',
                               image=civilization_icon(self.root, civ.key if civ else '', 24), compound='left')
                 color = COLORS[player.civ_id % len(COLORS)]
                 hero = tk.Frame(frame, bg=PANEL)
-                hero.pack(fill='x', padx=24, pady=(24, 16))
+                hero.pack(fill='x', padx=24, pady=(20, 12))
                 tk.Label(hero, image=civilization_icon(self.root, civ.key if civ else '', 64),
                          bg=PANEL).pack(side='left', padx=(0, 18))
                 heading = tk.Frame(hero, bg=PANEL)
@@ -418,8 +440,9 @@ class Dashboard:
                 tk.Label(heading, text=(civ.key.upper() if civ else 'UNKNOWN') + '  /  ' + role, font=('Segoe UI', 9), fg=color, bg=PANEL, anchor='w').pack(fill='x')
                 tk.Label(heading, text=name, font=(self.display_font, 28, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x')
                 tk.Label(heading, text=player.name, font=(self.font, 12), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x')
-                rating = tk.Label(frame, text='積分查詢已關閉' if self.args.no_elo else '正在查詢積分…', font=('Segoe UI', 12), fg=BLUE, bg=SURFACE, anchor='w', padx=14, pady=10)
+                rating = tk.Label(frame, text=tr('積分查詢已關閉') if self.args.no_elo else tr('正在查詢積分…'), font=(self.font, self.font_size + 6, 'bold'), fg=BLUE, bg=SURFACE, anchor='w', justify='left', padx=14, pady=10)
                 rating.pack(fill='x', padx=24, pady=(0, 20))
+                rating.bind('<Configure>', lambda e, label=rating: label.configure(wraplength=max(120, e.width - 28)))
                 body = tk.Frame(frame, bg=PANEL)
                 body.pack(fill='both', expand=True, padx=24, pady=(0, 20))
                 scrollbar = ttk.Scrollbar(body)
@@ -428,21 +451,18 @@ class Dashboard:
                 text.pack(fill='both', expand=True)
                 scrollbar.configure(command=text.yview)
                 self.style_text(text)
-                description = civ.description if civ else '此文明尚無官方說明，請確認遊戲資料版本。'
+                description = civ.description if civ else tr('此文明尚無官方說明，請確認遊戲資料版本。')
                 for index, line in enumerate(description.splitlines()):
-                    tag = 'intro' if index == 0 else ''
-                    if line.strip().endswith(('：', ':')):
-                        tag = 'unit' if any(word in line for word in ('單位', 'Unit')) else 'tech' if any(word in line for word in ('科技', 'Tech')) else 'team'
-                    start = text.index('end-1c')
-                    text.insert('end', line + '\n', tag)
-                    for number in re.finditer(r'[+−-]?\d+(?:[./]\d+)*(?:%|％)?', line):
-                        text.tag_add('number', f'{start}+{number.start()}c', f'{start}+{number.end()}c')
+                    if line.strip():  # the intro and headings carry their own spacing
+                        self.insert_text(text, line + '\n', heading_kind(line) or ('intro' if index == 0 else ''))
                 text.configure(state='disabled')
                 self.tabs.append((player, rating, text))
                 if players is enemies and player.civ_id in self.units:
-                    jumps.append((player.civ_id, frame, body))
+                    jumps.append((player.civ_id, hero, heading))
             if players is enemies and jumps:
                 self.add_counters(jumps)
+        if len(match.players) > 2:
+            self.add_team_bonuses(me, allies, enemies, frames)
         if not self.args.no_elo:
             def lookup():
                 try:
@@ -450,15 +470,15 @@ class Dashboard:
                     result = fetch_ratings(ids) if ids else {}
                     self.events.put(('ratings', (generation, result, None)))
                 except Exception:
-                    self.events.put(('ratings', (generation, {}, '暫時無法取得積分')))
+                    self.events.put(('ratings', (generation, {}, tr('暫時無法取得積分'))))
             self.pool.submit(lookup)
 
     def add_counters(self, jumps):
         """One tab with every enemy civ's unique units; each enemy's civ tab gets a button that jumps to its civ."""
         frame = tk.Frame(self.book, bg=PANEL)
-        self.book.add(frame, text='兵種應對')
-        tk.Label(frame, text='特殊兵種怎麼打', font=(self.display_font, 22, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(24, 4))
-        tk.Label(frame, text='依對手文明列出各建築的特殊兵種與地區兵種，取自遊戲的科技樹與兵種說明；不代表對手已經出這些兵。', font=(self.font, 10), fg=MUTED, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(0, 14))
+        self.book.add(frame, text=tr('兵種應對'))
+        tk.Label(frame, text=tr('特殊兵種怎麼打'), font=(self.display_font, 22, 'bold'), fg=FG, bg=PANEL, anchor='w').pack(fill='x', padx=24, pady=(24, 4))
+        tk.Label(frame, text=tr('依對手文明列出各建築的特殊兵種與地區兵種，取自遊戲的科技樹與兵種說明；不代表對手已經出這些兵。'), font=(self.font, 10), fg=MUTED, bg=PANEL, anchor='w', wraplength=800, justify='left').pack(fill='x', padx=24, pady=(0, 14))
         body = tk.Frame(frame, bg=PANEL)
         body.pack(fill='both', expand=True, padx=24, pady=(0, 20))
         scrollbar = ttk.Scrollbar(body)
@@ -471,34 +491,172 @@ class Dashboard:
             civ = self.civs.get(civ_id)
             text.mark_set(f'civ{civ_id}', 'end-1c')
             text.mark_gravity(f'civ{civ_id}', 'left')
-            text.insert('end', (civ.name if civ else f'未知文明 #{civ_id}') + '\n', 'heading')
+            text.insert('end', (civ.name if civ else tr('未知文明 #{0}' ,f'{civ_id}')) + '\n', 'heading')
             regional_started = False
             for unit in self.units[civ_id]:
                 if unit.regional and not regional_started:
                     regional_started = True
-                    text.insert('end', '地區兵種（少數文明共有）\n', 'group')
+                    text.insert('end', tr('地區兵種（少數文明共有）\n'), 'group')
                 text.insert('end', unit.name + '\n', 'unit')
                 where = ' · '.join(filter(None, (unit.building, unit.age)))
                 if where:
                     text.insert('end', where + '\n', 'meta')
                 if unit.summary:
                     text.insert('end', unit.summary + '\n')
-                for label, items, tag in (('用這些打', unit.loses_to, 'good'), ('它特別克制', unit.beats_hard, 'bad'), ('它克制', unit.beats, 'bad')):
+                for label, items, tag in ((tr('用這些打'), unit.loses_to, 'good'), (tr('它特別克制'), unit.beats_hard, 'bad'), (tr('它克制'), unit.beats, 'bad')):
                     if items:
-                        text.insert('end', label + '　', tag)
-                        text.insert('end', '、'.join(items) + '\n')
+                        text.insert('end', label + (': ' if language() == 'en' else '　'), tag)
+                        text.insert('end', (', ' if language() == 'en' else '、').join(items) + '\n')
                 if unit.strong_in_numbers:
-                    text.insert('end', '數量多時很強\n', 'bad')
+                    text.insert('end', tr('數量多時很強\n'), 'bad')
                 if not (unit.loses_to or unit.beats_hard or unit.beats or unit.strong_in_numbers):
-                    text.insert('end', '遊戲說明沒有列出克制關係\n', 'intro')
+                    text.insert('end', tr('遊戲說明沒有列出克制關係\n'), 'intro')
                 if unit.upgrades:
                     text.insert('end', unit.upgrades + '\n', 'intro')
         text.configure(state='disabled')
         self.counter_texts.append(text)
-        for civ_id, civ_frame, civ_body in jumps:
-            tk.Button(civ_frame, text='看特殊兵種怎麼打　→', command=lambda c=civ_id: self.jump(frame, text, c),
+        for civ_id, hero, heading in jumps:
+            tk.Button(hero, text=tr('看特殊兵種怎麼打\u3000→'), command=lambda c=civ_id: self.jump(frame, text, c),
                       bg=SURFACE, fg=VIOLET, activeforeground=VIOLET, relief='flat', borderwidth=0, anchor='w',
-                      padx=14, pady=8, cursor='hand2', font=(self.font, 11, 'bold')).pack(fill='x', padx=24, pady=(0, 16), before=civ_body)
+                      padx=14, pady=8, cursor='hand2', font=(self.font, 11, 'bold')).pack(side='right', padx=(16, 0), before=heading)
+
+    def insert_text(self, text, words, tags=''):
+        """Insert game text with its numbers highlighted."""
+        start = text.index('end-1c')
+        text.insert('end', words, tags)
+        for number in re.finditer(r'[+−-]?\d+(?:[./]\d+)*(?:%|％)?', words):
+            text.tag_add('number', f'{start}+{number.start()}c', f'{start}+{number.end()}c')
+
+    def add_team_bonuses(self, me, allies, enemies, frames):
+        """Team games open on both teams side by side: civs, team bonuses, average ratings; clicking a player opens their tab."""
+        frame = tk.Frame(self.book, bg=PANEL)
+        self.book.insert(0, frame, text=tr('團隊加成'))
+        self.book.select(frame)
+        columns = tk.Frame(frame, bg=PANEL)
+        columns.pack(fill='both', expand=True, padx=24, pady=(12, 20))
+        columns.rowconfigure(0, weight=1)
+        columns.columnconfigure((0, 1), weight=1, uniform='side')
+        gap = '  ' if language() == 'en' else '　'
+        sides = [(tr('我方隊伍'), [me] + allies), (tr('對手隊伍'), enemies)] if me else [(tr('所有玩家'), enemies)]
+        for column, (title, players) in enumerate(sides):
+            side = tk.Frame(columns, bg=PANEL)
+            side.grid(row=0, column=column, columnspan=1 if me else 2, sticky='nsew',
+                      padx=(0, 0) if not me else (0, 12) if column == 0 else (12, 0))
+            scrollbar = ttk.Scrollbar(side)  # packed only while the column overflows
+            # width=1: let the grid split the tab evenly instead of honouring Text's 80-column request
+            text = tk.Text(side, width=1, bg=PANEL, fg=FG, relief='flat', wrap='word', padx=0, borderwidth=0, highlightthickness=0)
+            text.configure(yscrollcommand=lambda first, last, s=scrollbar, t=text: self.toggle_scrollbar(s, t, first, last))
+            text.pack(fill='both', expand=True)
+            scrollbar.configure(command=text.yview)
+            emblems = self.team_icons[str(text)] = []
+            self.style_text(text)
+            cursor = text.cget('cursor')
+            text.insert('end', title + '\n', 'heading')
+            if not self.args.no_elo:
+                text.mark_set('average-at', 'end-1c')
+                text.mark_gravity('average-at', 'left')
+                text.insert('end', tr('正在查詢積分…'), 'average')
+                text.insert('end', '\n')
+            for player in players:
+                civ = self.civs.get(player.civ_id)
+                start = text.index('end-1c')
+                key = civ.key if civ else ''
+                emblems.append((text.image_create('end', image=civilization_icon(self.root, key, 24), padx=6, align='center'), key))
+                text.insert('end', civ.name if civ else tr('未知文明 #{0}' ,f'{player.civ_id}'), 'civ')
+                text.insert('end', gap + player.name + (tr('（你）') if player is me else '') + '\n', 'meta')
+                text.tag_add('civ', start)  # the icon starts the line, so it carries the row spacing
+                bonus = team_bonus(civ.description) if civ else ''
+                if bonus:
+                    self.insert_text(text, bonus + '\n', 'bonus')
+                else:
+                    text.insert('end', tr('遊戲說明沒有列出團隊加成') + '\n', ('bonus', 'meta'))
+                row = f'player{player.number}'
+                text.tag_add(row, start, 'end-1c')
+                text.tag_bind(row, '<Button-1>', lambda e, f=frames[player.number]: self.book.select(f))
+                text.tag_bind(row, '<Enter>', lambda e, t=text: t.configure(cursor='hand2'))
+                text.tag_bind(row, '<Leave>', lambda e, t=text, c=cursor: t.configure(cursor=c))
+            text.configure(state='disabled')
+            self.team_sides.append((text, players))
+        for event in ('<Configure>', '<Map>'):  # resized, or shown again after 字級 changed on another tab
+            columns.bind(event, lambda e: self.schedule_team_fit())
+        self.schedule_team_fit()
+
+    def show_team_ratings(self, ratings, error):
+        """Each team's mean rating over its humans who have one; (n/m) when only some of them do."""
+        for text, players in self.team_sides:
+            if not text.tag_ranges('average'):
+                continue
+            humans = sum(p.is_human for p in players)
+            averages = team_average(players, ratings)
+            parts = []
+            for key, name in ((RM_1V1, '1v1'), (RM_TEAM, tr('團戰'))):
+                if key in averages:
+                    mean, count = averages[key]
+                    parts.append(f'{name}  {mean}' + ('' if count == humans else f' ({count}/{humans})'))
+            if error:
+                words = error
+            elif not humans:
+                words = tr('電腦玩家')
+            else:
+                words = (tr('平均 ') + '  ·  '.join(parts)) if parts else tr('沒有排名紀錄')
+            text.configure(state='normal')
+            text.delete(*text.tag_ranges('average'))
+            text.insert('average-at', words, 'average')
+            text.configure(state='disabled')
+        self.schedule_team_fit()
+
+    @staticmethod
+    def toggle_scrollbar(scrollbar, text, first, last):
+        """A team column shows its scrollbar only while its text overflows."""
+        if float(first) <= 0 and float(last) >= 1:
+            scrollbar.pack_forget()
+        elif not scrollbar.winfo_manager():
+            scrollbar.pack(side='right', fill='y', before=text)
+        scrollbar.set(first, last)
+
+    def schedule_team_fit(self):
+        if self.team_fit_job is not None:  # resizing fires many events; fit once it settles
+            self.root.after_cancel(self.team_fit_job)
+        self.team_fit_job = self.root.after(80, self.fit_team_sides)
+
+    def style_team(self, text, size):
+        """A team column at `size`, with 32 px emblems once the text is large."""
+        self.style_text(text, size)
+        emblem = 32 if size >= 18 else 24
+        text.tag_configure('bonus', lmargin1=emblem + 12, lmargin2=emblem + 12)  # past the emblem and its padding
+        for name, key in self.team_icons.get(str(text), ()):
+            text.image_configure(name, image=civilization_icon(self.root, key, emblem))
+
+    def fit_team_sides(self):
+        """Grow the team overview's text until the fuller column is filled, like the reference cards; 字級 is the floor."""
+        if self.team_fit_job is not None:  # called directly (字級): drop the pending fit
+            self.root.after_cancel(self.team_fit_job)
+        self.team_fit_job = None
+        texts = [text for text, _ in self.team_sides if text.winfo_exists()]
+        if not texts or not texts[0].winfo_viewable():
+            return  # not on screen: the next <Configure> fits it
+        for text in texts:  # measure at full width; a column that still overflows gets its bar back
+            bar = next(w for w in text.master.winfo_children() if isinstance(w, ttk.Scrollbar))
+            self.toggle_scrollbar(bar, text, 0, 1)
+        self.root.update_idletasks()
+        room = [text.winfo_height() - 8 for text in texts]
+
+        def fits(size):
+            for text, height in zip(texts, room):
+                self.style_team(text, size)
+                if int(text.tk.call(text._w, 'count', '-update', '-ypixels', '1.0', 'end')) > height:
+                    return False
+            return True
+
+        low, high, best = self.font_size + 1, 26, self.font_size
+        while low <= high:
+            middle = (low + high) // 2
+            if fits(middle):
+                best, low = middle, middle + 1
+            else:
+                high = middle - 1
+        for text in texts:
+            self.style_team(text, best)
 
     def jump(self, frame, text, civ_id):
         self.book.select(frame)
@@ -507,7 +665,7 @@ class Dashboard:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--lang')
+    parser.add_argument('--lang', choices=('tw', 'en', 'zh'), help='app, guides and game-data language')
     parser.add_argument('--game-dir')
     parser.add_argument('--dir', action='append')
     parser.add_argument('--profile-id', type=int)
@@ -520,6 +678,7 @@ def main():
     parser.add_argument('--check-bundled-data', metavar='REPORT', help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.check_bundled_data:
+        set_language(args.lang or "tw")
         from map_notes import load_map_notes
         from build_library import load_library
         builds = load_library()
@@ -534,13 +693,14 @@ def main():
     if not args.demo:
         root.withdraw()
         config = read_settings()
+        set_language(args.lang or (config or {}).get("lang") or default_language())
         try:
             if config:
                 validate_settings(config)
         except (OSError, ValueError, KeyError):
             config = None
         if config is None or args.setup:
-            config = SetupDialog(root, config, first_run=True).result
+            config = SetupDialog(root, config or {"lang": args.lang or default_language()}, first_run=True).result
             if config is None:
                 root.destroy()
                 return
@@ -549,7 +709,7 @@ def main():
                 setattr(args, field, config.get(key))
         root.deiconify()
     else:
-        args.lang = args.lang or 'tw'
+        args.lang = args.lang or default_language()
         args.no_elo = True
     app = Dashboard(root, args)
     if args.demo:

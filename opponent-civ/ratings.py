@@ -25,3 +25,14 @@ def fetch_ratings(profile_ids, timeout=TIMEOUT_SECONDS):
         if profile_id is not None:
             ratings.setdefault(profile_id, {})[stat['leaderboard_id']] = stat['rating']
     return ratings
+
+
+def team_average(players, ratings):
+    """{leaderboard_id: (mean rating, how many humans had one)} over the humans among `players`."""
+    averages = {}
+    for board in (RM_1V1, RM_TEAM):
+        values = [ratings[p.profile_id][board] for p in players
+                  if p.is_human and board in ratings.get(p.profile_id, {})]
+        if values:
+            averages[board] = (round(sum(values) / len(values)), len(values))
+    return averages

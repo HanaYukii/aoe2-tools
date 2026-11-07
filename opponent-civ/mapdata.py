@@ -1,4 +1,5 @@
 """Map names: a recording's map id looked up in the game's maps.json."""
+from i18n import tr
 import json
 import re
 from pathlib import Path
@@ -28,7 +29,7 @@ def map_label(match, names):
     if match.map_file:
         return re.sub(r'\.rms2?$', '', match.map_file, flags=re.IGNORECASE)  # a mod's map script
     if match.map_id == SCENARIO:
-        return '劇本／戰役'
+        return tr('劇本／戰役')
     if match.map_id in names:
         return names[match.map_id]
-    return f'未知地圖 #{match.map_id}' if match.map_id >= 0 else ''
+    return tr('未知地圖 #{0}' ,f'{match.map_id}') if match.map_id >= 0 else ''

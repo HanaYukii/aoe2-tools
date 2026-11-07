@@ -30,6 +30,32 @@ class Civ:
     description: str   # localized tech-tree description, plain text
 
 
+def heading_kind(line):
+    """'team', 'unit' or 'tech' for a section heading of a civ description; None for other lines.
+
+    The official text is not uniform (團隊加成 / 團隊成分, 特殊科技 / 獨特技術, full- and
+    half-width colons), so headings are told apart by keyword, team first.
+    """
+    line = line.strip()
+    if not line.endswith(('：', ':')):
+        return None
+    if any(word in line for word in ('團隊', '团队', 'Team')):
+        return 'team'
+    if any(word in line for word in ('單位', '单位', 'Unit')):
+        return 'unit'
+    return 'tech'
+
+
+def team_bonus(description):
+    """The text under a civ description's team-bonus heading; '' when it has none."""
+    lines = description.splitlines()
+    start = next((i + 1 for i, line in enumerate(lines) if heading_kind(line) == 'team'), None)
+    if start is None:
+        return ''
+    end = next((i for i in range(start, len(lines)) if heading_kind(lines[i])), len(lines))
+    return '\n'.join(lines[start:end]).strip()
+
+
 def find_game_dir():
     if os.environ.get('AOE2DE_DIR'):
         return Path(os.environ['AOE2DE_DIR'])

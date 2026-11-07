@@ -631,7 +631,7 @@ class BuildLibraryUI:
         self.library_tab = LibraryView(book, self)
         book.add(self.plan_tab, text=tr('前期流程'), image=icon(app.root, 'hourglass'), compound='left')
         book.add(self.sheet_tab, text=tr('戰術速查'), image=icon(app.root, 'combat'), compound='left')
-        book.add(self.map_tab, text=tr('地圖注意'), image=icon(app.root, 'scroll'), compound='left')
+        book.add(self.map_tab, text=tr('地圖注意'), image=icon(app.root, 'map'), compound='left')
         book.add(self.library_tab, text=tr('流程庫'), image=icon(app.root, 'scroll'), compound='left')
         self.set_match(None)
 

@@ -148,7 +148,7 @@ class Dashboard:
         self.workspace_book = ttk.Notebook(detail)
         self.workspace_book.pack(fill='both', expand=True)
         self.rp_frame = tk.Frame(self.workspace_book, bg=PANEL)
-        self.workspace_book.add(self.rp_frame, text=tr('對局 RP'), image=icon(root, 'map'), compound='left')
+        self.workspace_book.add(self.rp_frame, text=tr('對局 RP'), image=icon(root, 'scouting'), compound='left')
         root.bind('<Configure>', lambda event: self.reflow(event))
         self.book = ttk.Notebook(self.rp_frame)
         self.book.pack(fill='both', expand=True, padx=20, pady=(0, 16))

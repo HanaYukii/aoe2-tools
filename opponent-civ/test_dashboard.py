@@ -45,6 +45,8 @@ class DashboardTests(unittest.TestCase):
             self.assertEqual((image.width(), image.height()), (24, 24))
             self.assertIs(image, icon(self.root, name))
         self.assertTrue(self.app.workspace_book.tab(self.app.rp_frame, 'image'))
+        pages = [str(self.app.workspace_book.tab(tab, 'image')) for tab in self.app.workspace_book.tabs()]
+        self.assertEqual(len(set(pages)), len(pages))  # every page tab has its own icon
 
     def test_all_civilization_icons_load_with_fallback(self):
         from ui_icons import CIVILIZATIONS, civilization_icon, icon

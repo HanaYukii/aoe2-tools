@@ -10592,11 +10592,11 @@
         },
         {
           "title": "2 · Elite Skirmisher, Bodkin, Ballistics",
-          "body": "Upgrade existing skirmishers with Elite Skirmisher + Bodkin Arrow, then armor in stages. Once the core army and production are stable, build a university for early Ballistics.\nBodkin Arrow does not affect scorpions; Roman scorpions do benefit from Ballistics. Get urgent units first, but do not indefinitely skip upgrades."
+          "body": "Upgrade existing skirmishers with Elite Skirmisher + Bodkin Arrow (range 7 vs cavalry archers' 6), then armor in stages. Once the core army and production are stable, build a university for early Ballistics.\nBodkin Arrow does not affect scorpions; Roman scorpions do benefit from Ballistics. Romans lack Bracer: fully upgraded Imperial cavalry archers also reach range 7. Get urgent units first, but do not indefinitely skip upgrades."
         },
         {
           "title": "3 · Add a screen against cavalry",
-          "body": "If cavalry reaches the siege, start with about 4–6 Pikemen and infantry armor; scale with enemy numbers. Keep them beside skirmishers and siege rather than chasing.\nAdd 1–2 monks against knights. Open the Versus knights guide if cavalry becomes the main threat. Against mangonels, add your own rather than only more scorpions."
+          "body": "Light cavalry kills a scorpion or skirmisher in 5 hits (cavalry archers deal only 1–2 per arrow), so screen the siege with infantry: mostly light cavalry → 4–6 Pikemen + armor (4 hits per light cavalry); mostly cavalry archers → Long Swordsmen (20 arrows to kill, Pikemen 10).\nKeep the infantry beside skirmishers and siege rather than chasing; add more as enemy cavalry grows. Add 1–2 monks against knights. Open the Versus knights guide if cavalry becomes the main threat. Against mangonels, add your own rather than only more scorpions."
         },
         {
           "title": "4 · Reduce the area to defend",
@@ -10608,7 +10608,7 @@
         },
         {
           "title": "6 · Hold chokepoints and prepare Imperial",
-          "body": "Use walls, woods and chokepoints to narrow fights. Check side routes before moving defenders away. Keep 2–3 on stone; use 6–8 for a timely castle.\nSee Castle Age for TC #3 and Imperial. Heavy Scorpion and Halberdier priorities depend on the enemy screen; see Imperial."
+          "body": "Use walls, woods and chokepoints to narrow fights. Once the army is ready, push their gold or TC to force a fight; check side routes before moving defenders away. Keep 2–3 on stone; use 6–8 for a timely castle.\nSee Castle Age for TC #3 and Imperial. Heavy Scorpion and Halberdier priorities depend on the enemy screen; see Imperial."
         }
       ],
       "sources": [
@@ -10635,11 +10635,11 @@
       "cards": [
         {
           "title": "1 · Stabilize with pikes and monks",
-          "body": "Against a few knights, protect resources with existing spears and add 1–2 monks for conversions/healing. Research Pikeman and armor as cavalry numbers grow.\nAbout 6–10 Pikemen is a starting reference, split across entrances. Reaching that count does not automatically make it safe to move out. Avoid chasing cavalry."
+          "body": "Against a few knights, protect resources with existing spears and add 1–2 monks for conversions/healing. Research Pikeman and armor as cavalry numbers grow.\nAbout 6–10 Pikemen is a starting reference, split across entrances. In a fight, bring about 1.5 Pikemen per knight (10 knights need about 15 to win clearly, with no gold spent). Reaching that count does not automatically make it safe to move out. Avoid chasing cavalry."
         },
         {
           "title": "2 · Spend Castle wood/gold on defense",
-          "body": "Under heavy cavalry pressure, use 1–2 woodcutters for a monastery. Add a second barracks if production cannot keep up. Prioritize Pikeman/armor over extra Long Swordsmen or rams.\nAdd a workshop for the enemy support: scorpions against ranged units, mangonels against enemy mangonels. Against knights alone, stabilize pikes/monks first."
+          "body": "Under heavy cavalry pressure, use 1–2 woodcutters for a monastery. Add a second barracks if production cannot keep up. Prioritize Pikeman/armor over extra Long Swordsmen or rams.\nAdd a workshop for the enemy support: scorpions against ranged units, mangonels against enemy mangonels. Against knights alone, stabilize pikes/monks first: a knight kills a scorpion in 4 hits, while a scorpion needs 18 bolts to kill a knight."
         },
         {
           "title": "3 · Close entrances, not just resources",
@@ -10647,7 +10647,7 @@
         },
         {
           "title": "4 · Respond to ranged support",
-          "body": "Against archers/skirmishers supporting knights, add scorpions and keep existing Elite Skirmishers. Answer enemy mangonels rather than blindly massing siege.\nDo not chase with all pikes and monks. Protect monks and resources. If ranged units become the main threat, switch branches and retain a small anti-cavalry screen."
+          "body": "Against archers/skirmishers supporting knights, add scorpions and keep existing Elite Skirmishers. Answer enemy mangonels rather than blindly massing siege.\nDo not chase with all pikes and monks; Romans have no camels, so only your own knights or Centurions match knight speed. Protect monks and resources. If ranged units become the main threat, switch branches and retain a small anti-cavalry screen."
         },
         {
           "title": "5 · 45–65 villagers: sustain TCs and pikes",

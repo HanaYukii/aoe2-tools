@@ -31,8 +31,8 @@ HELP_OFFSET = 79000                   # tech-tree help id 105107 (Longbowman) ->
 DESCRIPTION_OFFSET = 12000            # fallback: tech-tree name id 14107 -> description 26107
 AGE_NAMES = {1: 4201, 2: 4202, 3: 4203, 4: 4204}  # string ids of 黑暗/封建/城堡/帝王時代
 
-# English counter terms -> the game's Traditional Chinese names: unit names as
-# the game's strings spell them (Skirmisher = 矛兵, Spearman = 長槍兵), classes
+# English counter terms -> the game's Chinese names: unit names as the game's
+# strings spell them (Skirmisher = 矛兵／掷矛手, Spearman = 長槍兵／长矛兵), classes
 # as its own unit descriptions most often translate them.
 TERMS = {'tw': {
     'Infantry': '步兵',
@@ -79,6 +79,51 @@ TERMS = {'tw': {
     'slow, non-ranged units': '移動緩慢的非遠程單位',
     'especially Elephants': '尤其是大象單位',
     'especially with high armor': '尤其是高護甲單位',
+}, 'zh': {
+    'Infantry': '步兵',
+    'Cavalry': '骑兵',
+    'Mounted Units': '骑兵单位',
+    'Mounted Archers': '骑射手',
+    'Archery Units': '弓兵单位',
+    'Foot Archers': '步弓手',
+    'Foot Archers at long range': '远距离的步弓手',
+    'Ranged Soldiers': '远程士兵',
+    'Ranged Soldiers at long range': '远距离的远程士兵',
+    'Gunners': '火枪手',
+    'Gunpowder Units': '火药单位',
+    'Skirmishers': '掷矛手',
+    'Skirmisher-line': '掷矛手系',
+    'Spearman-line': '长矛兵系',
+    'Militia-line': '民兵系',
+    'Scout Cavalry-line': '斥候骑兵系',
+    'Camel Riders': '骆驼骑兵',
+    'Eagle Warriors': '鹰勇士',
+    'Monks': '僧侣',
+    'Monastery Units': '修道院单位',
+    'Priestesses': '女祭司',
+    'Unique Units': '独特单位',
+    'Siege Weapons': '攻城武器',
+    'Scorpions': '弩炮',
+    'Mangonel-line': '轻型投石车系',
+    'buildings': '建筑',
+    'Galleys': '箭船',
+    'Galley-line': '箭船系',
+    'most Warships': '大多数战舰',
+    'Fire Ships': '喷火船',
+    'Fire Galleys': '火艨艟',
+    'land units': '陆地单位',
+    'slow units at long range': '远距离的慢速单位',
+    'Demolition Ships': '爆破船',
+    'large groups of ships': '大群船只',
+    'large groups of units': '大群单位',
+    'tight groups of units': '密集的单位群',
+    'melee units': '近战单位',
+    'units at close range': '近战单位',
+    'units at range': '远距离的单位',
+    'units at medium and close range': '中近距离的单位',
+    'slow, non-ranged units': '移动缓慢的非远程单位',
+    'especially Elephants': '尤其是象兵',
+    'especially with high armor': '尤其是高护甲单位',
 }}
 
 COUNTER = re.compile(r'(Exceptionally strong|Strong|Weak) vs\. ([^.]*)\.')
@@ -89,6 +134,8 @@ EN_COUNTER_SENTENCE = re.compile(r'\s*(?:(?:Exceptionally strong|Strong|Weak) vs
 TW_COUNTER_CLAUSE = re.compile(
     r'擅|克制|剋制|不敵|較強|較弱|很強的攻擊|強勢|弱勢|克敵|反制|優勢|劣勢|不利|越多越強|對[^，]{1,10}(?:強大|特別強)'
     r'|^\s*尤其')  # "擅長對付騎乘單位，尤其是戰象" continues the clause before it
+ZH_COUNTER_CLAUSE = re.compile(r'适于|擅|克制|不敌|较强|较弱|强势|弱势|优势|劣势|不利|越多越强|^\s*尤其')  # "不适于攻击长矛兵系"
+COUNTER_CLAUSE = {'tw': TW_COUNTER_CLAUSE, 'zh': ZH_COUNTER_CLAUSE}
 
 
 @dataclass(frozen=True)
@@ -121,12 +168,13 @@ def english_items(clause):
 
 
 def summary(line, lang):
-    if lang == 'tw':  # a sentence keeps its clauses up to the first counter one:
+    counter = COUNTER_CLAUSE.get(lang)
+    if counter:  # a sentence keeps its clauses up to the first counter one:
         sentences = []  # "義大利獨特的步弓兵，特別擅長對抗騎兵。" -> "義大利獨特的步弓兵。"
         for sentence in line.split('。'):  # "不擅長對付長槍兵系，矛兵和駱駝騎兵。" -> nothing
             kept = []
             for clause in sentence.split('，'):
-                if TW_COUNTER_CLAUSE.search(clause):
+                if counter.search(clause):
                     break
                 if clause.strip():
                     kept.append(clause)

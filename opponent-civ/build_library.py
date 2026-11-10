@@ -19,11 +19,12 @@ def key(value):
 
 def map_kind(label):
     label = label.lower()
-    if any(s in label for s in ('競技場', 'arena', '黑森林', 'black forest', '避難所', 'hideout')):
+    # Map names as each game language spells them: Hideout is 藏身之處／藏身之处, Fortress 要塞／堡垒.
+    if any(s in label for s in ('競技場', '竞技场', 'arena', '黑森林', 'black forest', '避難所', '藏身之處', '藏身之处', 'hideout')):
         return 'closed'
-    if any(s in label for s in ('阿拉伯', 'arabia', '陸地', 'land')):
+    if any(s in label for s in ('阿拉伯', 'arabia', '陸地', '陆地', 'land')):
         return 'open'
-    if any(s in label for s in ('堡壘', 'fortress')):
+    if any(s in label for s in ('堡壘', '堡垒', '要塞', 'fortress')):
         return 'fortress'
     return None  # Unknown/custom maps must not silently exclude builds.
 
@@ -80,7 +81,7 @@ class LibraryError(ValueError):
 
 def read_catalog(data_path=None, *, lang=None):
     try:
-        data = json.loads(Path(data_path or (catalog_path("builds", lang) if (lang or language()) == "en" else DATA_PATH)).read_text(encoding='utf-8'))
+        data = json.loads(Path(data_path or (DATA_PATH if (lang or language()) == 'tw' else catalog_path('builds', lang))).read_text(encoding='utf-8'))
         if data.get('schema_version') != 1 or not isinstance(data.get('builds'), list):
             raise ValueError('unsupported catalog')
         sheet_ids = set()
@@ -190,8 +191,8 @@ def search_builds(builds, civ_key='', query=''):
     terms = query.casefold().replace('＋', '+').strip()
     if language() == 'en':
         terms = terms.replace('maa', 'men-at-arms').replace('fc', 'fast castle')
-    else:
-        terms = terms.replace('maa', '裝甲').replace('fc', '直城')
+    else:  # the Simplified guides use the mainland name of the Man-at-Arms
+        terms = terms.replace('maa', '武士' if language() == 'zh' else '裝甲').replace('fc', '直城')
     found = [b for b in builds if terms in (b.title+' '+b.population).casefold().replace('＋', '+')]
     return sorted(found, key=lambda b: (b.compatibility(civ_key) in {'other', 'unavailable'}, b.index))
 

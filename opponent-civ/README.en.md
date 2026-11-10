@@ -17,7 +17,7 @@ The first command opens setup when needed. The second uses synthetic offline mat
 
 | Option | Purpose |
 | --- | --- |
-| `--lang en` / `--lang tw` | Interface, bundled guides and game-data language |
+| `--lang en` / `--lang tw` / `--lang zh` | Interface, bundled guides and game-data language |
 | `--setup` | Open settings before starting |
 | `--with-game` | Launch the tool, then start AoE2 through Steam |
 | `--no-elo` | Disable network rating lookup |
@@ -49,6 +49,7 @@ Pushing a `v*` tag triggers tests, packaging and a GitHub Release. A manual work
 - `data/builds.zh-TW.json` / `data/builds.en.json`: 40 builds and tactical cards. English follow-up notes are concise adaptations; step allocations retain the same values.
 - `data/map-notes.zh-TW.json` / `data/map-notes.en.json`: map guidance. IDs and matching aliases remain the same across languages.
 - `data/ui.en.json` / `i18n.py`: interface translations and catalog selection.
+- `*.zh-CN.json`, `data/ui.zh-CN.json`, `README.zh-CN.md`: Simplified Chinese, generated from the Traditional files by `make_zh_cn.py` with game terms swapped for the Simplified game's own names. Regenerate after editing the Traditional files: `uv run --with opencc-python-reimplemented python opponent-civ/make_zh_cn.py`.
 - Keep build/sheet IDs stable so personal recommendations survive updates and language changes.
 - `build_ids` links sheets to openings. `civ` restricts a sheet to a civilization; `maps` restricts it by map. Era/navigation labels organize Roman branches.
 - Reference cards use one to three columns, fitting text to available space and scrolling when necessary. Both English technology names and worker allocations are highlighted.

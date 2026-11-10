@@ -9,12 +9,14 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+import ast
 from i18n import DATA, set_language, tr, default_language
-from build_library import load_library, read_catalog, search_builds, sheets_for, LibraryState
+from build_library import load_library, map_kind, read_catalog, search_builds, sheets_for, LibraryState
 from build_views import reference_highlights
 from map_notes import load_map_notes, note_for_map
 from dashboard import Dashboard
 from demo import populate
+from units import COUNTER_CLAUSE, TERMS, summary
 
 
 class TranslationTests(unittest.TestCase):
@@ -105,3 +107,84 @@ class TranslationTests(unittest.TestCase):
             else: root.destroy()
             app=root=None
             gc.collect()
+
+
+# Characters that exist only in Traditional script; none may survive in generated Simplified text.
+TRADITIONAL = re.compile('[們個時當點對與這為無經裝騎劍戰馬術區應會從體學實際議圖產農礦鐵築隊開關]')
+# Fields make_zh_cn.py copies as they are (ids, file names) or keeps alongside a Simplified copy.
+COPIED = {'id', 'civs', 'civ', 'map_type', 'video_filename', 'build_ids', 'era', 'url', 'aliases', 'maps'}
+
+
+def converted_text(value, key=None):
+    if isinstance(value, dict):
+        for k, v in value.items():
+            yield from converted_text(v, k)
+    elif isinstance(value, list) and key not in COPIED:
+        for v in value:
+            yield from converted_text(v, key)
+    elif isinstance(value, str) and key not in COPIED:
+        yield value
+
+
+class SimplifiedChineseTests(unittest.TestCase):
+    def tearDown(self):
+        set_language('tw')
+
+    def test_simplified_catalogs_mirror_traditional_ones(self):
+        for name, items in (('builds', 'builds'), ('map-notes', 'maps')):
+            tw = json.loads((DATA / f'{name}.zh-TW.json').read_text(encoding='utf-8'))
+            cn = json.loads((DATA / f'{name}.zh-CN.json').read_text(encoding='utf-8'))
+            self.assertEqual([x['id'] for x in tw[items]], [x['id'] for x in cn[items]], 'rerun make_zh_cn.py')
+            for a, b in zip(tw[items], cn[items]):
+                self.assertEqual(len(a.get('steps', a.get('cards', []))), len(b.get('steps', b.get('cards', []))))
+                self.assertEqual(a.get('video_filename'), b.get('video_filename'))  # local videos keep their names
+            for text in converted_text(cn):
+                self.assertNotRegex(text, TRADITIONAL)
+        tw, cn = read_catalog(lang='tw'), read_catalog(lang='zh')
+        self.assertEqual([s['id'] for s in tw['reference_sheets']], [s['id'] for s in cn['reference_sheets']])
+        for a, b in zip(tw['reference_sheets'], cn['reference_sheets']):
+            self.assertEqual(len(a['cards']), len(b['cards']))
+            self.assertTrue(set(a['maps']) <= set(b['maps']))  # map matching keeps the Traditional words
+
+    def test_every_ui_string_has_a_simplified_translation(self):
+        table = json.loads((DATA / 'ui.zh-CN.json').read_text(encoding='utf-8'))
+        keys = set(json.loads((DATA / 'ui.en.json').read_text(encoding='utf-8')))
+        for path in Path(__file__).resolve().parent.glob('*.py'):
+            if path.name.startswith('test_') or path.name == 'make_zh_cn.py':
+                continue
+            for node in ast.walk(ast.parse(path.read_text(encoding='utf-8'))):
+                if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == 'tr'
+                        and node.args and isinstance(node.args[0], ast.Constant)):
+                    keys.add(node.args[0].value)
+        self.assertEqual(sorted(keys - set(table)), [], 'rerun make_zh_cn.py')
+        for text in table.values():
+            self.assertNotRegex(text, TRADITIONAL)
+
+    def test_simplified_language_selection_and_terms(self):
+        with patch('i18n.locale.getlocale', return_value=('zh_CN', 'UTF-8')):
+            self.assertEqual(default_language(), 'zh')
+        with patch('i18n.locale.getlocale', return_value=('Chinese (Simplified)_China', '936')):
+            self.assertEqual(default_language(), 'zh')
+        with patch('i18n.locale.getlocale', return_value=('Chinese (Traditional)_Taiwan', '950')):
+            self.assertEqual(default_language(), 'tw')
+        set_language('zh')
+        self.assertEqual(tr('最近 {0} 場', 10), '最近 10 场')
+        builds = load_library()
+        self.assertTrue(search_builds(builds, '', 'MAA'))
+        self.assertTrue(all('武士' in b.title for b in search_builds(builds, '', 'MAA')))
+        roman = next(s for s in read_catalog()['reference_sheets'] if s['id'] == 'romans-vs-cavalry-archers')
+        self.assertIn('掷矛手', roman['cards'][0]['body'])     # 矛兵 would read as a Spearman in Simplified
+        self.assertNotIn('矛兵', roman['cards'][0]['body'])
+        self.assertEqual([s[0] for s in reference_highlights('先精锐＋二级射，再点弹道学、手推车')].count('tech'), 4)
+        self.assertEqual(note_for_map(load_map_notes(), '竞技场', 29)['id'], 'arena')
+
+    def test_map_kinds_use_each_languages_official_names(self):
+        for label, kind in (('竞技场', 'closed'), ('藏身之处', 'closed'), ('藏身之處', 'closed'),
+                            ('阿拉伯半岛', 'open'), ('堡垒', 'fortress'), ('要塞', 'fortress')):
+            self.assertEqual(map_kind(label), kind, label)
+
+    def test_simplified_unit_text_drops_counter_sentences(self):
+        self.assertEqual(set(TERMS['zh']), set(TERMS['tw']))
+        self.assertIn('zh', COUNTER_CLAUSE)
+        line = '罗马的独特重装骑兵，可提高附近民兵系单位的移动速度和攻击速度。适于攻击步兵和步弓手。不适于攻击长矛兵系和骆驼骑兵。'
+        self.assertEqual(summary(line, 'zh'), '罗马的独特重装骑兵，可提高附近民兵系单位的移动速度和攻击速度。')

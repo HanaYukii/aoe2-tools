@@ -106,9 +106,9 @@ class ScrollArea(tk.Frame):
 
 
 REFERENCE_TECH = re.compile(
-    r'精銳|二級箭|二級射|[一二三]級(?:步防|弓防|馬防|金|石)|'
-    r'[一二三](?:木|農|防)|彈道(?:學)?|化學|織布|輪軸|手推車|'
-    r'銀冠(?:葡萄園)?|金冠|徵兵(?:技術)?|步防|弓防|馬防|戟兵|長槍升級|'
+    r'精銳|精锐|二[級级][箭射]|[一二三][級级](?:步防|弓防|[馬马]防|金|石)|'
+    r'[一二三](?:木|[農农]|防)|[彈弹]道(?:[學学])?|化[學学]|[織织]布|輪軸|独轮推车|手推[車车]|'
+    r'[銀银]冠(?:葡萄[園园])?|金冠|[徵征]兵(?:技[術术])?|步防|弓防|[馬马]防|戟兵|[長长][槍枪]升[級级]|'
     r'Elite Skirmisher|Bodkin Arrow|Fletching|Bracer|Ballistics|Chemistry|Loom|Wheelbarrow|Hand Cart|'
     r'Double-Bit Axe|Bow Saw|Horse Collar|Heavy Plow|Conscription|Halberdier|Pikeman|'
     r'(?:Scale|Chain|Plate) (?:Mail|Barding) Armor|(?:Padded|Leather|Ring) Archer Armor|Ballistas|Burgundian Vineyards')

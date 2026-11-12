@@ -30,20 +30,21 @@ GLOSSARY = {
     '強弩兵': '劲弩手', '弩兵': '弩手', '火弓兵': '火焰弓箭手', '弓兵': '步弓手',
     '輕騎兵': '轻型骑兵', '偵察騎兵': '斥候骑兵', '草原騎兵': '草原枪兵', '戟兵': '长戟兵',
     '土耳其火槍兵': '苏丹亲兵', '火槍兵': '火枪手', '火砲': '手推炮', '火箭車': '火箭推车',
-    '炸藥桶': '爆破兵', '軍團兵': '罗马军', '戰鬥祭司': '牧师战士',
-    '贊皮游擊兵': '蔷琵步兵', '贊皮戰士': '蔷琵战士', '贊皮斥候': '蔷琵侦察兵',
+    '炸藥桶': '爆破兵', '軍團兵': '罗马军', '戰鬥祭司': '牧师战士', '風琴砲': '风琴炮',
+    '贊皮游擊兵': '蔷琵步兵', '贊皮戰士': '蔷琵战士', '贊皮斥候': '蔷琵斥候', '贊皮': '蔷琵',
     '佛萊明民兵': '弗拉芒民兵', '佛萊明': '弗拉芒',
     '軍營': '兵营', '射箭場': '靶场', '兵工廠': '铁匠铺', '攻城器製造所': '攻城武器厂', '市集': '市场',
     '採礦營地': '采矿场', '碼頭': '船坞', '漁船': '捕鱼船', '漁網': '养鱼场', '聚落': '定居点',
     '攻城工程師': '攻城技师',
+    '中型戰艦': '中型战船', '躉船': '趸船',
     '勃根地': '勃艮第', '馬雅': '玛雅', '朝鮮': '高丽', '馬札爾': '马扎尔', '馬利': '马里',
     '柏柏爾': '柏柏尔', '柏柏': '柏柏尔', '曼帕契': '马普切', '匈牙利': '匈牙利', '匈奴': '匈奴', '匈': '匈奴',
-    '阿拉伯': '阿拉伯半岛', '環形要塞': '环形要塞', '要塞': '堡垒', '猶加敦': '尤卡坦', '黃金谷': '金矿谷',
+    '阿拉伯沙漠': '阿拉伯沙漠', '阿拉伯': '阿拉伯半岛', '環形要塞': '环形要塞', '要塞': '堡垒', '猶加敦': '尤卡坦', '黃金谷': '金矿谷',
     '四座湖泊': '四片湖泊', '哈布風': '哈布风暴',
 }
 TERM = re.compile('|'.join(sorted(map(re.escape, GLOSSARY), key=len, reverse=True)))
 # Values copied as they are: ids, file names, numbers and links the code or tests match exactly.
-KEEP = {'id', 'index', 'civs', 'civ', 'map_type', 'video_filename', 'video_url', 'build_ids', 'era', 'url',
+KEEP = {'id', 'index', 'civs', 'civ', 'recommended_for', 'map_type', 'video_filename', 'video_url', 'build_ids', 'era', 'url',
         'population', 'allocation', 'wood', 'food', 'gold', 'stone', 'edition', 'schema_version',
         'reviewed_on', 'map_ids', 'page'}
 MATCHED = {'aliases', 'maps'}  # matched against map names: keep the original and add the Simplified one

@@ -33,7 +33,7 @@ The window prefers a secondary display and remembers its position. You can keep 
 
 ## Build orders and quick references
 
-- **40 build orders**, recommended by civilization and map. Change builds at any time and click a step to mark your place.
+- **45 build orders** in English, Traditional Chinese and Simplified Chinese, with civilization and map recommendations. Search common strategy names, switch builds and click a step to mark your place.
 - **Tactical cards** for worker allocation, upgrades, army transitions and extra TCs. Roman guides separate Feudal, Castle and Imperial play, with branches against archers, cavalry archers and knights.
 - **Arena defense guides** for castle drops and tower rushes, plus a Burgundian economy reference.
 - **28 map guides** covering unusual starts, food sources, fishing, defensive adjustments and team-game coordination.

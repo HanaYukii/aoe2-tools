@@ -1,0 +1,331 @@
+{
+  "reviewed_on": "2026-11-13",
+  "source_url": "https://aoebuddy.com/zh-hant/build-orders",
+  "population": "Villagers plus the starting Scout/Eagle; additional military units and ships are separate.",
+  "decisions": [
+    "Keep existing IDs and the personalized Roman and Burgundian defaults.",
+    "Keep one guide per opening; merge useful differences instead of adding slower population variants.",
+    "Use creator instructions and villager allocations ahead of inconsistent page headers.",
+    "Fishing Lines precedes Castle-age Gillnets; Roman Scorpions save gold only.",
+    "User selected the existing 19-pop, three-MAA deer opening for Romans: three Dark Age lumberjacks, no Dark Age berries, immediate Feudal upgrade; mill after the upgrade starts."
+  ],
+  "counts": {
+    "existing": 19,
+    "merged": 16,
+    "new": 4
+  },
+  "entries": [
+    {
+      "source_id": "02-1-stable-scouts",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/02-1-stable-scouts",
+      "creator": "Sitaux",
+      "original_guide": "https://www.youtube.com/watch?v=jS5gr92wg7Y",
+      "build_id": "hera-2026-10-02",
+      "relation": "merged"
+    },
+    {
+      "source_id": "19-generic-modern-man-at-arms-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/19-generic-modern-man-at-arms-rush",
+      "creator": "Sitaux",
+      "original_guide": "https://www.youtube.com/watch?v=ifOTdD6nscw",
+      "build_id": "hera-2026-10-22",
+      "relation": "merged"
+    },
+    {
+      "source_id": "01-1-range-archers",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/01-1-range-archers",
+      "creator": "Survivalist",
+      "original_guide": "https://www.youtube.com/watch?v=9dYOn2oiTgU",
+      "build_id": "hera-2026-10-01",
+      "relation": "existing"
+    },
+    {
+      "source_id": "11-2-range-archer-flank-team-game",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/11-2-range-archer-flank-team-game",
+      "creator": "Dragonstar",
+      "original_guide": "https://www.youtube.com/watch?v=icudl14VNUE",
+      "build_id": "hera-2026-10-14",
+      "relation": "merged"
+    },
+    {
+      "source_id": "12-fast-castle-boom",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/12-fast-castle-boom",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=Ae2k3ah1mRA",
+      "build_id": "hera-2026-10-15",
+      "relation": "merged"
+    },
+    {
+      "source_id": "40-scout-rush-fast-castle",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/40-scout-rush-fast-castle",
+      "creator": "Sitaux",
+      "original_guide": "https://sitaux.com/practice-your-first-build-order/",
+      "build_id": "hera-2026-10-02",
+      "relation": "merged"
+    },
+    {
+      "source_id": "25-knight-rush-beginner",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/25-knight-rush-beginner",
+      "creator": "Dragonstar",
+      "original_guide": "https://www.youtube.com/watch?v=J0A2cWxPMLg",
+      "build_id": "hera-2026-10-28",
+      "relation": "existing"
+    },
+    {
+      "source_id": "14-fast-castle-into-unique-unit",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/14-fast-castle-into-unique-unit",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=XHtzL4r_PGY",
+      "build_id": "hera-2026-10-17",
+      "relation": "merged"
+    },
+    {
+      "source_id": "35-turk-fast-imperial",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/35-turk-fast-imperial",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=7TVgpsKBxWk",
+      "build_id": "hera-2026-10-39",
+      "relation": "existing"
+    },
+    {
+      "source_id": "30-romans-5-man-at-arms-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/30-romans-5-man-at-arms-rush",
+      "creator": "Hera / Daut",
+      "original_guide": "https://ageofnotes.com/beginners/hera-strategy-guide-2025/",
+      "build_id": "hera-2026-10-33",
+      "relation": "merged"
+    },
+    {
+      "source_id": "32-scouts-into-cavalry-archers",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/32-scouts-into-cavalry-archers",
+      "creator": "Dragonstar",
+      "original_guide": "https://www.youtube.com/watch?v=SN5546QTr5M",
+      "build_id": "hera-2026-10-36",
+      "relation": "existing"
+    },
+    {
+      "source_id": "21-japanese-man-at-arms-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/21-japanese-man-at-arms-rush",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=WKxwOYb589g",
+      "build_id": "hera-2026-10-24",
+      "relation": "merged"
+    },
+    {
+      "source_id": "31-scouts-into-archers",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/31-scouts-into-archers",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=d565j04Jn6E",
+      "build_id": "hera-2026-10-35",
+      "relation": "existing"
+    },
+    {
+      "source_id": "34-teuton-tower-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/34-teuton-tower-rush",
+      "creator": "Dragonstar",
+      "original_guide": "https://www.youtube.com/watch?v=efm0Cp8vRy8",
+      "build_id": "hera-2026-10-38",
+      "relation": "existing"
+    },
+    {
+      "source_id": "41-black-forest-fish-boom",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/41-black-forest-fish-boom",
+      "creator": "Ganji",
+      "original_guide": "https://sitaux.com/black-forest/",
+      "build_id": "black-forest-fish-boom",
+      "relation": "new"
+    },
+    {
+      "source_id": "06-cuman-2-tc-boom",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/06-cuman-2-tc-boom",
+      "creator": "St4rk",
+      "original_guide": "https://www.youtube.com/watch?v=2eSZvky3hEw",
+      "build_id": "hera-2026-10-08",
+      "relation": "merged"
+    },
+    {
+      "source_id": "13-fast-castle-light-cav-relic-control",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/13-fast-castle-light-cav-relic-control",
+      "creator": "Survivalist",
+      "original_guide": "https://www.youtube.com/watch?v=bJKtl1bg50c",
+      "build_id": "hera-2026-10-16",
+      "relation": "merged"
+    },
+    {
+      "source_id": "23-khmer-fast-castle-knights-and-scorpions",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/23-khmer-fast-castle-knights-and-scorpions",
+      "creator": "Sitaux",
+      "original_guide": "https://sitaux.com/the-free-elo-strategy/",
+      "build_id": "hera-2026-10-26",
+      "relation": "merged"
+    },
+    {
+      "source_id": "28-man-at-arms-into-skirms",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/28-man-at-arms-into-skirms",
+      "creator": "St4rk",
+      "original_guide": "https://www.youtube.com/watch?v=ONYiSjug-a4",
+      "build_id": "hera-2026-10-22",
+      "relation": "merged"
+    },
+    {
+      "source_id": "30-romans-fast-castle-double-scorpion",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/30-romans-fast-castle-double-scorpion",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=OvKf2teF004",
+      "build_id": "romans-fast-castle-double-scorpions",
+      "relation": "new"
+    },
+    {
+      "source_id": "05-chinese-fast-feudal",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/05-chinese-fast-feudal",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-07",
+      "relation": "existing"
+    },
+    {
+      "source_id": "17-feudal-drush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/17-feudal-drush",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-20",
+      "relation": "existing"
+    },
+    {
+      "source_id": "03-anti-lame-fast-up-dark-age-advanced",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/03-anti-lame-fast-up-dark-age-advanced",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-03",
+      "relation": "existing"
+    },
+    {
+      "source_id": "37-scout-rush-ciskhan",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/37-scout-rush-ciskhan",
+      "creator": "ciskhan",
+      "original_guide": "https://www.youtube.com/watch?v=MDk-KyJwa1M",
+      "build_id": "hera-2026-10-19",
+      "relation": "merged"
+    },
+    {
+      "source_id": "16-fast-chickens-dark-age",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/16-fast-chickens-dark-age",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-19",
+      "relation": "existing"
+    },
+    {
+      "source_id": "36-generic-man-at-arms-into-skirmishers",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/36-generic-man-at-arms-into-skirmishers",
+      "creator": "AoE Buddy",
+      "original_guide": null,
+      "build_id": "hera-2026-10-31",
+      "relation": "merged"
+    },
+    {
+      "source_id": "39-ethiopian-20-pop-archer-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/39-ethiopian-20-pop-archer-rush",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=T1x0oh8NOKM",
+      "build_id": "hera-2026-10-14",
+      "relation": "merged"
+    },
+    {
+      "source_id": "09-drush-fast-castle",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/09-drush-fast-castle",
+      "creator": "Liereyy",
+      "original_guide": "https://sitaux.com/drush-fast-castle/",
+      "build_id": "hera-2026-10-12",
+      "relation": "existing"
+    },
+    {
+      "source_id": "22-jurchens-fast-castle-fire-lancer-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/22-jurchens-fast-castle-fire-lancer-rush",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=9ZF-vpOUiIE",
+      "build_id": "hera-2026-10-25",
+      "relation": "existing"
+    },
+    {
+      "source_id": "08-double-stable-scouts",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/08-double-stable-scouts",
+      "creator": "Dragonstar",
+      "original_guide": "https://www.youtube.com/watch?v=9mxLeB-nvHg",
+      "build_id": "hera-2026-10-11",
+      "relation": "existing"
+    },
+    {
+      "source_id": "18-fishing-ship-build",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/18-fishing-ship-build",
+      "creator": "Survivalist",
+      "original_guide": "https://www.youtube.com/watch?v=5KBobgUFNdw",
+      "build_id": "hera-2026-10-21",
+      "relation": "existing"
+    },
+    {
+      "source_id": "04-armenian-spear-rush-into-fast-castle-relic-control",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/04-armenian-spear-rush-into-fast-castle-relic-control",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-04",
+      "relation": "existing"
+    },
+    {
+      "source_id": "20-georgians-healing-scout-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/20-georgians-healing-scout-rush",
+      "creator": "Survivalist",
+      "original_guide": "https://www.youtube.com/watch?v=3l2rqXQdt-4",
+      "build_id": "hera-2026-10-23",
+      "relation": "existing"
+    },
+    {
+      "source_id": "24-khmer-super-fast-scout-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/24-khmer-super-fast-scout-rush",
+      "creator": "St4rk",
+      "original_guide": "https://www.youtube.com/watch?v=hL3spWaAgYw",
+      "build_id": "hera-2026-10-27",
+      "relation": "merged"
+    },
+    {
+      "source_id": "29-portuguese-monk-rush-strategy",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/29-portuguese-monk-rush-strategy",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-32",
+      "relation": "existing"
+    },
+    {
+      "source_id": "38-phosphoru-fast-castle-organ-guns",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/38-phosphoru-fast-castle-organ-guns",
+      "creator": "Red_Phosphorus",
+      "original_guide": "https://aoecompanion.com/b/kxnt2j50mm",
+      "build_id": "portuguese-fast-castle-organ-guns",
+      "relation": "new"
+    },
+    {
+      "source_id": "26-korean-spear-skirm-rush",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/26-korean-spear-skirm-rush",
+      "creator": "Hera",
+      "original_guide": null,
+      "build_id": "hera-2026-10-29",
+      "relation": "existing"
+    },
+    {
+      "source_id": "42-lithuanian-four-lakes-fast-castle",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/42-lithuanian-four-lakes-fast-castle",
+      "creator": "Survivalist",
+      "original_guide": "https://www.youtube.com/watch?v=ek7-ojHwBI4",
+      "build_id": "lithuanians-four-lakes-fast-castle",
+      "relation": "new"
+    },
+    {
+      "source_id": "33-scouts-into-skirms",
+      "source_url": "https://aoebuddy.com/zh-hant/build-orders/33-scouts-into-skirms",
+      "creator": "Morley Games",
+      "original_guide": "https://www.youtube.com/watch?v=Ap-j_hbr7h0",
+      "build_id": "hera-2026-10-37",
+      "relation": "existing"
+    }
+  ]
+}

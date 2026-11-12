@@ -17,6 +17,7 @@ def write_fixture(directory):
     for sheet in data['reference_sheets']:
         sheet['build_ids'] = [i for i in sheet['build_ids'] if i != 'burgundians-arena-relics']
     for item in data['builds']:
+        item.pop('recommended_for', None)
         item['title'] = f"測試流程 {item['index']}"
         item['notes'] = '測試筆記'
         item['steps'] = [dict(age='黑暗' if n < 12 else '封建', allocation='1', task=f'測試步驟 {n}',
@@ -36,7 +37,7 @@ class LibraryTests(unittest.TestCase):
 
     def test_parse_complete_guide_and_reject_partial(self):
         self.assertEqual(len(self.builds), 40)
-        self.assertEqual(self.builds[32].page, 69)
+        self.assertEqual(self.builds[32].page, 47)
         self.assertEqual(self.builds[0].steps[0].wood, '4')
         data = read_catalog(self.catalog)
         data['builds'][0]['steps'] = []
@@ -86,8 +87,8 @@ class LibraryTests(unittest.TestCase):
 
     def test_bundled_content_is_complete_without_media(self):
         builds = load_library(self.directory/'does-not-exist')
-        self.assertEqual(len(builds), 41)
-        self.assertEqual(sum(len(b.steps) for b in builds), 953)
+        self.assertEqual(len(builds), 45)
+        self.assertEqual(sum(len(b.steps) for b in builds), 1006)
         self.assertFalse([b for b in read_catalog()['builds'] if 'video_url' in b])  # no member video links
         self.assertTrue(all(b.video is None and b.pdf is None for b in builds))
         self.assertIn('動物配置', read_catalog()['overview'])
@@ -164,7 +165,7 @@ class LibraryTests(unittest.TestCase):
     def test_unreadable_optional_media_does_not_break_builtins(self):
         with patch('build_library.Path.resolve', side_effect=PermissionError('unavailable drive')):
             builds = load_library(self.directory)
-        self.assertEqual(len(builds), 41)
+        self.assertEqual(len(builds), 45)
         self.assertTrue(all(b.video is None for b in builds))
 
     def test_duplicate_ids_and_unsafe_links_are_rejected(self):

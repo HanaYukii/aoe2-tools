@@ -60,7 +60,7 @@ python opponent-civ/build_exe.py
 
 前期流程依文明推薦順序與地圖選取；「換流程」與步驟標記屬於當場對局。流程庫可搜尋、加入或移出推薦，用 ▲▼ 調整順序；個人排序存在本機設定資料夾。
 
-內建資料為 `data/builds.zh-TW.json` 與 `data/builds.en.json`；地圖也有對應的兩份資料。`i18n.py` 依語言選取，`data/ui.en.json` 保存介面譯文。簡中的 `*.zh-CN.json`、`ui.zh-CN.json` 與根目錄 `README.zh-CN.md` 由 `make_zh_cn.py` 從繁中產生，遊戲名詞換成簡中遊戲的官方譯名；改完繁中後執行 `uv run --with opencc-python-reimplemented python opponent-civ/make_zh_cn.py`，不要手改簡中檔。保留流程的固定 ID，避免使用者的推薦順序失效。速查以 `build_ids` 連到前期流程；`civ` 指定文明，或留空並用 `maps` 限定地圖，供所有文明使用。卡片依視窗寬度排成一至三欄，字級自動適配，空間不足時可捲動。
+內建流程為 `data/builds.zh-TW.json`、`data/builds.en.json`、`data/builds.zh-CN.json`；地圖也有對應的三份資料。`i18n.py` 依語言選取，`data/ui.en.json` 保存英文介面譯文。簡中的 `*.zh-CN.json`、`ui.zh-CN.json` 與根目錄 `README.zh-CN.md` 由 `make_zh_cn.py` 從繁中產生，遊戲名詞換成簡中遊戲的官方譯名；改完繁中後執行 `uv run --with opencc-python-reimplemented python opponent-civ/make_zh_cn.py`，不要手改簡中檔。保留流程的固定 ID，避免使用者的推薦順序失效。速查以 `build_ids` 連到前期流程；`civ` 指定文明，或留空並用 `maps` 限定地圖，供所有文明使用。卡片依視窗寬度排成一至三欄，字級自動適配，空間不足時可捲動。
 
 本機影片可由流程庫的「本機影片（選用）…」指定資料夾，以對應檔名辨識；沒有影片不影響內建流程。教材及個人 RP 不放入儲存庫或 EXE。
 

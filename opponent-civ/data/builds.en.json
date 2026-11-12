@@ -230,7 +230,12 @@
       "requires_cavalry": false,
       "video_filename": "37-單射箭場弓兵開局.mp4",
       "recommended_civs": "Britons, Mayans, Ethiopians, Tatars, Vikings",
-      "arrival": "Feudal 9:15"
+      "arrival": "Feudal 9:15",
+      "aliases": [
+        "1-Range Archers",
+        "single range",
+        "one range archers"
+      ]
     },
     {
       "index": 2,
@@ -414,7 +419,7 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "Keep training scouts for pressure or defense.",
+          "task": "Start with three extra Scouts, four including the starting unit; add more while they can trade or control the map.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -430,15 +435,63 @@
           "gold": "",
           "stone": "",
           "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "For an earlier Castle timing, postpone Scout upgrades; establish roughly 10–12 farms and five gold miners.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Near 400 food, ease off new farms and add the blacksmith; click Castle with 800 food and 200 gold, roughly around 29–31 villagers.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "A Knight-transition example is 10 wood, 13 food and 6 gold; add a second stable only if the first Knight remains affordable.",
+          "wood": "10",
+          "food": "13",
+          "gold": "6",
+          "stone": "0",
+          "population": "30"
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Produce the first Knights, fit Bloodlines and cavalry armor, then add a second Town Center once production is secure.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
         }
       ],
-      "notes": "Use mobility to pressure and buy time to wall. Against archer/spear, add skirmishers; against scouts, add your own scouts and a few spears. In extended Feudal play, upgrade 7–8 scouts with Bloodlines and blacksmith techs. On the way up, add Horse Collar and Gold Mining if missing. Two-stable knights are the default; Elite Skirmishers, Light Cavalry, monks or siege depend on the opponent.",
+      "notes": "",
       "page": 7,
       "starter": true,
       "requires_cavalry": true,
       "video_filename": "35-單馬廄斥候開局.mp4",
       "recommended_civs": "Franks, Huns, Lithuanians, Magyars, Malians",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Scout Rush",
+        "3 Scouts → Fast Castle",
+        "single stable",
+        "scout rush",
+        "3 scouts",
+        "three scouts fast castle"
+      ]
     },
     {
       "index": 3,
@@ -596,7 +649,10 @@
       "requires_cavalry": false,
       "video_filename": "20-防偷豬羊快速開局（進階版）.mp4",
       "recommended_civs": "Generic; for openings without early infantry",
-      "arrival": "Feudal 8:25"
+      "arrival": "Feudal 8:25",
+      "aliases": [
+        "Anti-Lame Fast Up Dark Age (Advanced)"
+      ]
     },
     {
       "index": 4,
@@ -886,7 +942,10 @@
       "requires_cavalry": false,
       "video_filename": "",
       "recommended_civs": "Armenians",
-      "arrival": "Feudal 12:10  /  Castle 15:40"
+      "arrival": "Feudal 12:10  /  Castle 15:40",
+      "aliases": [
+        "Armenian Spear Rush Into Fast Castle Relic Control"
+      ]
     },
     {
       "index": 5,
@@ -1449,7 +1508,10 @@
       "requires_cavalry": false,
       "video_filename": "28-中國通用開局.mp4",
       "recommended_civs": "Chinese",
-      "arrival": "Feudal 8:25"
+      "arrival": "Feudal 8:25",
+      "aliases": [
+        "Chinese Fast Feudal"
+      ]
     },
     {
       "index": 8,
@@ -1629,7 +1691,10 @@
       "requires_cavalry": false,
       "video_filename": "23-庫曼封建雙 TC 爆經濟.mp4",
       "recommended_civs": "Cumans",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Cuman  Feudal 2-TC Boom"
+      ]
     },
     {
       "index": 9,
@@ -2419,7 +2484,10 @@
       "requires_cavalry": true,
       "video_filename": "21-雙馬廄斥候.mp4",
       "recommended_civs": "Franks, Huns, Magyars, Lithuanians, Persians",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Double Stable Scouts"
+      ]
     },
     {
       "index": 12,
@@ -2667,7 +2735,10 @@
       "requires_cavalry": false,
       "video_filename": "15-民兵直城.mp4",
       "recommended_civs": "Britons, Ethiopians, Italians, Mayans, Vikings",
-      "arrival": "Feudal 12:35  /  Castle 16:05"
+      "arrival": "Feudal 12:35  /  Castle 16:05",
+      "aliases": [
+        "Drush Fast Castle → Crossbow"
+      ]
     },
     {
       "index": 13,
@@ -2934,130 +3005,68 @@
     {
       "index": 14,
       "id": "hera-2026-10-14",
-      "title": "Ethiopian two-range archers (team games)",
+      "title": "Team-game Flank: Two-range Archers",
       "population": "19",
-      "civs": [
-        "ethiopians"
-      ],
+      "civs": [],
       "map_type": "open",
       "advanced": false,
       "steps": [
         {
           "age": "Dark Age",
-          "allocation": "6",
-          "task": "6 villagers on sheep.",
-          "wood": "",
-          "food": "6",
-          "gold": "",
-          "stone": "",
-          "population": "7"
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "2",
-          "task": "2 villagers on wood; one builds a house first.",
-          "wood": "2",
-          "food": "",
-          "gold": "",
-          "stone": "",
+          "allocation": "-",
+          "task": "Keep the first eight villagers on food, bring an early boar and secure sheep before pushing deer.",
+          "wood": "0",
+          "food": "8",
+          "gold": "0",
+          "stone": "0",
           "population": "9"
         },
         {
           "age": "Dark Age",
-          "allocation": "1",
-          "task": "1 villager lures a boar.",
-          "wood": "",
-          "food": "7",
-          "gold": "",
-          "stone": "",
-          "population": "10"
-        },
-        {
-          "age": "Dark Age",
           "allocation": "-",
-          "task": "Recommended: push 1–3 deer after finding all sheep.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "6",
-          "task": "Next 6 villagers take hunt under the TC; lure the second boar during this stage.",
-          "wood": "",
-          "food": "13",
-          "gold": "",
-          "stone": "",
-          "population": "16"
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "1",
-          "task": "1 villager builds a mining camp on gold.",
-          "wood": "",
-          "food": "",
-          "gold": "1",
-          "stone": "",
-          "population": "17"
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "2",
-          "task": "Next 2 villagers take hunt under the TC.",
-          "wood": "",
-          "food": "15",
-          "gold": "",
-          "stone": "",
-          "population": "19"
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "-",
-          "task": "Research Loom.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "-",
-          "task": "Click Feudal Age; target arrival 8:50.",
-          "wood": "2",
-          "food": "15",
-          "gold": "1",
-          "stone": "0",
-          "population": "19"
-        },
-        {
-          "age": "To Feudal",
-          "allocation": "-",
-          "task": "Move 7 villagers from under the TC to the lumber camp.",
-          "wood": "9",
+          "task": "Villagers 9–11 take wood while an existing hunter brings the second boar.",
+          "wood": "3",
           "food": "8",
+          "gold": "0",
+          "stone": "0",
+          "population": "12"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 12 builds a house, then joins food.",
+          "wood": "3",
+          "food": "9",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 13 establishes the gold camp.",
+          "wood": "3",
+          "food": "9",
+          "gold": "1",
+          "stone": "0",
+          "population": "14"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add five food villagers and advance at 19 population; include Loom when safety requires it.",
+          "wood": "3",
+          "food": "14",
           "gold": "1",
           "stone": "0",
           "population": "19"
         },
         {
-          "age": "To Feudal",
+          "age": "Advancing to Feudal",
           "allocation": "-",
-          "task": "Move 2 villagers from under the TC to build a barracks and house.",
-          "wood": "9",
-          "food": "6",
-          "gold": "1",
-          "stone": "0",
-          "population": "19"
-        },
-        {
-          "age": "To Feudal",
-          "allocation": "-",
-          "task": "Move 2 villagers from under the TC to straggler trees.",
-          "wood": "11",
-          "food": "4",
+          "task": "Reach eight lumberjacks, including two stragglers; build barracks and housing, reserving 350 wood for the ranges.",
+          "wood": "8",
+          "food": "9",
           "gold": "1",
           "stone": "0",
           "population": "19"
@@ -3065,19 +3074,9 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "Build 2 ranges and start archers.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "-",
-          "task": "Use one range builder to build a blacksmith; the other returns to food.",
-          "wood": "11",
-          "food": "5",
+          "task": "Open both ranges and a Spearman, protecting villager and Archer production; Ethiopians can fit Double-Bit Axe earlier with the age-up resources.",
+          "wood": "8",
+          "food": "9",
           "gold": "1",
           "stone": "0",
           "population": "19"
@@ -3085,87 +3084,17 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "After the blacksmith, continue houses and small resource walls.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "7",
-          "task": "7 villagers on gold.",
-          "wood": "",
-          "food": "",
-          "gold": "8",
-          "stone": "",
-          "population": "26"
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "-",
-          "task": "Move 2 straggler-tree villagers to food under the TC.",
-          "wood": "9",
-          "food": "7",
-          "gold": "8",
+          "task": "Add the blacksmith and grow to seven gold miners while both ranges produce.",
+          "wood": "8",
+          "food": "9",
+          "gold": "7",
           "stone": "0",
-          "population": "26"
+          "population": "25"
         },
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "Research Fletching and attack with your archers.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "6",
-          "task": "6 villagers on berries.",
-          "wood": "",
-          "food": "13",
-          "gold": "",
-          "stone": "",
-          "population": "32"
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "-",
-          "task": "After sheep run out, gradually add farms up to 7–8.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "2",
-          "task": "2 villagers on wood.",
-          "wood": "11",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": "34"
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "3",
-          "task": "3 villagers on gold.",
-          "wood": "",
-          "food": "",
-          "gold": "11",
-          "stone": "",
-          "population": "37"
-        },
-        {
-          "age": "Feudal Age",
-          "allocation": "-",
-          "task": "Build a market; sell stone to reach Castle Age.",
+          "task": "Join the first four Archers, Spearman and Scout with Fletching and coordinate with your pocket.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3175,7 +3104,7 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "If still short of food, keep training villagers for the resources you need.",
+          "task": "Keep seven miners, build toward eight foragers and seven farms, then add farmers.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3185,7 +3114,7 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "Finish walls if possible; otherwise ensure adequate defense.",
+          "task": "Around 14–15 Archers, consider a market-assisted Castle timing; sell stone only for a committed one-TC attack.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3193,49 +3122,9 @@
           "population": ""
         },
         {
-          "age": "Feudal Age",
+          "age": "Advancing to Castle",
           "allocation": "-",
-          "task": "Click Castle Age.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "To Castle",
-          "allocation": "-",
-          "task": "Research Double-Bit Axe and Gold Mining.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "To Castle",
-          "allocation": "-",
-          "task": "Optional: research Horse Collar.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "To Castle",
-          "allocation": "-",
-          "task": "Add a second lumber camp; move 6 villagers to another woodline.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "To Castle",
-          "allocation": "-",
-          "task": "Keep pressuring with archers without throwing them away.",
+          "task": "Build toward 11–13 gold miners and about ten farms; fit Double-Bit Axe and Gold Mining around production.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3245,7 +3134,7 @@
         {
           "age": "Castle Age",
           "allocation": "-",
-          "task": "Research Crossbowman and Bodkin Arrow.",
+          "task": "Take Crossbowman and Bodkin Arrow, then a university for Ballistics; preserve roughly 15 or more Crossbowmen.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3255,7 +3144,37 @@
         {
           "age": "Castle Age",
           "allocation": "-",
-          "task": "Research Bow Saw.",
+          "task": "Fit Wheelbarrow and Horse Collar around the military timing rather than delaying the first Crossbow push.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "With pocket support, a one-TC Imperial follow-up can use roughly 20 farms and 35–40 Crossbowmen as reference points.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Imperial",
+          "allocation": "-",
+          "task": "Expand to four ranges during the age-up; add Thumb Ring and Gold Shaft Mining where available.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Imperial Age",
+          "allocation": "-",
+          "task": "Complete the available ranged upgrades and Chemistry, then expand the economy when the frontline is secure.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3263,13 +3182,28 @@
           "population": ""
         }
       ],
-      "notes": "A tight team-game flank opening, easiest with Ethiopians; slower civs may need 20 pop. Trade economy for early archer numbers and use stone sales for Castle. Pocket scouts help against skirmishers. Castle options: Ballistics for pressure, siege, monks, or buy back 100 stone to add a TC.",
+      "notes": "",
       "page": 31,
       "starter": false,
       "requires_cavalry": false,
       "video_filename": "30-衣索比亞團戰雙射箭場弓兵.mp4",
-      "recommended_civs": "Ethiopians; adapt for other strong archer civilizations",
-      "arrival": "Feudal 8:50"
+      "recommended_civs": "Britons, Ethiopians, Mayans, Vietnamese; check the ranged tech tree for other civilizations",
+      "arrival": "Feudal ~8:25–8:50, depending on Loom",
+      "recommended_for": [
+        "britons",
+        "ethiopians",
+        "mayans",
+        "vietnamese",
+        "tatars",
+        "magyars"
+      ],
+      "aliases": [
+        "2-Range Archer Flank: Team Game",
+        "Ethiopian  Archer Rush",
+        "two range",
+        "flank archers",
+        "Ethiopian two range"
+      ]
     },
     {
       "index": 15,
@@ -3537,7 +3471,10 @@
       "requires_cavalry": false,
       "video_filename": "38-直城純爆經濟.mp4",
       "recommended_civs": "Burgundians, Poles, Bohemians, Portuguese, Bengalis",
-      "arrival": "Feudal 10:30  /  Castle 14:00"
+      "arrival": "Feudal 10:30  /  Castle 14:00",
+      "aliases": [
+        "Fast Castle Boom"
+      ]
     },
     {
       "index": 16,
@@ -3815,7 +3752,10 @@
       "requires_cavalry": true,
       "video_filename": "27-競技場輕騎加和尚搶聖物.mp4",
       "recommended_civs": "Generic; Arena and other closed maps",
-      "arrival": "Feudal 11:20  /  Castle 14:50"
+      "arrival": "Feudal 11:20  /  Castle 14:50",
+      "aliases": [
+        "Arena 27+2 Light Cav & Relic Boom"
+      ]
     },
     {
       "index": 17,
@@ -4053,7 +3993,10 @@
       "requires_cavalry": false,
       "video_filename": "31-直城接城堡兵.mp4",
       "recommended_civs": "Spanish, Turks, Mayans, Burgundians, Mongols",
-      "arrival": "Feudal 11:20  /  Castle 14:50"
+      "arrival": "Feudal 11:20  /  Castle 14:50",
+      "aliases": [
+        "Fast Castle into Food & Gold Unique Unit"
+      ]
     },
     {
       "index": 18,
@@ -4401,6 +4344,16 @@
           "gold": "",
           "stone": "",
           "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "For Scouts, use two stable builders on reaching Feudal, take Double-Bit Axe and open Scouts plus a Spearman; fit Horse Collar when affordable.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
         }
       ],
       "notes": "Treat this as a Dark Age module for chicken Arabia, then connect to your chosen opening. Plan about 6 berry villagers in early Feudal to bridge into farms. For MAA/Feudal militia, use 20 pop, extra wood and 2 gold miners. Chicken gathering ends early in Feudal; move those villagers onto safer food afterward.",
@@ -4409,7 +4362,13 @@
       "requires_cavalry": false,
       "video_filename": "14-雞圖快速黑暗開局.mp4",
       "recommended_civs": "Generic; Arabia with chickens",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Scout Rush  chicken",
+        "Fast Chickens Dark Age",
+        "chicken scouts",
+        "scout rush chicken"
+      ]
     },
     {
       "index": 20,
@@ -4637,7 +4596,10 @@
       "requires_cavalry": false,
       "video_filename": "36-快速封建民兵快攻.mp4",
       "recommended_civs": "Malians, Lithuanians, Japanese, Britons, Vikings",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Feudal Drush"
+      ]
     },
     {
       "index": 21,
@@ -4765,7 +4727,10 @@
       "requires_cavalry": false,
       "video_filename": "34-通用碼頭漁船開局.mp4",
       "recommended_civs": "Italians, Japanese, Vikings, Lithuanians, Malians",
-      "arrival": "Feudal 9:15"
+      "arrival": "Feudal 9:15",
+      "aliases": [
+        "Generic  Hybrid Opening"
+      ]
     },
     {
       "index": 22,
@@ -5015,15 +4980,29 @@
           "gold": "",
           "stone": "",
           "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Keep roughly four gold miners for Archers; light Skirmisher support allows less gold and more farms without extending the infantry investment.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
         }
       ],
-      "notes": "Push at least 2 deer for this tight MAA opening. Archers are the natural follow-up because early food income is limited. Use a defensive tower if caught before the transition is ready. Wall and aim for Crossbowman timing; add another range or stable only if the map or pressure calls for it. Reassign berries and refresh inefficient lumber camps as resources run out.",
+      "notes": "",
       "page": 47,
       "starter": true,
       "requires_cavalry": false,
       "video_filename": "24-新版裝甲快攻.mp4",
       "recommended_civs": "Generic; push at least 2 deer",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Man-at-Arms Rush",
+        "MAA into Archers / Skirmishers"
+      ]
     },
     {
       "index": 23,
@@ -5353,7 +5332,10 @@
       "requires_cavalry": false,
       "video_filename": "",
       "recommended_civs": "Georgians",
-      "arrival": "Feudal 8:00"
+      "arrival": "Feudal 8:00",
+      "aliases": [
+        "Georgians  Fast Scout Rush"
+      ]
     },
     {
       "index": 24,
@@ -5623,7 +5605,10 @@
       "requires_cavalry": false,
       "video_filename": "32-日本快速裝甲.mp4",
       "recommended_civs": "Japanese",
-      "arrival": "Feudal 8:25"
+      "arrival": "Feudal 8:25",
+      "aliases": [
+        "Japanese  MAA into Archers"
+      ]
     },
     {
       "index": 25,
@@ -5907,7 +5892,10 @@
       "requires_cavalry": false,
       "video_filename": "10-女真直城火矛快攻.mp4",
       "recommended_civs": "Jurchens, Koreans, Vietnamese, Chinese, Khitans",
-      "arrival": "Feudal 10:30  /  Castle 14:00"
+      "arrival": "Feudal 10:30  /  Castle 14:00",
+      "aliases": [
+        "Fast Castle into Fire Lancers"
+      ]
     },
     {
       "index": 26,
@@ -6227,7 +6215,10 @@
       "requires_cavalry": false,
       "video_filename": "08-高棉直城騎士加弩砲.mp4",
       "recommended_civs": "Khmer",
-      "arrival": "Feudal 10:55"
+      "arrival": "Feudal 10:55",
+      "aliases": [
+        "Khmer Fast Castle: Knights & Scorpions"
+      ]
     },
     {
       "index": 27,
@@ -6397,7 +6388,10 @@
       "requires_cavalry": false,
       "video_filename": "09-高棉極速斥候.mp4",
       "recommended_civs": "Khmer",
-      "arrival": "Feudal 7:35"
+      "arrival": "Feudal 7:35",
+      "aliases": [
+        "Khmer  Fast Scouts → Knights"
+      ]
     },
     {
       "index": 28,
@@ -6685,7 +6679,10 @@
       "requires_cavalry": true,
       "video_filename": "19-雙馬廄騎士快攻（新手版）.mp4",
       "recommended_civs": "Franks, Magyars, Slavs, Berbers, Huns",
-      "arrival": "Feudal 11:45  /  Castle 16:05"
+      "arrival": "Feudal 11:45  /  Castle 16:05",
+      "aliases": [
+        "Fast Castle Knights"
+      ]
     },
     {
       "index": 29,
@@ -6957,7 +6954,10 @@
       "requires_cavalry": false,
       "video_filename": "29-槍兵加矛兵快攻.mp4",
       "recommended_civs": "Koreans, Byzantines, Lithuanians",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Korean Spear Skirm Rush"
+      ]
     },
     {
       "index": 30,
@@ -7435,7 +7435,10 @@
       "requires_cavalry": false,
       "video_filename": "13-裝甲轉矛兵.mp4",
       "recommended_civs": "No specific civilization recommended",
-      "arrival": "Feudal 9:15"
+      "arrival": "Feudal 9:15",
+      "aliases": [
+        "Generic Man-at-Arms into Skirmishers"
+      ]
     },
     {
       "index": 32,
@@ -7745,13 +7748,16 @@
       "requires_cavalry": false,
       "video_filename": "06-葡萄牙和尚快攻.mp4",
       "recommended_civs": "Portuguese",
-      "arrival": "Feudal 9:40  /  Castle 13:10"
+      "arrival": "Feudal 9:40  /  Castle 13:10",
+      "aliases": [
+        "Portuguese Monk Rush Strategy"
+      ]
     },
     {
       "index": 33,
       "id": "hera-2026-10-33",
-      "title": "Roman five men-at-arms rush",
-      "population": "20",
+      "title": "Roman Three Men-at-Arms Rush",
+      "population": "19",
       "civs": [
         "romans"
       ],
@@ -7760,48 +7766,38 @@
       "steps": [
         {
           "age": "Dark Age",
-          "allocation": "6",
-          "task": "6 villagers on sheep.",
-          "wood": "",
+          "allocation": "-",
+          "task": "Start with six shepherds.",
+          "wood": "0",
           "food": "6",
-          "gold": "",
-          "stone": "",
+          "gold": "0",
+          "stone": "0",
           "population": "7"
         },
         {
           "age": "Dark Age",
-          "allocation": "3",
-          "task": "3 villagers on wood.",
+          "allocation": "-",
+          "task": "Villagers 7–9 establish the first lumber camp.",
           "wood": "3",
-          "food": "",
-          "gold": "",
-          "stone": "",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
           "population": "10"
         },
         {
           "age": "Dark Age",
-          "allocation": "2",
-          "task": "2 villagers on boar.",
-          "wood": "",
-          "food": "8",
-          "gold": "",
-          "stone": "",
-          "population": "12"
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "1",
-          "task": "1 villager builds a house, then a mill on berries.",
-          "wood": "",
-          "food": "9",
-          "gold": "",
-          "stone": "",
-          "population": "13"
+          "allocation": "-",
+          "task": "Villager 10 brings the first boar.",
+          "wood": "3",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "11"
         },
         {
           "age": "Dark Age",
           "allocation": "-",
-          "task": "When the first boar has about half its food left, send a hunter to lure the second.",
+          "task": "Push at least two deer; delay berries and the mill through Dark Age, reserving wood for barracks and the mining camp.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7810,43 +7806,33 @@
         },
         {
           "age": "Dark Age",
-          "allocation": "4",
-          "task": "4 villagers on berries.",
-          "wood": "",
-          "food": "13",
-          "gold": "",
-          "stone": "",
+          "allocation": "-",
+          "task": "Villagers 11–15 gather boar and deer; bring the next boar before food under the Town Center runs out.",
+          "wood": "3",
+          "food": "12",
+          "gold": "0",
+          "stone": "0",
+          "population": "16"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 16 builds the barracks, then the next house.",
+          "wood": "3",
+          "food": "12",
+          "gold": "0",
+          "stone": "0",
           "population": "17"
         },
         {
           "age": "Dark Age",
-          "allocation": "1",
-          "task": "1 villager builds a barracks at the front of your base, then a house. Reserve wood for a mining camp; chicken starts may need another 100 wood for a mill.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "Dark Age",
-          "allocation": "2",
-          "task": "2 villagers on wood.",
-          "wood": "5",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": "20"
-        },
-        {
-          "age": "Dark Age",
           "allocation": "-",
-          "task": "As you prepare Loom and have food for the Feudal click, move 2 food villagers to gold. Long-distance mine nearby gold if camp wood is short.",
-          "wood": "5",
-          "food": "11",
-          "gold": "2",
+          "task": "Villagers 17–18 take TC food; keep three lumberjacks and one builder.",
+          "wood": "3",
+          "food": "14",
+          "gold": "0",
           "stone": "0",
-          "population": "20"
+          "population": "19"
         },
         {
           "age": "Dark Age",
@@ -7861,37 +7847,37 @@
         {
           "age": "Dark Age",
           "allocation": "-",
-          "task": "Click Feudal Age; target arrival 9:15.",
-          "wood": "5",
-          "food": "11",
+          "task": "Advance at 19 population, with an ideal Feudal arrival around 8:50.",
+          "wood": "3",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "19"
+        },
+        {
+          "age": "Advancing to Feudal",
+          "allocation": "-",
+          "task": "As the age-up starts, send the barracks builder and one food villager to gold; nearby gold can be long-mined until the camp is funded.",
+          "wood": "3",
+          "food": "13",
           "gold": "2",
           "stone": "0",
-          "population": "20"
+          "population": "19"
         },
         {
-          "age": "To Feudal",
+          "age": "Advancing to Feudal",
           "allocation": "-",
-          "task": "Move 2 food villagers to wood.",
-          "wood": "7",
-          "food": "9",
+          "task": "Move five hunters to wood for roughly 8 wood, 8 food and 2 gold.",
+          "wood": "8",
+          "food": "8",
           "gold": "2",
           "stone": "0",
-          "population": "20"
+          "population": "19"
         },
         {
-          "age": "To Feudal",
+          "age": "Advancing to Feudal",
           "allocation": "-",
-          "task": "Train 3 militia first and move out if safe; reinforce with the next 2 without delaying the MAA upgrade.",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "To Feudal",
-          "allocation": "-",
-          "task": "When hunt under the TC runs out, chop stragglers first, then gradually reach 5 farms.",
+          "task": "Train three Militia and send them forward when safe; reserve 100 food and 40 gold for Man-at-Arms rather than waiting at home for the upgrade.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7901,7 +7887,7 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "Research Man-at-Arms on reaching Feudal. If tight on resources, prioritize upgrading the first 3; aim for 5 in the first wave.",
+          "task": "Research Man-at-Arms immediately: a clean reference is 8:50 start, 9:30 completion, with three infantry in the first wave.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7912,6 +7898,16 @@
           "age": "Feudal Age",
           "allocation": "-",
           "task": "Get Double-Bit Axe first. Add Horse Collar once defense is stable and resources allow; it need not precede every farm.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "After starting Man-at-Arms, add the 100-wood mill at safe chickens or berries; once hunt runs out, move those villagers to straggler trees, then work toward five farms.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7991,7 +7987,7 @@
         {
           "age": "Feudal Age",
           "allocation": "-",
-          "task": "After 5 MAA, keep 2 on gold. If stopping MAA, upgrades are covered and 200 gold is banked, temporarily drop to 1. Check gold at about 400 food.",
+          "task": "After the opening MAA, keep 2 on gold. If stopping MAA, upgrades are covered and 200 gold is banked, temporarily drop to 1. Check gold at about 400 food.",
           "wood": "",
           "food": "",
           "gold": "",
@@ -8050,12 +8046,18 @@
         }
       ],
       "notes": "",
-      "page": 69,
+      "page": 47,
       "starter": false,
       "requires_cavalry": false,
-      "video_filename": "07-羅馬五裝甲快攻.mp4",
+      "video_filename": "24-新版裝甲快攻.mp4",
       "recommended_civs": "Romans",
-      "arrival": "Feudal 9:15"
+      "arrival": "Feudal ~8:50 / Man-at-Arms ~9:30",
+      "aliases": [
+        "Roman deer opening without Dark Age berries",
+        "Romans Men-at-Arms Rush",
+        "Roman MAA",
+        "three men-at-arms"
+      ]
     },
     {
       "index": 34,
@@ -8633,7 +8635,10 @@
       "requires_cavalry": true,
       "video_filename": "17-斥候轉弓兵.mp4",
       "recommended_civs": "Chinese, Huns, Malians, Portuguese",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Scouts → Archers"
+      ]
     },
     {
       "index": 36,
@@ -8971,7 +8976,10 @@
       "requires_cavalry": true,
       "video_filename": "22-斥候轉馬弓.mp4",
       "recommended_civs": "Huns, Mongols, Magyars, Japanese, Tatars",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Scouts → Cavalry Archers"
+      ]
     },
     {
       "index": 37,
@@ -9269,7 +9277,10 @@
       "requires_cavalry": true,
       "video_filename": "11-斥候轉矛兵.mp4",
       "recommended_civs": "Franks, Huns, Malians, Lithuanians",
-      "arrival": "Feudal 8:50"
+      "arrival": "Feudal 8:50",
+      "aliases": [
+        "Scouts → Skirmishers"
+      ]
     },
     {
       "index": 38,
@@ -9479,7 +9490,10 @@
       "requires_cavalry": false,
       "video_filename": "12-條頓塔攻.mp4",
       "recommended_civs": "Teutons",
-      "arrival": "Feudal 8:25"
+      "arrival": "Feudal 8:25",
+      "aliases": [
+        "Teuton Tower Rush"
+      ]
     },
     {
       "index": 39,
@@ -9809,7 +9823,10 @@
       "requires_cavalry": false,
       "video_filename": "33-土耳其直帝.mp4",
       "recommended_civs": "Turks",
-      "arrival": "Feudal 12:35  /  Castle 16:05  /  Imperial 20:05"
+      "arrival": "Feudal 12:35  /  Castle 16:05  /  Imperial 20:05",
+      "aliases": [
+        "Turk Fast Imperial"
+      ]
     },
     {
       "index": 40,
@@ -10329,7 +10346,739 @@
       "requires_cavalry": true,
       "video_filename": "",
       "recommended_civs": "Burgundians",
-      "arrival": "Feudal 11:20  /  Castle 14:50"
+      "arrival": "Feudal 11:20  /  Castle 14:50",
+      "aliases": [
+        "Burgundian relic control",
+        "Burgundian light cavalry"
+      ]
+    },
+    {
+      "index": 42,
+      "id": "black-forest-fish-boom",
+      "title": "Black Forest Fish Boom",
+      "population": "26＋2",
+      "civs": [],
+      "map_type": "water",
+      "advanced": false,
+      "steps": [
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Start six shepherds and confirm the wall position and a safe pond.",
+          "wood": "0",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "7"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villagers 7–11 work from one lumber camp.",
+          "wood": "5",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "12"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 12 builds the dock, then takes wood; aim for four or five Dark Age Fishing Ships.",
+          "wood": "6",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Use villager 13 for the first boar.",
+          "wood": "6",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "14"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add three hunters under the Town Center.",
+          "wood": "6",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "17"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 17 brings the next boar; take extra boars only with control of the entrance.",
+          "wood": "6",
+          "food": "11",
+          "gold": "0",
+          "stone": "0",
+          "population": "18"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add four hunters; extra boars and deer can let berries wait.",
+          "wood": "6",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "22"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villagers 22–25 establish a second woodline.",
+          "wood": "10",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "26"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Transfer two lumberjacks to gold and advance with 25 villagers; ships are separate. Fit Loom to the walling risk.",
+          "wood": "8",
+          "food": "15",
+          "gold": "2",
+          "stone": "0",
+          "population": "26"
+        },
+        {
+          "age": "Advancing to Feudal",
+          "allocation": "-",
+          "task": "Keep the existing fishing fleet working and finish the wall before expanding docks.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Train two lumberjacks, build market and blacksmith, and secure the age-up food and gold.",
+          "wood": "10",
+          "food": "15",
+          "gold": "2",
+          "stone": "0",
+          "population": "28"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "After the Castle click, fit Double-Bit Axe and Fishing Lines without cutting into the TC and fish-trap budget.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "Move exhausted hunters toward wood while reserving food for the coming three-TC production.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add two Town Centers and Bow Saw; once Fishing Lines is complete, fit Gillnets when the budget allows.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Initially rally the three Town Centers toward wood and expand progressively to two, then up to four docks.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Pair each extra ship with 100 wood for its trap; stop adding ships when trap construction cannot keep pace.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Fit Wheelbarrow after three-TC production settles; safe fish traps can delay a large farm investment.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "A practice reference is roughly 100–110 villagers plus ships at 22 minutes; adapt military spending to the frontline.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add a fifth dock only when the current docks, traps and Town Centers are funded; choose military and Imperial timing from the game.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": false,
+      "video_filename": "",
+      "recommended_civs": "Any civilization with a secure pond; Japanese, Malay, Burgundians, Celts",
+      "arrival": "Castle ~15:40–16:10; add 4–5 Dark Age Fishing Ships",
+      "aliases": [
+        "BF fish boom",
+        "fish traps"
+      ]
+    },
+    {
+      "index": 43,
+      "id": "romans-fast-castle-double-scorpions",
+      "title": "Romans Fast Castle into Double-workshop Scorpions",
+      "population": "20＋1",
+      "civs": [
+        "romans"
+      ],
+      "map_type": "open",
+      "advanced": true,
+      "steps": [
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Keep the first seven villagers on food and bring in an early boar.",
+          "wood": "0",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "8"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villagers 8–10 establish housing and the lumber camp; push deer to support food income.",
+          "wood": "3",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "11"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add two hunters and bring the next boar with an existing food villager.",
+          "wood": "3",
+          "food": "9",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Establish five foragers; berries and hunt must carry the early age-up.",
+          "wood": "3",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "18"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add two lumberjacks and advance at 20 population, leaving Loom for Feudal Age.",
+          "wood": "5",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "20"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Train one food villager; build the market with three villagers and blacksmith with one, then research Loom.",
+          "wood": "5",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Sell the starting 200 stone for the Castle click; buy food only if needed. This is a one-TC commitment.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "Set up 10 wood, 5 food and 5 gold; fit Double-Bit Axe around the two-workshop wood budget.",
+          "wood": "10",
+          "food": "5",
+          "gold": "5",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "Around halfway to Castle, send two foragers along a flank; use home workshops if the route is unsafe.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Place the two workshops and wall the builders into a safe pocket; defend first if the forward is denied.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Keep the workshops producing. Roman Scorpions save gold, not wood; budget market purchases and repairs.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "A small group can clear light units; around six or seven Scorpions, consider a Ram. Answer enemy Mangonels first.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Deny production and resources before committing onto the Town Center; keep the builders available for repairs.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": false,
+      "video_filename": "",
+      "recommended_civs": "",
+      "arrival": "Feudal ~8:50 / Castle ~12:20–13:00",
+      "aliases": [
+        "Romans  FC Double Scorpions",
+        "Roman double siege",
+        "double workshop",
+        "YouPudding"
+      ]
+    },
+    {
+      "index": 44,
+      "id": "portuguese-fast-castle-organ-guns",
+      "title": "Portuguese Fast Castle into Organ Guns",
+      "population": "23＋0–2",
+      "civs": [
+        "portuguese"
+      ],
+      "map_type": "open",
+      "advanced": true,
+      "steps": [
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Open with two houses and six shepherds.",
+          "wood": "0",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "7"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 7 brings the first boar.",
+          "wood": "0",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "8"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villagers 8–11 establish wood, add housing and use short walls back toward the Town Center.",
+          "wood": "4",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "12"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add five hunters and keep the second boar and safe deer flowing.",
+          "wood": "4",
+          "food": "12",
+          "gold": "0",
+          "stone": "0",
+          "population": "17"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Start the mill with villager 17 and transfer food villagers until roughly six work berries.",
+          "wood": "4",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "19"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add four new stone miners plus two food villagers, wall wood and stone, then take Loom and advance at 23 population.",
+          "wood": "4",
+          "food": "12",
+          "gold": "0",
+          "stone": "6",
+          "population": "23"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Build the market with two villagers and blacksmith with one; train up to two villagers only if the timing remains safe.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Use the market for the age-up, but check that any stone sale still leaves a path to 650 by Castle Age.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "A defensive tower can keep the stone accessible; if it is denied, sell other resources and accept a later timing.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "Secure 650 stone while keeping berries, wood and stone accessible; postpone booming and economy upgrades.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Place a defensive castle covering stone and wood where possible, then move most miners toward wood and gold.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Maintain Organ Gun production; an initial pair can cover each other while denying outer resources.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Against a sealed stone wall, consider a Petard around the third or fourth castle production cycle.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Add a workshop: Mangonels support the ranged fight, while protected Rams can force buildings.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Against Mangonels, a monastery with Sanctity and Redemption is an option if the gold budget supports it.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Resume a larger farm economy after the push has the counter-units and technology it needs.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": false,
+      "video_filename": "",
+      "recommended_civs": "",
+      "arrival": "Castle ~14:00–14:30; train 0–2 Feudal villagers",
+      "aliases": [
+        "Fast Castle → Organ Guns",
+        "organ gun",
+        "organ guns",
+        "Phosphoru"
+      ]
+    },
+    {
+      "index": 45,
+      "id": "lithuanians-four-lakes-fast-castle",
+      "title": "Lithuanian Four Lakes Fast Castle",
+      "population": "21＋2",
+      "civs": [
+        "lithuanians"
+      ],
+      "map_type": "water",
+      "advanced": false,
+      "steps": [
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "After two houses, put the first five villagers on wood; use the Lithuanian food reserve and locate the home pond.",
+          "wood": "5",
+          "food": "0",
+          "gold": "0",
+          "stone": "0",
+          "population": "6"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villager 6 takes shore fish, builds the dock at 150 wood, walls into safety and returns to fishing.",
+          "wood": "5",
+          "food": "1",
+          "gold": "0",
+          "stone": "0",
+          "population": "7"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villagers 7–10 take sheep; add ships at 75 wood while budgeting housing for both production queues.",
+          "wood": "5",
+          "food": "5",
+          "gold": "0",
+          "stone": "0",
+          "population": "11"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add two lumberjacks and secure the house before the second ship.",
+          "wood": "7",
+          "food": "5",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Bring the first boar with villager 13.",
+          "wood": "7",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "14"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Add four hunters and the next boar; use wood villagers for housing that helps close the base.",
+          "wood": "7",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "18"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Villagers 18–20 take wood; delay the second lumber camp.",
+          "wood": "10",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "Dark Age",
+          "allocation": "-",
+          "task": "Take Loom and advance with 20 villagers: 21 population, plus roughly seven Dark Age Fishing Ships.",
+          "wood": "10",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "Advancing to Feudal",
+          "allocation": "-",
+          "task": "Transfer three exhausted hunters to gold and start the barracks around 60% of the age-up.",
+          "wood": "10",
+          "food": "7",
+          "gold": "3",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "Train two food villagers; use one builder for the blacksmith and two for the stable.",
+          "wood": "10",
+          "food": "9",
+          "gold": "3",
+          "stone": "0",
+          "population": "23"
+        },
+        {
+          "age": "Feudal Age",
+          "allocation": "-",
+          "task": "If wood is short, finish the blacksmith first, then build the stable with three villagers and advance when ready.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "After the Castle click, resume ships toward 10–12, leaving resources for Double-Bit Axe and the first Knights.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Advancing to Castle",
+          "allocation": "-",
+          "task": "Fit Bloodlines when affordable; a contested pond needs protection for the existing fleet before more ships.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Open Knights and a monastery for relics, securing the home pond and routes out of the base.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "Castle Age",
+          "allocation": "-",
+          "task": "Fit Bow Saw and the Fishing Lines-to-Gillnets chain around production; secure another pond before expanding safely.",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": true,
+      "video_filename": "",
+      "recommended_civs": "",
+      "arrival": "Feudal ~9:40 / Castle ~13:10–14:00; ships counted separately",
+      "aliases": [
+        "Four Lakes",
+        "Lithuanian hybrid"
+      ]
     }
   ],
   "reference_sheets": [
@@ -10443,7 +11192,7 @@
       "cards": [
         {
           "title": "1 · Get the first MAA forward",
-          "body": "Train 3 militia during the Feudal transition; move out if the route is safe, then reinforce with 2. Do not let reinforcement costs delay Man-at-Arms.\nOn reaching Feudal, research Man-at-Arms, then Double-Bit Axe. If resources are tight, upgrade the first 3 before completing the intended 5."
+          "body": "Open at 19 population with three Dark Age lumberjacks, at least two deer and no berries. Start two gold miners at the age-up and send three Militia early.\nTake Man-at-Arms immediately: 8:50→9:30 is a clean reference. The mill and Double-Bit Axe must not delay it."
         },
         {
           "title": "2 · Blacksmith → range",
@@ -10459,19 +11208,14 @@
         },
         {
           "title": "5 · Save for Castle",
-          "body": "After 5 MAA, keep 2 on gold. If stopping MAA, upgrades are covered and 200 gold is banked, temporarily reduce to 1. Check gold at roughly 400 food.\nReference: 20–24 food / 12–14 wood / 2–4 gold. At 39 villagers: 22 food / 14 wood / 3 gold. Choose allocations that fit your total villager count."
+          "body": "After the opening MAA, keep 2 on gold. If stopping MAA, upgrades are covered and 200 gold is banked, temporarily reduce to 1. Check gold at roughly 400 food.\nReference: 20–24 food / 12–14 wood / 2–4 gold. At 39 villagers: 22 food / 14 wood / 3 gold. Choose allocations that fit your total villager count."
         },
         {
           "title": "6 · Choose the Castle branch",
           "body": "A Castle click around 38–42 villagers is a reference. Pressure may delay it; do not wait for a villager count if you can safely advance now.\nPreserve your army and reserve workshop wood/gold. Choose Archers, Cavalry archers or Knights; use Castle Age for infantry/ram pressure, TC #2 and Imperial preparation."
         }
       ],
-      "sources": [
-        {
-          "title": "Build reference",
-          "url": "https://aoebuddy.com/build-orders/30-romans-5-man-at-arms-rush"
-        }
-      ],
+      "sources": [],
       "era": "feudal",
       "nav_label": "Feudal"
     },

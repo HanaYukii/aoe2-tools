@@ -230,7 +230,15 @@
       "requires_cavalry": false,
       "video_filename": "37-單射箭場弓兵開局.mp4",
       "recommended_civs": "不列颠、玛雅、埃塞俄比亚、鞑靼、维京",
-      "arrival": "封建 9:15"
+      "arrival": "封建 9:15",
+      "aliases": [
+        "單射箭場小弓",
+        "1-Range Archers",
+        "單靶場",
+        "單靶場小弓",
+        "单靶场小弓",
+        "单靶场"
+      ]
     },
     {
       "index": 2,
@@ -414,7 +422,7 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "持续补斥候，用来进攻或防守。",
+          "task": "先补 3 肉马，加起始共 4 只；有伤害或要争控图再续兵。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -430,15 +438,73 @@
           "gold": "",
           "stone": "",
           "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "想早点上城就先停肉马攻防，约 10–12 田后补 5 金。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "约 400 食后缓加田，补铁匠铺；800 食、200 金点城，约 29–31 村作参考。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "骑士衔接配工例：10 木／13 食／6 金；第二马厩不挤掉首只骑士才下。",
+          "wood": "10",
+          "food": "13",
+          "gold": "6",
+          "stone": "0",
+          "population": "30"
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "先出骑士再补血统、马防；军事稳定后加第二 TC。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
         }
       ],
-      "notes": "- 目标是快速上封，用斥候施压。\n- 利用机动性抢先出手，让对手先承受压力。\n- 前几只斥候出完后，若对手主打步弓手＋枪兵，就转掷矛手，组成斥候＋掷矛手。\n- 拿到控图权后，尽量把家围好，避免被反打。\n- 若对手民兵／武士前压，先用村民、斥候加 1 枪兵清掉，再去进攻。\n- 最适合有血统的文明：城堡理想上想接骑士，封建也能选择大量投资斥候。\n\n### 后续转型\n\n- 对手主打步弓手＋枪兵，就补靶场出掷矛手。\n- 对手打斥候，就继续补斥候与几只枪兵，直到家围好；围好后可全军出门进攻。\n- 后续自然会需要铁匠铺，资源够时补上。\n- 封建打得很激烈时，有 7-8 只斥候就点血统，再补防御与攻击。\n- 点城堡后补一级农（若之前没点）与一级金。\n- 上城选择很多，缺省建议双马厩骑士；对手大量弩手时，也可单靶场升精锐掷矛手。\n- 留下很多斥候，或想反制僧侣时，升轻型骑兵很合适。\n- 依局势安排铁匠铺升级顺序。\n- 点二级木。\n- 接着可以加大军事投资、混僧侣／攻城器，或补 1-2 座 TC 继续发展；保持弹性，选最适合局势的路线。",
+      "notes": "",
       "page": 7,
       "starter": true,
       "requires_cavalry": true,
       "video_filename": "35-單馬廄斥候開局.mp4",
       "recommended_civs": "法兰克、匈奴、立陶宛、马扎尔、马里",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "肉馬封建快攻",
+        "Scout Rush",
+        "3 肉馬 → 上城",
+        "3 Scouts → Fast Castle",
+        "肉馬",
+        "單馬廄肉馬",
+        "3肉馬",
+        "3 肉馬",
+        "三肉馬轉城",
+        "肉马封建快攻",
+        "3 肉马 → 上城",
+        "肉马",
+        "单马厩肉马",
+        "3肉马",
+        "3 肉马",
+        "三肉马转城"
+      ]
     },
     {
       "index": 3,
@@ -596,7 +662,12 @@
       "requires_cavalry": false,
       "video_filename": "20-防偷豬羊快速開局（進階版）.mp4",
       "recommended_civs": "通用；适合不打步兵开局时",
-      "arrival": "封建 8:25"
+      "arrival": "封建 8:25",
+      "aliases": [
+        "防偷豬快速點封（進階）",
+        "Anti-Lame Fast Up Dark Age (Advanced)",
+        "防偷猪快速点封（高端）"
+      ]
     },
     {
       "index": 4,
@@ -886,7 +957,12 @@
       "requires_cavalry": false,
       "video_filename": "",
       "recommended_civs": "亚美尼亚",
-      "arrival": "封建 12:10  /  城堡 15:40"
+      "arrival": "封建 12:10  /  城堡 15:40",
+      "aliases": [
+        "亞美尼亞長槍兵快攻轉上城搶聖物",
+        "Armenian Spear Rush Into Fast Castle Relic Control",
+        "亚美尼亚长枪兵快攻转上城抢圣物"
+      ]
     },
     {
       "index": 5,
@@ -1101,7 +1177,7 @@
     {
       "index": 6,
       "id": "hera-2026-10-06",
-      "title": "赞皮快攻",
+      "title": "蔷琵快攻",
       "population": "20",
       "civs": [
         "incas",
@@ -1225,7 +1301,7 @@
         {
           "age": "升封途中",
           "allocation": "-",
-          "task": "再出 3 只蔷琵侦察兵。",
+          "task": "再出 3 只蔷琵斥候。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -1293,7 +1369,7 @@
           "population": ""
         }
       ],
-      "notes": "- Hera 认为这可能是各南美洲文明最强、也最稳的开局。\n- 前期利用蔷琵步兵，迅速接远程兵，发挥各文明省木的优势。\n- 印加开局只需 1 间房；图皮起始资源较多；穆伊斯卡定居点便宜。马普切的主要省木来源则是定居点能直接出掷矛手，不必盖靶场。少了步弓手，弹性稍低，但额外血量的枪兵、掷矛手与蔷琵战士混编很强。\n- 这些文明都有定居点；若金矿或果区靠近树林，可把定居点放在两种资源之间，少盖一座，进一步省木。\n- 可以只做轻度骚扰，之后围家上城，必要时补塔守。\n- 也能在封建投入更多，补第二座靶场或兵营，加上步兵／远程兵的铁匠铺科技。\n- 上城后选择很开放，可走各种远程兵，也能升蔷琵战士。\n\n### 后续转型\n\n- 靶场出掷矛手：维持 2 金，供额外赞皮与一级箭。\n- 靶场出步弓手：再补 3 金，维持步弓手、偶尔补赞皮与一级箭。\n- 初期施压后，可围家、补防守塔，安全上城。\n- 想继续打封建，就补第二座靶场／兵营，搭配更多铁匠铺升级。\n- 上城可以再补 2 座兵营，大量出满科技蔷琵战士。\n- 也可持续加码远程兵，走弩手或掷矛手。\n- 修道院、攻城武器厂、大学，或补 TC 都很好接，选择非常弹性。祝顺利、玩得开心！",
+      "notes": "- Hera 认为这可能是各南美洲文明最强、也最稳的开局。\n- 前期利用蔷琵步兵，迅速接远程兵，发挥各文明省木的优势。\n- 印加开局只需 1 间房；图皮起始资源较多；穆伊斯卡定居点便宜。马普切的主要省木来源则是定居点能直接出掷矛手，不必盖靶场。少了步弓手，弹性稍低，但额外血量的枪兵、掷矛手与蔷琵战士混编很强。\n- 这些文明都有定居点；若金矿或果区靠近树林，可把定居点放在两种资源之间，少盖一座，进一步省木。\n- 可以只做轻度骚扰，之后围家上城，必要时补塔守。\n- 也能在封建投入更多，补第二座靶场或兵营，加上步兵／远程兵的铁匠铺科技。\n- 上城后选择很开放，可走各种远程兵，也能升蔷琵战士。\n\n### 后续转型\n\n- 靶场出掷矛手：维持 2 金，供额外蔷琵与一级箭。\n- 靶场出步弓手：再补 3 金，维持步弓手、偶尔补蔷琵与一级箭。\n- 初期施压后，可围家、补防守塔，安全上城。\n- 想继续打封建，就补第二座靶场／兵营，搭配更多铁匠铺升级。\n- 上城可以再补 2 座兵营，大量出满科技蔷琵战士。\n- 也可持续加码远程兵，走弩手或掷矛手。\n- 修道院、攻城武器厂、大学，或补 TC 都很好接，选择非常弹性。祝顺利、玩得开心！",
       "page": 15,
       "starter": false,
       "requires_cavalry": false,
@@ -1449,7 +1525,12 @@
       "requires_cavalry": false,
       "video_filename": "28-中國通用開局.mp4",
       "recommended_civs": "中国",
-      "arrival": "封建 8:25"
+      "arrival": "封建 8:25",
+      "aliases": [
+        "中國快速點封",
+        "Chinese Fast Feudal",
+        "中国快速点封"
+      ]
     },
     {
       "index": 8,
@@ -1629,7 +1710,12 @@
       "requires_cavalry": false,
       "video_filename": "23-庫曼封建雙 TC 爆經濟.mp4",
       "recommended_civs": "库曼",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "庫曼  封建雙 TC Boom",
+        "Cuman  Feudal 2-TC Boom",
+        "库曼  封建双 TC Boom"
+      ]
     },
     {
       "index": 9,
@@ -2419,7 +2505,12 @@
       "requires_cavalry": true,
       "video_filename": "21-雙馬廄斥候.mp4",
       "recommended_civs": "法兰克、匈奴、马扎尔、立陶宛、波斯",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "雙馬廄肉馬",
+        "Double Stable Scouts",
+        "双马厩肉马"
+      ]
     },
     {
       "index": 12,
@@ -2667,7 +2758,12 @@
       "requires_cavalry": false,
       "video_filename": "15-民兵直城.mp4",
       "recommended_civs": "不列颠、埃塞俄比亚、意大利、玛雅、维京",
-      "arrival": "封建 12:35  /  城堡 16:05"
+      "arrival": "封建 12:35  /  城堡 16:05",
+      "aliases": [
+        "黑快上城 → 弩兵",
+        "Drush Fast Castle → Crossbow",
+        "黑快上城 → 弩手"
+      ]
     },
     {
       "index": 13,
@@ -2934,110 +3030,58 @@
     {
       "index": 14,
       "id": "hera-2026-10-14",
-      "title": "埃塞俄比亚双靶场步弓手（团战）",
+      "title": "团战外家双靶场小弓",
       "population": "19",
-      "civs": [
-        "ethiopians"
-      ],
+      "civs": [],
       "map_type": "open",
       "advanced": false,
       "steps": [
         {
           "age": "黑暗",
-          "allocation": "6",
-          "task": "6 村吃羊。",
-          "wood": "",
-          "food": "6",
-          "gold": "",
-          "stone": "",
-          "population": "7"
-        },
-        {
-          "age": "黑暗",
-          "allocation": "2",
-          "task": "2 村伐木，其中 1 村先盖房。",
-          "wood": "2",
-          "food": "",
-          "gold": "",
-          "stone": "",
+          "allocation": "-",
+          "task": "前 8 村先吃食物，早拉猪；找齐羊再推鹿。",
+          "wood": "0",
+          "food": "8",
+          "gold": "0",
+          "stone": "0",
           "population": "9"
         },
         {
           "age": "黑暗",
-          "allocation": "1",
-          "task": "1 村引猪。",
-          "wood": "",
-          "food": "7",
-          "gold": "",
-          "stone": "",
-          "population": "10"
-        },
-        {
-          "age": "黑暗",
           "allocation": "-",
-          "task": "【建议】找齐羊后，用斥候推 1-3 只鹿。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "黑暗",
-          "allocation": "6",
-          "task": "接下来 6 村吃 TC 下的猎物；这段期间引第二只猪。",
-          "wood": "",
-          "food": "13",
-          "gold": "",
-          "stone": "",
-          "population": "16"
-        },
-        {
-          "age": "黑暗",
-          "allocation": "1",
-          "task": "1 村到金矿盖采矿场。",
-          "wood": "",
-          "food": "",
-          "gold": "1",
-          "stone": "",
-          "population": "17"
-        },
-        {
-          "age": "黑暗",
-          "allocation": "2",
-          "task": "接下来 2 村吃 TC 下的猎物。",
-          "wood": "",
-          "food": "15",
-          "gold": "",
-          "stone": "",
-          "population": "19"
-        },
-        {
-          "age": "黑暗",
-          "allocation": "-",
-          "task": "点织布。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "黑暗",
-          "allocation": "-",
-          "task": "点封建；理想到达时间 8:50。",
-          "wood": "2",
-          "food": "15",
-          "gold": "1",
-          "stone": "0",
-          "population": "19"
-        },
-        {
-          "age": "升封途中",
-          "allocation": "-",
-          "task": "从 TC 下调 7 村到伐木场。",
-          "wood": "9",
+          "task": "第 9–11 村伐木，接第二猪。",
+          "wood": "3",
           "food": "8",
+          "gold": "0",
+          "stone": "0",
+          "population": "12"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 12 村盖房后吃食物。",
+          "wood": "3",
+          "food": "9",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 13 村盖矿场挖金。",
+          "wood": "3",
+          "food": "9",
+          "gold": "1",
+          "stone": "0",
+          "population": "14"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 14–18 村吃 TC 食物，19 人口点封；织布依安全补。",
+          "wood": "3",
+          "food": "14",
           "gold": "1",
           "stone": "0",
           "population": "19"
@@ -3045,19 +3089,9 @@
         {
           "age": "升封途中",
           "allocation": "-",
-          "task": "从 TC 下调 2 村盖兵营与房子。",
-          "wood": "9",
-          "food": "6",
-          "gold": "1",
-          "stone": "0",
-          "population": "19"
-        },
-        {
-          "age": "升封途中",
-          "allocation": "-",
-          "task": "从 TC 下调 2 村砍散木。",
-          "wood": "11",
-          "food": "4",
+          "task": "猎物村转木到 8 木，含 2 村散木；补兵营、房屋，留 350 木下双靶场。",
+          "wood": "8",
+          "food": "9",
           "gold": "1",
           "stone": "0",
           "population": "19"
@@ -3065,19 +3099,9 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "盖 2 座靶场，开始出步弓手。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "封建",
-          "allocation": "-",
-          "task": "用其中 1 名盖靶场的村民盖铁匠铺，另 1 村回去采食物。",
-          "wood": "11",
-          "food": "5",
+          "task": "上封下双靶场、先出 1 枪；先保出村与双靶场。埃塞俄比亚可利用时代资源提早一级木。",
+          "wood": "8",
+          "food": "9",
           "gold": "1",
           "stone": "0",
           "population": "19"
@@ -3085,87 +3109,17 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "盖完铁匠铺的村民继续盖房、围小墙。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "封建",
-          "allocation": "7",
-          "task": "7 村挖金。",
-          "wood": "",
-          "food": "",
-          "gold": "8",
-          "stone": "",
-          "population": "26"
-        },
-        {
-          "age": "封建",
-          "allocation": "-",
-          "task": "从散木调 2 村，采 TC 下的食物。",
-          "wood": "9",
-          "food": "7",
-          "gold": "8",
+          "task": "接铁匠铺，新村补到 7 金；持续双靶场小弓。",
+          "wood": "8",
+          "food": "9",
+          "gold": "7",
           "stone": "0",
-          "population": "26"
+          "population": "25"
         },
         {
           "age": "封建",
           "allocation": "-",
-          "task": "点一级箭，开始用步弓手进攻。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "封建",
-          "allocation": "6",
-          "task": "6 村采果。",
-          "wood": "",
-          "food": "13",
-          "gold": "",
-          "stone": "",
-          "population": "32"
-        },
-        {
-          "age": "封建",
-          "allocation": "-",
-          "task": "羊吃完后慢慢补田，直到 7-8 田。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "封建",
-          "allocation": "2",
-          "task": "2 村伐木。",
-          "wood": "11",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": "34"
-        },
-        {
-          "age": "封建",
-          "allocation": "3",
-          "task": "3 村挖金。",
-          "wood": "",
-          "food": "",
-          "gold": "11",
-          "stone": "",
-          "population": "37"
-        },
-        {
-          "age": "封建",
-          "allocation": "-",
-          "task": "盖市场，卖石上城。",
+          "task": "一级射接首批约 4 小弓、枪与斥候；和内家肉马配合。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3175,7 +3129,7 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "若还缺食物，就继续出村，分到目前需要的资源。",
+          "task": "维持 7 金，逐步补到约 8 果、7 田；后续新村补田。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3185,17 +3139,7 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "这时尽量把家围好，至少要有足够防守。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "封建",
-          "allocation": "-",
-          "task": "点城堡。",
+          "task": "约 14–15 小弓后评估市场卖石买食上城；确定要单 TC 打才卖石。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3205,37 +3149,7 @@
         {
           "age": "升城途中",
           "allocation": "-",
-          "task": "点一级木与一级金。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "升城途中",
-          "allocation": "-",
-          "task": "【可选】点一级农。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "升城途中",
-          "allocation": "-",
-          "task": "开第二座伐木场，调 6 村到另一片树林。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "升城途中",
-          "allocation": "-",
-          "task": "步弓手继续进攻，但不要白送。",
+          "task": "金补到约 11–13 村、约 10 田，补一级木与一级金；有余裕就续弓。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3245,7 +3159,7 @@
         {
           "age": "城堡",
           "allocation": "-",
-          "task": "升弩手、点二级箭。",
+          "task": "先弩手、二级射，再学院接弹道学；目标保住约 15 只以上。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3255,7 +3169,37 @@
         {
           "age": "城堡",
           "allocation": "-",
-          "task": "点二级木。",
+          "task": "独轮推车、一级农依食物压力补；不要为农科技延误首波弩手。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "有内家掩护才考虑单 TC 接帝，约 20 田、35–40 弩手作参考。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升帝途中",
+          "allocation": "-",
+          "task": "升帝补到 4 靶场；依文明补拇指环、二级金。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "帝王",
+          "allocation": "-",
+          "task": "三级射、强弩、化学依科技树接上；前线稳定再扩 TC。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -3263,13 +3207,34 @@
           "population": ""
         }
       ],
-      "notes": "- 埃塞俄比亚最容易运行，其他强势步弓手文明也能用；较慢的文明通常要改成 20 总人口上封。\n- 目标是尽快累积最多步弓手。\n- 牺牲一些经济来换兵量，取得前期优势。\n- 利用市场卖石，提早上城。\n- 希望封建或城堡初期取胜，或先打出够大的领先，再退回补经济，逐步拿下。\n- 团战边家更适合这套，因为内家的斥候可以弥补你怕掷矛手的弱点。\n\n### 后续转型\n\n- 立刻盖大学点弹道学，全押结束比赛。\n- 混一些攻城器，协助前推，或防对手步弓手、掷矛手。\n- 补修道院，捡圣物或招降骑士。\n- 也可在想补 TC 时买回 100 石，转正常发展。",
+      "notes": "",
       "page": 31,
       "starter": false,
       "requires_cavalry": false,
       "video_filename": "30-衣索比亞團戰雙射箭場弓兵.mp4",
-      "recommended_civs": "埃塞俄比亚；其他强势步弓手文明可调整",
-      "arrival": "封建 8:50"
+      "recommended_civs": "不列颠、埃塞俄比亚、玛雅、越南；其他文明确认步弓手科技",
+      "arrival": "封建约 8:25–8:50（视织布）",
+      "recommended_for": [
+        "britons",
+        "ethiopians",
+        "mayans",
+        "vietnamese",
+        "tatars",
+        "magyars"
+      ],
+      "aliases": [
+        "外家雙射箭場小弓（團戰）",
+        "2-Range Archer Flank: Team Game",
+        "衣索比亞  小弓",
+        "Ethiopian  Archer Rush",
+        "雙靶場",
+        "外家小弓",
+        "衣索比亞雙靶場",
+        "外家双靶场小弓（团战）",
+        "埃塞俄比亚  小弓",
+        "双靶场",
+        "埃塞俄比亚双靶场"
+      ]
     },
     {
       "index": 15,
@@ -3537,7 +3502,11 @@
       "requires_cavalry": false,
       "video_filename": "38-直城純爆經濟.mp4",
       "recommended_civs": "勃艮第、波兰、波希米亚、葡萄牙、孟加拉",
-      "arrival": "封建 10:30  /  城堡 14:00"
+      "arrival": "封建 10:30  /  城堡 14:00",
+      "aliases": [
+        "上城 Boom",
+        "Fast Castle Boom"
+      ]
     },
     {
       "index": 16,
@@ -3815,7 +3784,12 @@
       "requires_cavalry": true,
       "video_filename": "27-競技場輕騎加和尚搶聖物.mp4",
       "recommended_civs": "通用；适合竞技场等较封闭地图",
-      "arrival": "封建 11:20  /  城堡 14:50"
+      "arrival": "封建 11:20  /  城堡 14:50",
+      "aliases": [
+        "競技場 27+2 輕騎搶聖物 Boom",
+        "Arena 27+2 Light Cav & Relic Boom",
+        "竞技场 27+2 轻骑抢圣物 Boom"
+      ]
     },
     {
       "index": 17,
@@ -4053,7 +4027,12 @@
       "requires_cavalry": false,
       "video_filename": "31-直城接城堡兵.mp4",
       "recommended_civs": "西班牙、土耳其、玛雅、勃艮第、蒙古",
-      "arrival": "封建 11:20  /  城堡 14:50"
+      "arrival": "封建 11:20  /  城堡 14:50",
+      "aliases": [
+        "上城轉堡兵（吃食物和金）",
+        "Fast Castle into Food & Gold Unique Unit",
+        "上城转堡兵（吃食物和金）"
+      ]
     },
     {
       "index": 18,
@@ -4401,6 +4380,16 @@
           "gold": "",
           "stone": "",
           "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "接肉马：上封 2 村马厩、一级木，先出肉马与 1 枪；一级农依余裕补。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
         }
       ],
       "notes": "- 这是阿拉伯半岛出鸡时的黑暗流程。\n- 每场鸡版阿拉伯半岛都能用，尤其适合避开对手早期民兵骚扰。更多说明可看 Patreon 轻型骑兵等级的鸡开局视频。\n- 目的是稳定开局，完整利用鸡的食物，再接你想打的战术。\n- 各种封建打法都能接；要打武士，前期木头要多配一点。\n- 唯一缺点是不好稳定运行黑暗民兵快攻，但封建民兵仍然可行。\n- 也就是把这套当黑暗模块，再接其他流程的战术段落。\n\n### 后续转型\n\n- 到这里黑暗流程就结束，后续几乎什么都能接。\n- 【注意】封建初期要安排 6 村采果；若只放约 4 村，木头会不够接田。磨坊与 6 村到果区的时间依战术调整，但最后都要做到 6 果。\n- 接斥候：照斥候流程的黑暗后段，把吃猎物村转木，再盖房、兵营。\n- 接步弓手：照步弓手流程的黑暗后段，猎物村转木，再到金矿盖采矿场。\n- 接武士：20 人口上封，资源够就尽快盖兵营与房子；也要盖采矿场，放 2 金。\n- 封建民兵的衔接概念与武士相同。\n- 接下来就是正常对局，但你充分吃到鸡的价值；鸡会在封建初期吃完，村民转果后，就不用再分心保护吃鸡村。",
@@ -4409,7 +4398,19 @@
       "requires_cavalry": false,
       "video_filename": "14-雞圖快速黑暗開局.mp4",
       "recommended_civs": "通用；阿拉伯半岛鸡配置",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "Ciskhan 的肉馬（18 村，吃雞）",
+        "Scout Rush  chicken",
+        "黑暗時代快速吃雞",
+        "Fast Chickens Dark Age",
+        "吃雞肉馬",
+        "雞圖肉馬",
+        "Ciskhan 的肉马（18 村，吃鸡）",
+        "黑暗时代快速吃鸡",
+        "吃鸡肉马",
+        "鸡图肉马"
+      ]
     },
     {
       "index": 20,
@@ -4637,7 +4638,11 @@
       "requires_cavalry": false,
       "video_filename": "36-快速封建民兵快攻.mp4",
       "recommended_civs": "马里、立陶宛、日本、不列颠、维京",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "封建黑快",
+        "Feudal Drush"
+      ]
     },
     {
       "index": 21,
@@ -4765,7 +4770,12 @@
       "requires_cavalry": false,
       "video_filename": "34-通用碼頭漁船開局.mp4",
       "recommended_civs": "意大利、日本、维京、立陶宛、马里",
-      "arrival": "封建 9:15"
+      "arrival": "封建 9:15",
+      "aliases": [
+        "通用  海陸混合開局",
+        "Generic  Hybrid Opening",
+        "通用  海陆混合开局"
+      ]
     },
     {
       "index": 22,
@@ -5015,15 +5025,33 @@
           "gold": "",
           "stone": "",
           "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "接小弓维持约 4 金；只补 3–5 掷矛手支持时可少金、多田，别盲目续武士。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
         }
       ],
-      "notes": "- 这是新版武士快攻，追求比旧版更稳、出手更快。\n- 任何文明都能用，但要正确运行，至少必须推 2 只鹿。\n- 用武士给对手很大压力，再接步弓手，既能挡反攻，也能继续前压。\n- 封建初期食物收入低，因此后续只能接步弓手，无法顺畅转其他兵。\n- 还没准备好就被反打时，可盖防守塔救场。\n\n### 后续转型\n\n- 到封建中期后，可依局势选后续。\n- 最佳路线是围家、先上城，接弩手。\n- 需要更多封建兵，或地形很开放，就考虑第二座靶场或马厩，并重新平衡配工。\n- 果吃完后可转田／金，或让果区村到另一片树林开第二伐木场；原木区这时通常已不太有效率。\n- 上城后选择很多，依文明对局与局势决定；接下来就是正常对局。",
+      "notes": "",
       "page": 47,
       "starter": true,
       "requires_cavalry": false,
       "video_filename": "24-新版裝甲快攻.mp4",
       "recommended_civs": "通用；至少推 2 只鹿",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "裝甲步兵開局",
+        "Man-at-Arms Rush",
+        "裝甲步兵轉小弓 / 矛兵",
+        "MAA into Archers / Skirmishers",
+        "武士步兵开局",
+        "武士步兵转小弓 / 掷矛手"
+      ]
     },
     {
       "index": 23,
@@ -5353,7 +5381,12 @@
       "requires_cavalry": false,
       "video_filename": "",
       "recommended_civs": "格鲁吉亚",
-      "arrival": "封建 8:00"
+      "arrival": "封建 8:00",
+      "aliases": [
+        "喬治亞  快速肉馬",
+        "Georgians  Fast Scout Rush",
+        "格鲁吉亚  快速肉马"
+      ]
     },
     {
       "index": 24,
@@ -5623,7 +5656,12 @@
       "requires_cavalry": false,
       "video_filename": "32-日本快速裝甲.mp4",
       "recommended_civs": "日本",
-      "arrival": "封建 8:25"
+      "arrival": "封建 8:25",
+      "aliases": [
+        "日本  裝甲步兵轉小弓",
+        "Japanese  MAA into Archers",
+        "日本  武士步兵转小弓"
+      ]
     },
     {
       "index": 25,
@@ -5907,7 +5945,12 @@
       "requires_cavalry": false,
       "video_filename": "10-女真直城火矛快攻.mp4",
       "recommended_civs": "女真、高丽、越南、中国、契丹",
-      "arrival": "封建 10:30  /  城堡 14:00"
+      "arrival": "封建 10:30  /  城堡 14:00",
+      "aliases": [
+        "上城轉火長矛騎兵",
+        "Fast Castle into Fire Lancers",
+        "上城转火长掷矛手骑兵"
+      ]
     },
     {
       "index": 26,
@@ -6227,7 +6270,12 @@
       "requires_cavalry": false,
       "video_filename": "08-高棉直城騎士加弩砲.mp4",
       "recommended_civs": "高棉",
-      "arrival": "封建 10:55"
+      "arrival": "封建 10:55",
+      "aliases": [
+        "高棉上城：騎士 + 弩砲",
+        "Khmer Fast Castle: Knights & Scorpions",
+        "高棉上城：骑士 + 弩炮"
+      ]
     },
     {
       "index": 27,
@@ -6397,7 +6445,12 @@
       "requires_cavalry": false,
       "video_filename": "09-高棉極速斥候.mp4",
       "recommended_civs": "高棉",
-      "arrival": "封建 7:35"
+      "arrival": "封建 7:35",
+      "aliases": [
+        "高棉  快速肉馬 → 騎士",
+        "Khmer  Fast Scouts → Knights",
+        "高棉  快速肉马 → 骑士"
+      ]
     },
     {
       "index": 28,
@@ -6685,7 +6738,12 @@
       "requires_cavalry": true,
       "video_filename": "19-雙馬廄騎士快攻（新手版）.mp4",
       "recommended_civs": "法兰克、马扎尔、斯拉夫、柏柏尔、匈奴",
-      "arrival": "封建 11:45  /  城堡 16:05"
+      "arrival": "封建 11:45  /  城堡 16:05",
+      "aliases": [
+        "直城爆馬",
+        "Fast Castle Knights",
+        "直城爆马"
+      ]
     },
     {
       "index": 29,
@@ -6957,7 +7015,12 @@
       "requires_cavalry": false,
       "video_filename": "29-槍兵加矛兵快攻.mp4",
       "recommended_civs": "高丽、拜占庭、立陶宛",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "朝鮮長槍加矛兵快攻",
+        "Korean Spear Skirm Rush",
+        "高丽长枪加掷矛手快攻"
+      ]
     },
     {
       "index": 30,
@@ -7435,7 +7498,12 @@
       "requires_cavalry": false,
       "video_filename": "13-裝甲轉矛兵.mp4",
       "recommended_civs": "原稿未列推荐文明",
-      "arrival": "封建 9:15"
+      "arrival": "封建 9:15",
+      "aliases": [
+        "通用裝甲步兵轉矛兵",
+        "Generic Man-at-Arms into Skirmishers",
+        "通用武士步兵转掷矛手"
+      ]
     },
     {
       "index": 32,
@@ -7745,13 +7813,17 @@
       "requires_cavalry": false,
       "video_filename": "06-葡萄牙和尚快攻.mp4",
       "recommended_civs": "葡萄牙",
-      "arrival": "封建 9:40  /  城堡 13:10"
+      "arrival": "封建 9:40  /  城堡 13:10",
+      "aliases": [
+        "葡萄牙僧爆",
+        "Portuguese Monk Rush Strategy"
+      ]
     },
     {
       "index": 33,
       "id": "hera-2026-10-33",
-      "title": "罗马 5 武士快攻",
-      "population": "20",
+      "title": "罗马三武士快攻",
+      "population": "19",
       "civs": [
         "romans"
       ],
@@ -7760,48 +7832,38 @@
       "steps": [
         {
           "age": "黑暗",
-          "allocation": "6",
-          "task": "6 村吃羊。",
-          "wood": "",
+          "allocation": "-",
+          "task": "前 6 村吃羊。",
+          "wood": "0",
           "food": "6",
-          "gold": "",
-          "stone": "",
+          "gold": "0",
+          "stone": "0",
           "population": "7"
         },
         {
           "age": "黑暗",
-          "allocation": "3",
-          "task": "3 村伐木。",
+          "allocation": "-",
+          "task": "第 7–9 村伐木。",
           "wood": "3",
-          "food": "",
-          "gold": "",
-          "stone": "",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
           "population": "10"
         },
         {
           "age": "黑暗",
-          "allocation": "2",
-          "task": "2 村吃猪。",
-          "wood": "",
-          "food": "8",
-          "gold": "",
-          "stone": "",
-          "population": "12"
-        },
-        {
-          "age": "黑暗",
-          "allocation": "1",
-          "task": "1 村先盖房，再到果区盖磨坊。",
-          "wood": "",
-          "food": "9",
-          "gold": "",
-          "stone": "",
-          "population": "13"
+          "allocation": "-",
+          "task": "第 10 村引第一猪。",
+          "wood": "3",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "11"
         },
         {
           "age": "黑暗",
           "allocation": "-",
-          "task": "【注意】第一只猪约剩一半食物时，抽 1 名吃猎物的村民引第二只。",
+          "task": "至少推 2 鹿；黑暗不采果、不盖磨坊，留木给兵营与矿场。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7810,43 +7872,33 @@
         },
         {
           "age": "黑暗",
-          "allocation": "4",
-          "task": "4 村采果。",
-          "wood": "",
-          "food": "13",
-          "gold": "",
-          "stone": "",
+          "allocation": "-",
+          "task": "第 11–15 村收 TC 下猪鹿；适时接第二猪。",
+          "wood": "3",
+          "food": "12",
+          "gold": "0",
+          "stone": "0",
+          "population": "16"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 16 村盖兵营，再补下一房。",
+          "wood": "3",
+          "food": "12",
+          "gold": "0",
+          "stone": "0",
           "population": "17"
         },
         {
           "age": "黑暗",
-          "allocation": "1",
-          "task": "1 村在家前方盖兵营，再盖房；预留矿场木，小鸡图另盖磨坊需多留 100 木。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "黑暗",
-          "allocation": "2",
-          "task": "2 村伐木。",
-          "wood": "5",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": "20"
-        },
-        {
-          "age": "黑暗",
           "allocation": "-",
-          "task": "准备点织布、食物够接点封时，先调 2 食村挖金；缺矿场木可先远采近金。",
-          "wood": "5",
-          "food": "11",
-          "gold": "2",
+          "task": "第 17–18 村吃 TC 食物，黑暗维持 3 木，另 1 村处理建筑。",
+          "wood": "3",
+          "food": "14",
+          "gold": "0",
           "stone": "0",
-          "population": "20"
+          "population": "19"
         },
         {
           "age": "黑暗",
@@ -7861,37 +7913,37 @@
         {
           "age": "黑暗",
           "allocation": "-",
-          "task": "点封建；理想到达时间 9:15。",
-          "wood": "5",
-          "food": "11",
+          "task": "19 人口点封，理想到达约 8:50。",
+          "wood": "3",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "19"
+        },
+        {
+          "age": "升封途中",
+          "allocation": "-",
+          "task": "点封立刻用兵营村＋1 食村挖金，缺矿场木可先远采近金。",
+          "wood": "3",
+          "food": "13",
           "gold": "2",
           "stone": "0",
-          "population": "20"
+          "population": "19"
         },
         {
           "age": "升封途中",
           "allocation": "-",
-          "task": "从食物调 2 村伐木。",
-          "wood": "7",
-          "food": "9",
+          "task": "从猎物调 5 村伐木，约 8 木／8 食／2 金。",
+          "wood": "8",
+          "food": "8",
           "gold": "2",
           "stone": "0",
-          "population": "20"
+          "population": "19"
         },
         {
           "age": "升封途中",
           "allocation": "-",
-          "task": "先出 3 民兵，路线安全就先走，后两只续补；别让补兵拖到武士升级。",
-          "wood": "",
-          "food": "",
-          "gold": "",
-          "stone": "",
-          "population": ""
-        },
-        {
-          "age": "升封途中",
-          "allocation": "-",
-          "task": "【注意】TC 下猎物吃完后，村民先砍散木，再逐步补到 5 田。",
+          "task": "出 3 民兵，路线安全就先走；留武士升级的 100 食、40 金，不等升级才出门。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7901,7 +7953,7 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "上封先升武士；资源紧先保前三只升级，首波目标 5 只。",
+          "task": "上封立刻点武士，干净参考约 8:50 开始、9:30 完成；首批就是 3 只。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7912,6 +7964,16 @@
           "age": "封建",
           "allocation": "-",
           "task": "先点一级木；一级农等防守接稳、有余裕再补，不绑撒田时机。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "武士已点下再补 100 木磨坊，放安全鸡／果区；猎物结束先散木，再补到 5 田。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -7991,7 +8053,7 @@
         {
           "age": "封建",
           "allocation": "-",
-          "task": "五武士后留 2 金；不续武士、科技已补且存到 200 金，可暂减到 1 金。食物约 400 时检查金量。",
+          "task": "首批武士后留 2 金；不续武士、科技已补且存到 200 金，可暂减到 1 金。食物约 400 时检查金量。",
           "wood": "",
           "food": "",
           "gold": "",
@@ -8050,12 +8112,25 @@
         }
       ],
       "notes": "",
-      "page": 69,
+      "page": 47,
       "starter": false,
       "requires_cavalry": false,
-      "video_filename": "07-羅馬五裝甲快攻.mp4",
+      "video_filename": "24-新版裝甲快攻.mp4",
       "recommended_civs": "罗马",
-      "arrival": "封建 9:15"
+      "arrival": "封建约 8:50／武士约 9:30",
+      "aliases": [
+        "羅馬不採果裝甲",
+        "羅馬裝甲快攻",
+        "Romans Men-at-Arms Rush",
+        "羅馬裝甲",
+        "三裝甲",
+        "不採果裝甲",
+        "罗马不采果武士",
+        "罗马武士快攻",
+        "罗马武士",
+        "三武士",
+        "不采果武士"
+      ]
     },
     {
       "index": 34,
@@ -8633,7 +8708,12 @@
       "requires_cavalry": true,
       "video_filename": "17-斥候轉弓兵.mp4",
       "recommended_civs": "中国、匈奴、马里、葡萄牙",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "肉馬轉小弓",
+        "Scouts → Archers",
+        "肉马转小弓"
+      ]
     },
     {
       "index": 36,
@@ -8971,7 +9051,12 @@
       "requires_cavalry": true,
       "video_filename": "22-斥候轉馬弓.mp4",
       "recommended_civs": "匈奴、蒙古、马扎尔、日本、鞑靼",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "肉馬轉馬弓",
+        "Scouts → Cavalry Archers",
+        "肉马转骑射手"
+      ]
     },
     {
       "index": 37,
@@ -9269,7 +9354,12 @@
       "requires_cavalry": true,
       "video_filename": "11-斥候轉矛兵.mp4",
       "recommended_civs": "法兰克、匈奴、马里、立陶宛",
-      "arrival": "封建 8:50"
+      "arrival": "封建 8:50",
+      "aliases": [
+        "肉馬轉矛兵",
+        "Scouts → Skirmishers",
+        "肉马转掷矛手"
+      ]
     },
     {
       "index": 38,
@@ -9479,7 +9569,10 @@
       "requires_cavalry": false,
       "video_filename": "12-條頓塔攻.mp4",
       "recommended_civs": "条顿",
-      "arrival": "封建 8:25"
+      "arrival": "封建 8:25",
+      "aliases": [
+        "Teuton Tower Rush"
+      ]
     },
     {
       "index": 39,
@@ -9809,7 +9902,11 @@
       "requires_cavalry": false,
       "video_filename": "33-土耳其直帝.mp4",
       "recommended_civs": "土耳其",
-      "arrival": "封建 12:35  /  城堡 16:05  /  帝王 20:05"
+      "arrival": "封建 12:35  /  城堡 16:05  /  帝王 20:05",
+      "aliases": [
+        "土耳其帝快",
+        "Turk Fast Imperial"
+      ]
     },
     {
       "index": 40,
@@ -10329,7 +10426,757 @@
       "requires_cavalry": true,
       "video_filename": "",
       "recommended_civs": "勃艮第",
-      "arrival": "封建 11:20  /  城堡 14:50"
+      "arrival": "封建 11:20  /  城堡 14:50",
+      "aliases": [
+        "勃根地搶遺跡",
+        "勃根地輕騎",
+        "勃艮第抢遗迹",
+        "勃艮第轻骑"
+      ]
+    },
+    {
+      "index": 42,
+      "id": "black-forest-fish-boom",
+      "title": "黑森林捕鱼船农",
+      "population": "26＋2",
+      "civs": [],
+      "map_type": "water",
+      "advanced": false,
+      "steps": [
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "前 6 村吃羊；先确认墙口与安全鱼塘。",
+          "wood": "0",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "7"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 7–11 村伐木，集中一座伐木场。",
+          "wood": "5",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "12"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 12 村盖港后伐木；黑暗先出约 4–5 捕鱼船。",
+          "wood": "6",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 13 村引第一猪。",
+          "wood": "6",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "14"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 14–16 村吃 TC 猎物。",
+          "wood": "6",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "17"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 17 村接第二猪；有墙口控制再拉额外猪。",
+          "wood": "6",
+          "food": "11",
+          "gold": "0",
+          "stone": "0",
+          "population": "18"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 18–21 村补猎物；有额外猪、鹿时可晚采果。",
+          "wood": "6",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "22"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 22–25 村到第二木区。",
+          "wood": "10",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "26"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "调 2 木村挖金，26 人口点封，捕鱼船另计；织布看墙口安全。",
+          "wood": "8",
+          "food": "15",
+          "gold": "2",
+          "stone": "0",
+          "population": "26"
+        },
+        {
+          "age": "升封途中",
+          "allocation": "-",
+          "task": "维持现有捕鱼船工作与墙口，先不贪第二港。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "封建出 2 木村；2 村市场、1 村铁匠铺，存城所需食金。",
+          "wood": "10",
+          "food": "15",
+          "gold": "2",
+          "stone": "0",
+          "population": "28"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "点城后补一级木；钓线不卡 TC 才补，预留自然鱼接养鱼场的木材。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "猎物吃完多转木，留足食物维持后续三 TC 出村。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "到城下两座新 TC、二级木；钓线完成后，有余裕再补刺网。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "三 TC 初期多集结木区；逐步补第二至第四港。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "每加 1 捕鱼船，同时准备 100 木养鱼场；资源只够续船却盖不了网就先停船。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "三 TC 续村稳定再补独轮推车；鱼塘仍安全时，以养鱼场供食、少急着撒田。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "22 分可用「村＋捕鱼船合计约 100–110」作练习参考，前线受压先留兵。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "第五港等前四港、养鱼场与出村都养得起再加；依前线决定帝王或出兵。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": false,
+      "video_filename": "",
+      "recommended_civs": "有安全鱼塘皆可；日本、马来、勃艮第、塞尔特",
+      "arrival": "城堡约 15:40–16:10；黑暗另 4–5 捕鱼船",
+      "aliases": [
+        "黑森林捕魚 Boom",
+        "Black Forest Fish Boom",
+        "黑森林魚塘",
+        "漁網",
+        "黑森林捕鱼 Boom",
+        "黑森林鱼塘",
+        "养鱼场"
+      ]
+    },
+    {
+      "index": 43,
+      "id": "romans-fast-castle-double-scorpions",
+      "title": "罗马直城双 BK 弩炮",
+      "population": "20＋1",
+      "civs": [
+        "romans"
+      ],
+      "map_type": "open",
+      "advanced": true,
+      "steps": [
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "前 7 村吃 TC 食物，早拉第一猪。",
+          "wood": "0",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "8"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 8–10 村盖房、伐木场并伐木；推鹿补食物。",
+          "wood": "3",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "11"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "再补 2 食村，用现有食村接第二猪。",
+          "wood": "3",
+          "food": "9",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "磨坊采果补到 5 村；这套靠果与猎物保极早点城。",
+          "wood": "3",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "18"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "最后 2 村补木，20 人口点封；织布留到封建。",
+          "wood": "5",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "20"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "封建出 1 食村，同时 3 村市场、1 村铁匠铺，再点织布。",
+          "wood": "5",
+          "food": "15",
+          "gold": "0",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "卖起始 200 石凑金点城；必要时才买食物，这套暂不扩 TC。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "调成 10 木／5 食／5 金，补一级木；先保双 BK 木材。",
+          "wood": "10",
+          "food": "5",
+          "gold": "5",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "升城约一半，抽 2 果村走侧路前置；不安全就改家中 BK。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "到城双 BK，建筑村用小段墙保护；前置被挡就先守。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "双 BK 续弩炮；罗马弩炮只省金，不省木，预留买木与修理钱。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "约 3 台先清轻型兵，有 6–7 台再接攻城锤；投车出现先处理。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "先拆出兵建筑、封住资源，再考虑 TC；两村跟进维修。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": false,
+      "video_filename": "",
+      "recommended_civs": "",
+      "arrival": "封建约 8:50／城堡约 12:20–13:00",
+      "aliases": [
+        "羅馬  上城雙廠弩砲",
+        "Romans  FC Double Scorpions",
+        "羅馬雙弩砲",
+        "羅馬雙廠",
+        "雙 BK",
+        "罗马  上城双厂弩炮",
+        "罗马双弩炮",
+        "罗马双厂",
+        "双 BK"
+      ]
+    },
+    {
+      "index": 44,
+      "id": "portuguese-fast-castle-organ-guns",
+      "title": "葡萄牙直城风琴炮",
+      "population": "23＋0–2",
+      "civs": [
+        "portuguese"
+      ],
+      "map_type": "open",
+      "advanced": true,
+      "steps": [
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "两房起手，前 6 村吃羊。",
+          "wood": "0",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "7"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 7 村引第一猪。",
+          "wood": "0",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "8"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 8–11 村伐木，补房并用短木墙接 TC。",
+          "wood": "4",
+          "food": "7",
+          "gold": "0",
+          "stone": "0",
+          "population": "12"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 12–16 村收 TC 食物，接第二猪与安全的鹿。",
+          "wood": "4",
+          "food": "12",
+          "gold": "0",
+          "stone": "0",
+          "population": "17"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 17 村盖磨坊，加既有食村补到约 6 果。",
+          "wood": "4",
+          "food": "14",
+          "gold": "0",
+          "stone": "0",
+          "population": "19"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 19–22 村加 2 食村采石；小围保木、石，织布后 23 人口点封。",
+          "wood": "4",
+          "food": "12",
+          "gold": "0",
+          "stone": "6",
+          "population": "23"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "2 村市场、1 村铁匠铺；安全可出 0–2 村，重压就先保点城。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "食金不足靠市场调度；卖石前先算能否在到城时补回 650。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "对手武士／弓压石，可用反塔保石；石已被封就改卖木食、接受晚一点。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "持续采到 650 石，守紧果、木、石；先不投资多 TC 或经济科技。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "到城下守堡，尽量同时保石与木；城堡盖好后石村多转木金。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "风琴炮续产，先约 2 台互相掩护，绕侧面封资源。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "对手石墙封死，可用第三、四次出兵的资源改出爆破兵；别一直撞完整墙。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "补 BK：通常投车解兵与塔；急拆建筑、且有人保护才接攻城锤。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "对手出投车，可补修道院、僧侣血量与救赎；先确认招降金够不够。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "该有的反制工具补齐、推进稳住后，再恢复撒田与扩经济。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": false,
+      "video_filename": "",
+      "recommended_civs": "",
+      "arrival": "城堡约 14:00–14:30；封建出村 0–2",
+      "aliases": [
+        "上城 → 風琴砲",
+        "Fast Castle → Organ Guns",
+        "風琴",
+        "風琴炮",
+        "上城 → 风琴炮",
+        "风琴",
+        "风琴炮"
+      ]
+    },
+    {
+      "index": 45,
+      "id": "lithuanians-four-lakes-fast-castle",
+      "title": "立陶宛四湖直城",
+      "population": "21＋2",
+      "civs": [
+        "lithuanians"
+      ],
+      "map_type": "water",
+      "advanced": false,
+      "steps": [
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "两房后前 5 村集中伐木，利用立陶宛起始食物；先找近鱼塘。",
+          "wood": "5",
+          "food": "0",
+          "gold": "0",
+          "stone": "0",
+          "population": "6"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 6 村吃岸鱼，150 木时盖港、小围保村，再回岸鱼。",
+          "wood": "5",
+          "food": "1",
+          "gold": "0",
+          "stone": "0",
+          "population": "7"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 7–10 村吃羊；每 75 木补捕鱼船，留意船与村的房屋量。",
+          "wood": "5",
+          "food": "5",
+          "gold": "0",
+          "stone": "0",
+          "population": "11"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 11–12 村补木，第二艘捕鱼船前补房。",
+          "wood": "7",
+          "food": "5",
+          "gold": "0",
+          "stone": "0",
+          "population": "13"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 13 村引第一猪。",
+          "wood": "7",
+          "food": "6",
+          "gold": "0",
+          "stone": "0",
+          "population": "14"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 14–17 村补猎物，接第二猪；木村用房屋配合小围。",
+          "wood": "7",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "18"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "第 18–20 村补木，先不加第二伐木场。",
+          "wood": "10",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "黑暗",
+          "allocation": "-",
+          "task": "20 村点织布再点封：流程为 21 人口，黑暗捕鱼船另出到约 7 艘。",
+          "wood": "10",
+          "food": "10",
+          "gold": "0",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "升封途中",
+          "allocation": "-",
+          "task": "猎物结束调 3 村到金；约 60% 进度盖兵营。",
+          "wood": "10",
+          "food": "7",
+          "gold": "3",
+          "stone": "0",
+          "population": "21"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "封建出 2 食村；1 村铁匠铺、2 村马厩。",
+          "wood": "10",
+          "food": "9",
+          "gold": "3",
+          "stone": "0",
+          "population": "23"
+        },
+        {
+          "age": "封建",
+          "allocation": "-",
+          "task": "木不够同下两栋，先铁匠铺、再 3 村补马厩；建筑与食金齐就点城。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "点城后才恢复加船到约 10–12 艘；保留一级木与首批骑士资源。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "升城途中",
+          "allocation": "-",
+          "task": "有余裕先补血统；鱼塘有敌港或军舰时，优先保现有船。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "到城出骑士、补修道院抢遗迹；先控住近塘与出门路线。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        },
+        {
+          "age": "城堡",
+          "allocation": "-",
+          "task": "二级木、捕鱼船科技（钓线→刺网）依余裕补；争第二鱼塘，稳住再加 TC。",
+          "wood": "",
+          "food": "",
+          "gold": "",
+          "stone": "",
+          "population": ""
+        }
+      ],
+      "notes": "",
+      "page": 0,
+      "starter": false,
+      "requires_cavalry": true,
+      "video_filename": "",
+      "recommended_civs": "",
+      "arrival": "封建约 9:40／城堡约 13:10–14:00；另计捕鱼船",
+      "aliases": [
+        "立陶宛四湖上城",
+        "Lithuanian Four Lakes Fast Castle",
+        "四湖",
+        "立陶宛漁船",
+        "立陶宛捕鱼船"
+      ]
     }
   ],
   "reference_sheets": [
@@ -10443,7 +11290,7 @@
       "cards": [
         {
           "title": "① 首批武士：先到场",
-          "body": "升封途中先出 3 民兵，路线安全就先走；后两只续补，别卡武士升级。\n上封先升武士，再补一级木；资源紧先保前三只，首波目标 5 只。"
+          "body": "19 人口、黑暗 3 木、至少推 2 鹿，不采果；点封立刻 2 村挖金，三民兵提早走。\n上封立即升武士，干净参考约 8:50→9:30；磨坊与一级木都别挤掉升级。"
         },
         {
           "title": "② 铁匠铺 → 靶场",
@@ -10459,19 +11306,14 @@
         },
         {
           "title": "⑤ 停兵存城：调配工",
-          "body": "五武士后缺省 2 金；不续武士、科技已补且存到 200 金，可暂减到 1 金。食物约 400 时检查金量。\n准备点城抓 20–24 食／12–14 木／2–4 金；39 村例：22 食、14 木、3 金。各项别全取上限。"
+          "body": "首批武士后缺省 2 金；不续武士、科技已补且存到 200 金，可暂减到 1 金。食物约 400 时检查金量。\n准备点城抓 20–24 食／12–14 木／2–4 金；39 村例：22 食、14 木、3 金。各项别全取上限。"
         },
         {
           "title": "⑥ 点城后选下一页",
           "body": "约 38–42 村点城作参考；受压持续补兵就延后，资源够且守得住不必凑村数。\n升城先保兵、留 BK 木金。步弓手／骑射手／骑士看对应页；步兵攻城锤、第二 TC 与跟帝看主线运营。"
         }
       ],
-      "sources": [
-        {
-          "title": "罗马五武士流程对照",
-          "url": "https://aoebuddy.com/build-orders/30-romans-5-man-at-arms-rush"
-        }
-      ],
+      "sources": [],
       "era": "feudal",
       "nav_label": "罗马・封建速查"
     },

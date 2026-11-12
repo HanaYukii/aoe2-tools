@@ -30,7 +30,7 @@ The first command opens setup when needed. The second uses synthetic offline mat
 
 Settings and window position are saved under `%LOCALAPPDATA%\aoe2-tools\opponent-civ` on Windows, `~/Library/Application Support/aoe2-tools` on macOS, or the XDG configuration directory on Linux. Do not commit personal settings or recordings.
 
-Language changes saved in Settings take effect after restarting. `--lang` overrides the saved choice for that run. Legacy `zh` uses Simplified Chinese game data with the Traditional Chinese interface/guides.
+Language changes saved in Settings take effect after restarting. `--lang` overrides the saved choice for that run. `zh` selects Simplified Chinese throughout the interface, guides and game data.
 
 ## Test and package
 
@@ -40,14 +40,14 @@ python -m pip install pyinstaller==6.22.3
 python opponent-civ/build_exe.py
 ```
 
-Build the Windows executable on Windows. Output: `opponent-civ/build/release/aoe2-opponent-dashboard.exe` and `SHA256SUMS.txt`. The packaging check runs the actual EXE from an empty directory and validates both language catalogs. Add `--desktop` to copy it to the Windows desktop.
+Build the Windows executable on Windows. Output: `opponent-civ/build/release/aoe2-opponent-dashboard.exe` and `SHA256SUMS.txt`. The packaging check runs the actual EXE from an empty directory and validates all three language catalogs. Add `--desktop` to copy it to the Windows desktop.
 
 Pushing a `v*` tag triggers tests, packaging and a GitHub Release. A manual workflow run produces a build artifact without publishing a release.
 
 ## Guide data and localization
 
-- `data/builds.zh-TW.json` / `data/builds.en.json`: 40 builds and tactical cards. English follow-up notes are concise adaptations; step allocations retain the same values.
-- `data/map-notes.zh-TW.json` / `data/map-notes.en.json`: map guidance. IDs and matching aliases remain the same across languages.
+- `data/builds.zh-TW.json` / `data/builds.en.json` / `data/builds.zh-CN.json`: 45 builds and tactical cards. Equivalent openings share one guide and searchable aliases; step allocations match across languages.
+- `data/map-notes.zh-TW.json` / `data/map-notes.en.json` / `data/map-notes.zh-CN.json`: map guidance. IDs and matching aliases remain the same across languages.
 - `data/ui.en.json` / `i18n.py`: interface translations and catalog selection.
 - `*.zh-CN.json`, `data/ui.zh-CN.json`, `README.zh-CN.md`: Simplified Chinese, generated from the Traditional files by `make_zh_cn.py` with game terms swapped for the Simplified game's own names. Regenerate after editing the Traditional files: `uv run --with opencc-python-reimplemented python opponent-civ/make_zh_cn.py`.
 - Keep build/sheet IDs stable so personal recommendations survive updates and language changes.

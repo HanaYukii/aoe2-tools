@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "reviewed_on": "2026-10-30",
+  "reviewed_on": "2026-11-13",
   "maps": [
     {
       "id": "arabia",
       "title": "Arabia · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Standard land opening; adapt to resource positions",
       "aliases": [
         "Arabia",
         "阿拉伯"
@@ -16,39 +16,31 @@
       ],
       "cards": [
         {
-          "title": "1 · Standard opening; check wood and gold",
-          "body": "Find both large huntables and a defensible woodline. Forward resources need earlier defense; do not delay scouting to push every deer."
+          "title": "1 · Exposed resources change the spending order",
+          "body": "With forward wood/gold, fund a range/stable and defense before banking for Castle. Small walls stop melee units; archers require units or another woodline."
         },
         {
-          "title": "2 · Scout before the Feudal click",
-          "body": "Locate the opponent and military buildings. Choose range/stable and small-wall priorities during the transition. If forward villagers appear, protect resources before forcing Castle."
-        },
-        {
-          "title": "3 · Short walls with 1–2 villagers",
-          "body": "Connect houses to woods and seal resource gaps. Arrows pass over walls, so leave room to retreat. Reserve wood for the first military building and farms."
-        },
-        {
-          "title": "4 · Team games: combine archers and cavalry",
-          "body": "Meet before fighting. If flanked, report threatened resources so reinforcements protect the economy instead of only chasing villagers."
+          "title": "2 · Scout the opening during the age-up",
+          "body": "Scout military buildings and the first army during the Feudal transition. Continued deer pushing can leave the first defensive range too late. See civilization guides for transitions."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/arabia/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/arabia/"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "arena",
       "title": "Arena · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Stone walls, Fast Castle and relic investment",
       "aliases": [
         "Arena",
         "競技場"
@@ -58,39 +50,31 @@
       ],
       "cards": [
         {
-          "title": "1 · Stone walls still need scouting",
-          "body": "Your Fast Castle build applies. Scout the front gate for enemy villagers before clicking Feudal; close gates after leaving. Check Loom before villager fights."
+          "title": "1 · Relics: stable first, monastery on arrival",
+          "body": "For scout relic play, advance with stable + blacksmith. Prepare scouts during the age-up; reserve 175 wood for a monastery and 100 gold for the first monk before extra TCs."
         },
         {
-          "title": "2 · Choose relics or boom on the way up",
-          "body": "For relics, reserve a monastery and 1–2 monks; scout routes first. For booming, check outside before adding TCs. See the civilization guide for details."
-        },
-        {
-          "title": "3 · Towers/castles: preserve inner routes",
-          "body": "Use 1–2 villagers for safe inner walls, maintaining access between TCs and resources. Do not rush out with your economy. Use the tower/castle defense pages."
-        },
-        {
-          "title": "4 · Team games: assign military roles",
-          "body": "Agree who contests relics and who produces army. Report how long a pressured flank can hold so the pocket can decide whether to keep booming."
+          "title": "2 · Forward towers or castles change the boom",
+          "body": "Forward towers/castles call for inner access to wood/gold before extra TCs. Use the tower- or castle-defense page for allocations and units."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/arena/details"
         },
         {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Strategy",
+          "url": "https://sitaux.com/close-maps/"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "socotra",
       "title": "Socotra · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Close quarters; six herdables, one elephant, five small huntables",
       "aliases": [
         "Socotra",
         "索科特拉島"
@@ -100,43 +84,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Find and secure your elephant early",
-          "body": "Close spawns make laming especially dangerous. Find the large huntable and lure it early rather than focusing only on deer. Reference start: 6 herdables, 1 elephant and 5 small huntables."
+          "title": "1 · Secure the only elephant first",
+          "body": "Usually six herdables, one elephant and five small huntables. Locate and lure the elephant before deer pushing; there is no second boar."
         },
         {
-          "title": "2 · No second boar to wait for",
-          "body": "Transition to berries/farms as the last hunt runs low. For outside deer, use 1 villager for a safe mill, then roughly 4–6 gatherers; do not send the entire group blind."
+          "title": "2 · Plan the food bridge earlier",
+          "body": "Plan the next deer/berry mill before the elephant runs out. If it is stolen, bridge with berries/farms and a later Men-at-Arms timing."
         },
         {
-          "title": "3 · Prepare for early contact",
-          "body": "During the Feudal transition, prepare a barracks and resource walls. Watch enemy units and forward villagers. Check Loom before fighting with villagers; laming the enemy elephant is an advanced option."
-        },
-        {
-          "title": "4 · Team games: identify nearby enemies",
-          "body": "Your nearest enemy may not be directly opposite. Report TCs and forward villagers, and coordinate pressure on one side."
+          "title": "3 · Contact can happen in Dark Age",
+          "body": "Villagers or militia can arrive in Dark Age. Research Loom before villager fights; prepare resource walls and the barracks during the age-up."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://sitaux.com/chaotic-playstyle/"
-        },
-        {
-          "title": "Map reference",
+          "title": "Map resources",
           "url": "https://aoebuddy.com/maps/socotra/details"
+        },
+        {
+          "title": "Strategy",
+          "url": "https://sitaux.com/chaotic-playstyle/"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "scandinavia",
       "title": "Scandinavia · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Three large huntables; land pressure and separate lakes",
       "aliases": [
         "Scandanavia",
         "Scandinavia",
@@ -144,47 +120,43 @@
         "斯堪的納維亞"
       ],
       "map_ids": [
-        25,
         25
       ],
       "cards": [
         {
-          "title": "1 · More hunt; sheep can wait",
-          "body": "Find extra hunt early. If safe to lure, use it first and keep sheep under the TC to fill gaps rather than following a fixed sheep-first order."
+          "title": "1 · Find the third large huntable",
+          "body": "Three large huntables, deer and small animals extend the opening. Keep herdables as a bridge; delay mass farming while safe natural food funds fishing and military."
         },
         {
-          "title": "2 · Dock around villager 11–13",
-          "body": "For a conservative one-dock start, use villager 11–13 to dock and train 3–4 Dark Age fishing ships. Around 5–6 woodcutters supports fish production; reserve extra building/military wood. Delay if the shore is distant or fish are scarce."
+          "title": "2 · One-dock practice opening",
+          "body": "Practice baseline: dock at villager 11–13, then three or four fish. About five or six woodcutters cover fishing, not buildings. Shift food workers to wood when fish can cover food."
         },
         {
-          "title": "3 · Hunt + fish can delay farms",
-          "body": "Before the last safe hunt runs out, check whether fishing covers food demand. Add farms if it does not. Move some food workers to wood after the Feudal click only if fishing income is sufficient."
-        },
-        {
-          "title": "4 · Watch land as well as water",
-          "body": "Lakes are separate; watch enemy villagers sneaking docks. Do not defend only with ships while land units enter. In teams, assign water and land roles."
+          "title": "3 · Attack the other lake with a land builder",
+          "body": "Send a land builder to dock the other lake. Shelter threatened fishing ships in your dock; it fires no arrows in Dark Age. Reserve warship resources too."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/scandinavia/details"
         },
         {
-          "title": "Map reference",
-          "url": "https://sitaux.com/hybrid-maps/"
+          "title": "Strategy",
+          "url": "https://sitaux.com/scandinavia/"
         },
         {
-          "title": "Map reference",
-          "url": "https://aoecompanion.com/b/lf4vyc4qi8"
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "nomad",
       "title": "Nomad · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Two builders on the TC, one on the dock; check neighbors",
       "aliases": [
         "Nomad",
         "nomad",
@@ -196,39 +168,43 @@
       ],
       "cards": [
         {
-          "title": "1 · Two villagers build TC, one docks",
-          "body": "Use two nearby villagers to place a TC near wood and food. The other finds shore fish, docks, builds a house and fishes. Avoid long walks for a perfect site."
+          "title": "1 · Two villagers build the TC; one builds a dock",
+          "body": "Two nearby villagers build the TC by wood/food; the third docks and gathers shore fish. Reserve 150 wood + 75 for the first boat; do not delay the TC for perfect mines."
         },
         {
-          "title": "2 · Reserve 75 wood for the first fish",
-          "body": "After TC/dock costs, reserve the first fishing ship. Gradually reach about 5–6 woodcutters while maintaining land food. Start with 3–4 ships near enemies; add more if safe. Ships and villagers share housing."
+          "title": "2 · Fish count depends on the next investment",
+          "body": "Three or four fish can suit a close-dock fast Feudal. Safe back docks permit more. Five or six woodcutters cover one fishing dock; warships and another dock cost extra."
         },
         {
-          "title": "3 · Scout neighbors with sheep",
-          "body": "After placing the TC, use sheep to find neighbors, hunt and enemy docks. Before Feudal, decide between more fishing and military wood. Do not keep booming fish under land/water pressure."
+          "title": "3 · Nearby neighbors may rule out a greedy Fast Castle",
+          "body": "Use herdables to locate neighbors/docks. A close TC or tower pressure on wood/gold favors Feudal investment; unique-unit Fast Castle needs safe gathering space."
         },
         {
-          "title": "4 · Team games: positions are flexible",
-          "body": "Mark yourself and enemies immediately. Cooperate locally; do not delay the TC just to settle beside an ally."
+          "title": "4 · Give fishing ships a route back to the dock",
+          "body": "A standard dock shelters five fishing ships: no Dark Age arrows, at most three in Feudal. Front docks contest space; back docks favor short fishing and retreat routes."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/nomad/details"
         },
         {
-          "title": "Map reference",
-          "url": "https://aoecompanion.com/b/s8ublcj83c"
+          "title": "Strategy",
+          "url": "https://sitaux.com/nomad/"
+        },
+        {
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "land-nomad",
       "title": "Land Nomad · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "No starting TC or fishing economy; hunt into Castle",
       "aliases": [
         "Land Nomad",
         "LandNomad",
@@ -240,38 +216,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Place the TC; no fishing dock",
-          "body": "Build with roughly 2–3 nearby villagers without waiting for everyone to meet. Do not copy the sea-Nomad dock split."
+          "title": "1 · Build near wood and usable food",
+          "body": "Build promptly with two or three nearby villagers beside wood/hunt. There is no fishing boom; use herdables to find more food and enemy TCs."
         },
         {
-          "title": "2 · Sheep scout the next food source",
-          "body": "For distant food, send 1 villager to mill a safe location, then about 4–6 gatherers, adjusted to food available. Avoid blind mass relocations."
+          "title": "2 · Use hunt while it remains defendable",
+          "body": "Plan the next hunting group and mill together. Against nearby pressure, farm under the TC rather than relying on denied hunting routes."
         },
         {
-          "title": "3 · Check neighbors before Fast Castle",
-          "body": "With a nearby enemy TC, protect wood/gold and villagers first. Boom more freely only with safe space."
-        },
-        {
-          "title": "4 · Team games: help by proximity",
-          "body": "There are no fixed flank/pocket roles. Report isolated players and enemy proximity before assigning reinforcements."
+          "title": "3 · Let spawn positions choose the investment",
+          "body": "Distant enemies favor Fast Castle; a TC beside your wood calls for Feudal defense. Place the next TC on usable food and wood/gold."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/land-nomad/details"
         },
         {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Strategy",
+          "url": "https://sitaux.com/chaotic-playstyle/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "african-clearing",
       "title": "African Clearing · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Shore-fish economy; not a sea-Nomad dock opening",
       "aliases": [
         "African Clearing",
         "AfricanClearing",
@@ -282,38 +255,35 @@
       ],
       "cards": [
         {
-          "title": "1 · TC near shore fish and wood",
-          "body": "Villagers gather shore fish directly. Water does not automatically justify a dock."
+          "title": "1 · Place the TC by shore fish and outer wood",
+          "body": "Build by a pond near wood. Villagers gather shore fish directly: no dock or fishing ships needed. Fund mills and military buildings instead."
         },
         {
-          "title": "2 · Move between ponds before fish run out",
-          "body": "Send 1 villager to scout/mill the next pond, then about 4–6 gatherers. Split groups by fish supply; reserve mill wood and gradually add farms."
+          "title": "2 · Prepare the next pond before moving the workers",
+          "body": "Before the pond runs out, send one mill builder, then roughly four to six fishers. Farm if enemy pressure denies the next pond."
         },
         {
-          "title": "3 · Protect scattered fish villagers",
-          "body": "Outside food is vulnerable to cavalry. Scout first, small-wall wood and avoid moving all gatherers into an unknown pond."
-        },
-        {
-          "title": "4 · Team games: share pond information",
-          "body": "Mark enemy TCs and fish villagers. Cavalry can protect outside food or raid together; avoid crowding one pond."
+          "title": "3 · Mobility contests the food economy",
+          "body": "Scouts contest dispersed ponds, with knights/camels as Castle options. A unique-unit Fast Castle still needs military spending to protect exposed fishers."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/african-clearing/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/african-clearing/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "steppe",
       "title": "Steppe · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Six villagers, no TC; tents provide population space",
       "aliases": [
         "Steppe",
         "steppe",
@@ -324,37 +294,25 @@
       ],
       "cards": [
         {
-          "title": "1 · Six villagers build the TC first",
-          "body": "Standard civs start with 6 villagers, no TC and tents for population space. Use all 6 to build nearby; do not waste time searching for perfect wood/gold. Let the starting scout explore; check housing after completion."
+          "title": "1 · Build the TC before houses",
+          "body": "Standard civilizations start with six villagers, no TC and tents for population. Build the TC promptly with the starting group; scout for food instead of making two opening houses."
         },
         {
-          "title": "2 · Food first, then 3–4 on wood",
-          "body": "Put about 6 on nearby food. If sheep are missing, use accessible berries/hunt rather than waiting. Gradually add 3–4 woodcutters and a camp, then connect to your chosen opening."
+          "title": "2 · Food first, then establish wood income",
+          "body": "After the TC finishes, use about six villagers on nearby food and build toward three or four woodcutters. Berries/hunt bridge a missing-sheep start."
         },
         {
-          "title": "3 · Use actual population",
-          "body": "A 19-pop Feudal click still means 19 pop, not 22 because you started with extra villagers. Check militia, Loom and age-up resources separately. TC construction/walking changes timings; do not force an Arabia clock."
-        },
-        {
-          "title": "4 · Exposed wood needs a backup",
-          "body": "During the transition, use 1–2 villagers for short resource walls and preserve TC retreat routes. Defend gathering points rather than building a huge perimeter. In teams, report enemy directions and woodlines."
+          "title": "3 · Use actual population; expect a different clock",
+          "body": "A 19-pop build still means actual population 19. TC construction changes the clock; separately budget the barracks and mining camp before Feudal."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.reddit.com/r/aoe2/comments/vwa7b9/"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/steppe/details"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "megarandom",
@@ -402,7 +360,7 @@
       "id": "glade",
       "title": "Glade · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Usually only four home gold tiles; expansion is beyond the exit",
       "aliases": [
         "Glade",
         "林間空地"
@@ -412,39 +370,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Close narrow exits; no free stone walls",
-          "body": "A Fast Castle can work, but use about 1–2 villagers to seal entrances and leave a gate. Forests are not Arena walls; enemies can still enter through exits."
+          "title": "1 · Wall the opening and plan the next gold",
+          "body": "Wall the entrance for Fast Castle. Home gold is usually four tiles, about 3,200 gold. Locate the next mine outside during the age-up."
         },
         {
-          "title": "2 · Scout outside resources on the way up",
-          "body": "Home minerals are limited. Scout outside gold/stone and use units/monks to secure room before home mines run out. If trapped, defend before adding TCs blindly."
+          "title": "2 · Buy space before committing to extra TCs",
+          "body": "Contest the exit with army/monks before expanding. Unique units into a one-TC fast Imperial is an option; add TCs once outside resources are accessible."
         },
         {
-          "title": "3 · Secure the exit before a castle",
-          "body": "Increase stone only when choosing a castle push. Near 650 stone and with escorts, send about 6–8 builders. Cover the passage and next resource; do not build unprotected in front of enemy units."
-        },
-        {
-          "title": "4 · Stalemate: preserve army for Imperial",
-          "body": "If castles block both sides, prepare trebuchets and add TCs when space allows. In teams, combine armies to free a blocked exit rather than all booming inside."
+          "title": "3 · Use a forward castle to secure the expansion",
+          "body": "Use the first castle to cover the exit, outside gold and forward ground. A castle lock favors Imperial trebuchets over repeatedly adding Castle Age units."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/glade/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/glade/"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "enclosed",
       "title": "Enclosed · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Unbuildable rocky path; usually only two home stone tiles",
       "aliases": [
         "Enclosed",
         "與世隔絕"
@@ -454,43 +408,31 @@
       ],
       "cards": [
         {
-          "title": "1 · Rocky outer paths cannot be built on",
-          "body": "Check buildable ground before walling. Rocky paths cannot hold walls, towers or drop-off buildings. Even a connected inner treeline may leave side routes."
+          "title": "1 · The rocky path cannot hold emergency defenses",
+          "body": "The rocky ring cannot hold walls/towers. Find buildable space for mining camps/TCs before moving miners; emergency defenses must stand off the path."
         },
         {
-          "title": "2 · Scout outside gold and hunt early",
-          "body": "Use the normal home opening, then scout before moving out. If relying on outside hunt for Castle, reserve mill wood and escorts first."
+          "title": "2 · Budget the small home stone deposit",
+          "body": "Usually seven home gold tiles and two stone tiles, about 700 stone. Budget the first castle and TCs; a second castle needs outside stone."
         },
         {
-          "title": "3 · Start outside gathering with 4–6",
-          "body": "Use 1 villager to confirm a building site and retreat route, then move 4–6 gatherers. Add more only with protection. If the route is blocked, change resources; rocky ground cannot save you with emergency buildings."
-        },
-        {
-          "title": "4 · Team games: watch side routes",
-          "body": "Agree reinforcement routes and cover resource flanks. Check buildable ground beyond the rocky path before sending TC or military builders."
+          "title": "3 · Forest cover does not secure the outer route",
+          "body": "Enemies can circle around the forest. Production near the exits supports outside mines; reopen a blocked reinforcement route before sending more workers."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://aoe2db.com/maps/enclosed"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/enclosed/details"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "fortified-clearing",
       "title": "Fortified Clearing · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "A starting front wall; rear access and outside mines",
       "aliases": [
         "Fortified Clearing",
         "fortified_clearing",
@@ -501,38 +443,27 @@
       ],
       "cards": [
         {
-          "title": "1 · Front defenses do not seal the rear",
-          "body": "Scout rear paths and ally directions. Starting defenses do not mean the whole base is walled."
+          "title": "1 · Inspect the rear before treating the base as closed",
+          "body": "The starting wall covers only part of the approach. Inspect rear routes before Fast Castle; spend wall wood on actual gaps."
         },
         {
-          "title": "2 · Plan outside mining early",
-          "body": "Scout the center before home minerals run low. Secure it with army/defenses, then move roughly 4–6 gold miners to start."
-        },
-        {
-          "title": "3 · Keep vision behind the line",
-          "body": "Close rear gaps and preserve resource retreat routes. Flanking can also be an attacking option."
-        },
-        {
-          "title": "4 · Team games: split center and flank duties",
-          "body": "Assign central control and side-route coverage so a combined frontal push does not expose every base."
+          "title": "2 · Expand toward the next mine",
+          "body": "Secondary mines may be outside the wall. Scout them during the age-up and use the next TC/castle to secure mines and wood."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/fortified-clearing/details"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "hideout",
       "title": "Hideout · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Palisade start; two approaches and an outer ring",
       "aliases": [
         "Hideout",
         "hideout",
@@ -543,42 +474,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Check exits in late Dark Age",
-          "body": "Watch for enemy forward wallers during the Feudal transition. Do not discover a sealed exit only after reaching Castle."
+          "title": "1 · Check for a wall-off before Castle Age",
+          "body": "Scout exits before Feudal to catch a wall-off. Militia can contest builders; established walls with ranged support favor using the other approach."
         },
         {
-          "title": "2 · MAA can contest exits, but may be late",
-          "body": "If militia are already out and villagers are walling, act with the scout before the MAA upgrade finishes. Do not charge into archer/tower cover; check another side."
+          "title": "2 · Archer-tower pressure changes the inner layout",
+          "body": "Against archer-tower pressure, rewall outside range, relocate workers or counter-tower to preserve access. Protect the Castle timing; use the tower-defense guide."
         },
         {
-          "title": "3 · Move out with escorts",
-          "body": "Once Castle and the exit are secure, use roughly 2–3 villagers for outside military buildings. Add builders for an outside TC later; do not cram every building inside."
-        },
-        {
-          "title": "4 · Fast Castle is possible; keep scouting",
-          "body": "Rewall or counter-tower under pressure. Contest relics in Castle. Later, seal one side and push another while watching for tree cuts."
+          "title": "3 · Expand through an exit and narrow the late-game front",
+          "body": "Extend monasteries, production and TCs through an exit. In late Castle Age, stonewall one side to concentrate the army on the other."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/hideout/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/hideout/"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/defending-your-empires-aoe2/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "fortress",
       "title": "Fortress · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Ten villagers, a castle and starting farms",
       "aliases": [
         "Fortress",
         "堡壘",
@@ -589,38 +513,31 @@
       ],
       "cards": [
         {
-          "title": "1 · Count existing villagers and buildings",
-          "body": "Check age, population and available buildings. Do not repeat a three-villager Dark Age opening or rebuild facilities you already have."
+          "title": "1 · Use the ten-villager start and five farms",
+          "body": "Standard random-map settings give ten villagers, a castle and five farms. Assign farms, hunt and wood immediately; the larger workforce changes the age-up timing."
         },
         {
-          "title": "2 · Use the starting castle",
-          "body": "Decide between unique-unit production and economy. Check age-up prerequisites and available technologies before advancing."
+          "title": "2 · A unique-unit opening needs no first-castle stone",
+          "body": "No 650-stone investment is needed for the first castle. Fund unique units/upgrades directly, or use it for defense while the next TC secures outside wood/gold."
         },
         {
-          "title": "3 · Scout beyond castle range",
-          "body": "Find outside mines and exits; the initial castle cannot protect the whole map."
-        },
-        {
-          "title": "4 · Team games: assign army and boom roles",
-          "body": "Use existing production for earlier units or coordinate Imperial timing. Avoid everyone waiting for the enemy to act."
+          "title": "3 · The existing castle supports a fast Imperial",
+          "body": "The castle satisfies the building prerequisite for Imperial; Castle still needs two Feudal buildings. Check existing facilities first and use the castle for immediate trebuchets."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/fortress/details"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "black-forest",
       "title": "Black Forest · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Choke-point walling; safe hunt and optional fish ponds",
       "aliases": [
         "Black Forest",
         "Black_Forest",
@@ -631,38 +548,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Scout chokepoints before walling",
-          "body": "Check enemy villagers and alternate routes. For a contested forward wall, about 2 villagers + scout can work; confirm Loom. If uncontested, wall with few villagers without disrupting boar/TC production."
+          "title": "1 · Pay for early walling only when contesting space",
+          "body": "Contested forward walls can justify Loom, two villagers and the scout. Otherwise wall a safe choke; leave room for a second layer against enemy builders."
         },
         {
-          "title": "2 · Extra hunt is useful; ponds are optional",
-          "body": "Take safe additional food. Skip a small or distant pond if dock investment and multitasking would delay the Fast Castle."
+          "title": "2 · Check the pond before changing the build",
+          "body": "Dock plus three fishing ships costs 375 wood. A poor/distant pond favors hunt into farms; a chosen fish boom needs its own extra Dark Age wood."
         },
         {
-          "title": "3 · Leave room for armies at entrances",
-          "body": "If a castle blocks the choke, hold and prepare trebuchets instead of repeatedly feeding units into it."
-        },
-        {
-          "title": "4 · Team games: reinforcement routes and cuts",
-          "body": "Flanks hold entrances; pockets support. Watch treelines in Imperial. Open another route if the main choke is too strong."
+          "title": "3 · Choose siege timing or another route",
+          "body": "A castle-locked choke favors trebuchets. The Mangonel line needs Onager to cut trees; Khmer Ballista Elephants can cut a Castle Age flank earlier."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/black-forest/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/black-forest/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "michi",
       "title": "Michi · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "A forest barrier; plan the cut timing and composition",
       "aliases": [
         "Michi",
         "開道"
@@ -672,38 +586,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Boom with a military plan",
-          "body": "The separating forest allows more economy. Plan extra TCs and your Imperial army; do not wait until an enemy cut to begin production."
+          "title": "1 · The cutting unit sets the contact timing",
+          "body": "Conventional cuts use Imperial Onagers. Khmer Ballista Elephants can cut in Castle Age, so military preparation may need to come earlier."
         },
         {
-          "title": "2 · Add production during Imperial research",
-          "body": "Start around 3–4 main production buildings; a siege role may start with 2 workshops. Have an army ready before the cut and scale with resources."
+          "title": "2 · Build production and upgrades during the age-up",
+          "body": "Add production and upgrades during the age-up; prepare the army before cutting. Bombard Cannons need a university/workshops beforehand and Chemistry on arrival."
         },
         {
-          "title": "3 · Khmer may cut earlier",
-          "body": "Watch for Ballista Elephants. If cutting yourself, mass the army before opening the path."
-        },
-        {
-          "title": "4 · Team games: agree who cuts",
-          "body": "Assign frontline, ranged and siege roles. Keep trade behind the battlefield and away from reinforcement lanes."
+          "title": "3 · Keep trade clear of the planned attack route",
+          "body": "Reserve a rear trade route between opposite-end markets. Keep the planned cut and reinforcement corridor clear of houses and markets."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/michi/details"
         },
         {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Strategy",
+          "url": "https://sitaux.com/close-maps/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "amazon-tunnel",
       "title": "Amazon Tunnel · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "One main tunnel; forests can still be cut",
       "aliases": [
         "Amazon Tunnel",
         "AmazonTunnel",
@@ -714,38 +625,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Scout and seal the shared choke",
-          "body": "Start with about 1–2 villagers on a safe narrow wall. Check the entire line with allies; add escorts if contested."
+          "title": "1 · Wall the shared route, not every individual base",
+          "body": "Identify the tunnel connecting the teams and coordinate one choke-point wall line. Rewall behind tower pressure to preserve gathering space."
         },
         {
-          "title": "2 · Boom, then prepare the army",
-          "body": "During the Imperial transition, start around 3–4 main production buildings or 2 workshops for siege. Have escorts ready before opening and scale to income."
+          "title": "2 · A locked tunnel calls for siege or a forest route",
+          "body": "Break a castle lock with Imperial siege or an Onager flank. Khmer Ballista Elephants can create a Castle Age forest route earlier."
         },
         {
-          "title": "3 · Spread against siege; watch side cuts",
-          "body": "Do not stack frontline and ranged units in one clump. Watch both treelines as the game develops."
-        },
-        {
-          "title": "4 · Team games: complementary armies",
-          "body": "Avoid everyone making the same unit. Leave reinforcement space and keep trade away from the main battle."
+          "title": "3 · Use limited fighting space for complementary units",
+          "body": "Keep the rear trade route open. Limited choke space favors complementary frontline, ranged and siege roles over every player massing the same melee unit."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/amazon-tunnel/details"
         },
         {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Strategy",
+          "url": "https://sitaux.com/close-maps/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "oasis",
       "title": "Oasis · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Central wood; two routes around the outside",
       "aliases": [
         "Oasis",
         "綠洲"
@@ -755,38 +663,27 @@
       ],
       "cards": [
         {
-          "title": "1 · Central wood, routes on both sides",
-          "body": "Scout both ends of the woodline and outside paths. Defending only straight ahead leaves flanks open."
+          "title": "1 · A wood TC does not close the outer ring",
+          "body": "A second TC can secure central wood/mines. Both outer routes lead to enemies; close both approaches or connect walls to the edge."
         },
         {
-          "title": "2 · Refresh lumber camps",
-          "body": "At about 8–10 woodcutters on one camp, or when walking grows long, check a second camp. Reserve 100 wood and spread gathering efficiently."
-        },
-        {
-          "title": "3 · Wall both approaches",
-          "body": "Connect walls to the central forest and map edge; retain vision on the other side."
-        },
-        {
-          "title": "4 · Team games: cover both lanes",
-          "body": "Do not chase with the whole team on one side while the other opens into economy and trade."
+          "title": "2 · Close one route before concentrating on the other",
+          "body": "Close the unused route before concentrating on one side. Assign both ends in team games and keep trade behind those defenses."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/oasis/details"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "four-lakes",
       "title": "Four Lakes · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "One-lake fishing opening; offensive docks and a second lake",
       "aliases": [
         "Four Lakes",
         "FourLakes",
@@ -797,42 +694,43 @@
       ],
       "cards": [
         {
-          "title": "1 · Dock around villager 11–13",
-          "body": "Conservative starting point: 1 villager docks, then takes shore fish. Train 3–4 Dark Age fishing ships; roughly 5–6 woodcutters supports fish production. Reserve houses and military wood separately."
+          "title": "1 · A conservative one-dock baseline",
+          "body": "Generic baseline: dock at villager 11–13, three or four fish. Dock + three boats costs 375 wood; five or six woodcutters cover fishing, not buildings. Lithuanian early docks use a separate build."
         },
         {
-          "title": "2 · Shift food to wood only with enough fish",
-          "body": "Fishing can delay farms once it covers demand. On a safe lake, gradually consider 6–8 ships, adjusting to fish supply and military needs rather than forcing the count."
+          "title": "2 · Shift workers when fishing covers food",
+          "body": "When fish cover food, move some food workers to wood. For Fast Castle, pause new boats if needed to reserve 325 wood for market + blacksmith."
         },
         {
-          "title": "3 · Reserve 800 food + 200 gold for Castle",
-          "body": "Pause fishing-ship production if wood is needed for age-up buildings. Ships cost wood, not food, but land food and gold still matter. Keep existing fishing working."
+          "title": "3 · A forward builder is the route into another lake",
+          "body": "Other lakes require a land builder and a new dock. Watch for enemy builders; shelter fishing ships in docks, with no Dark Age arrows and at most three in Feudal."
         },
         {
-          "title": "4 · Secure one lake before expanding",
-          "body": "Once the first lake and Feudal army are stable, scout another with 1–2 villagers. Reserve 150 wood for a safe dock. Losing a lake means adding farms; keep watching land."
+          "title": "4 · Fund the second lake alongside the land army",
+          "body": "If the first lake still feeds a land battle, fund the army first. Add a second dock with one builder when affordable, then start with a few boats."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/four-lakes/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/four-lakes/"
         },
         {
-          "title": "Map reference",
-          "url": "https://aoecompanion.com/b/lf4vyc4qi8"
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "islands",
       "title": "Islands · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Front-dock distance sets the Feudal timing; back docks shelter fish",
       "aliases": [
         "Islands",
         "島嶼"
@@ -842,38 +740,43 @@
       ],
       "cards": [
         {
-          "title": "1 · Dock direction changes attack timing",
-          "body": "For a nearby-water fast Feudal, dock around villager 11–13 and start 3–4 fishing ships. Scout enemy docks; do not delay navy for extra fish."
+          "title": "1 · Close docks favor an earlier military timing",
+          "body": "Three or four fish can be a fast-Feudal baseline. Reserve 150 wood for a second dock plus fleet resources. Close docks favor earlier army; distant back docks permit more fish."
         },
         {
-          "title": "2 · Wood for fishing, gold for warships",
-          "body": "For Feudal water control, reserve 150 wood for dock #2 during the transition and increase wood/gold. Sustain two docks before adding a third."
+          "title": "2 · Use the current naval counters and dock protection",
+          "body": "Hulks counter Fire Galleys but are vulnerable to Galleys. Shelter threatened fish; Feudal docks fire at most three arrows, changing fights under them."
         },
         {
-          "title": "3 · Watch for landings",
-          "body": "Leave shoreline vision when the fleet moves out. Prepare land defense when transports appear."
-        },
-        {
-          "title": "4 · Team games: combine fleets",
-          "body": "Coordinate dock directions and meeting points to avoid losing isolated fleets."
+          "title": "3 · Convert water control into a next step",
+          "body": "Use a fleet lead to deny docks/fishing, then choose Castle naval pressure or a landing. Transports and land production need separate wood."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/islands/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        },
+        {
+          "title": "Ship counters",
+          "url": "https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "team-islands",
       "title": "Team Islands · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "A shared island; coordinate front and back docks",
       "aliases": [
         "Team Islands",
         "Team_Islands",
@@ -884,38 +787,39 @@
       ],
       "cards": [
         {
-          "title": "1 · Coordinate dock directions",
-          "body": "Rear docks can fish safely; forward docks fight sooner. Adjust the opening to sailing distance."
+          "title": "1 · Assign the first naval fight",
+          "body": "Front players fund fast Feudal and a second dock; distant back docks can add fish. Assign the first naval wave instead of everyone choosing a delayed opening."
         },
         {
-          "title": "2 · Share fishing and navy duties",
-          "body": "Front-water players reserve dock #2 and military resources during the transition. Rear players add beyond 3–4 fish only when allies can cover the fight. The whole team cannot only fish-boom."
+          "title": "2 · Maintain production through the age transition",
+          "body": "Keep reinforcing the front. Medium Warships upgrades the Galley, Fire Galley and Hulk lines together in Castle Age, giving a mixed fleet a shared upgrade timing."
         },
         {
-          "title": "3 · Landings threaten the shared island",
-          "body": "Watch shoreline gaps and report landed villagers promptly. Do not focus exclusively on ships."
-        },
-        {
-          "title": "4 · Divide sea coverage",
-          "body": "Agree who takes first contact and who reinforces. Avoid clustering every dock on one shore."
+          "title": "3 · A landing bypasses the naval front",
+          "body": "Assign one player a land response to enemy builders/production while others hold water. Avoid abandoning the naval front with the whole team."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/team-islands/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "migration",
       "title": "Migration · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Small starting islands; transport and a central foothold",
       "aliases": [
         "Migration",
         "遷徙",
@@ -926,38 +830,39 @@
       ],
       "cards": [
         {
-          "title": "1 · Plan the move before resources run out",
-          "body": "Find the mainland and a landing site before the starting island runs out of wood/minerals."
+          "title": "1 · Long sailing distances can support Fast Castle",
+          "body": "Scout the mainland before island resources run low. Long sailing distances and safe back docks can support fish into Fast Castle; an early landing changes military needs."
         },
         {
-          "title": "2 · Reserve transport and TC costs",
-          "body": "For standard civs, budget 125 wood for a transport and 275 wood + 100 stone for the landing TC. Do not spend every wood income on fishing ships. Scout in Feudal; build the TC in Castle."
+          "title": "2 · Reserve 400 wood and 100 stone for the move",
+          "body": "Transport + TC costs 400 wood and 100 stone for standard civilizations. Scout in Feudal, send roughly four to six builders when safe, and place the TC on Castle arrival."
         },
         {
-          "title": "3 · Scout, then transport villagers",
-          "body": "Once the route is safe, roughly 4–6 villagers can establish the landing. Escort under naval pressure; avoid risking a large group at once."
-        },
-        {
-          "title": "4 · Team games: establish a shared foothold",
-          "body": "Coordinate landing and escort routes. Hold one mainland area before spreading TCs."
+          "title": "3 · Choose a foothold that can sustain production",
+          "body": "The first mainland TC should secure wood/gold and production space. A resource-poor beach needs another move; choose a different landing if the shore is blocked."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/migration/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "northern-isles",
       "title": "Northern Isles · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Naval fighting and early landings",
       "aliases": [
         "Northern Isles",
         "NorthernIsles",
@@ -969,38 +874,39 @@
       ],
       "cards": [
         {
-          "title": "1 · Check sailing distance and landings",
-          "body": "Island terrain does not rule out land aggression. Scout dock directions and likely landing shores."
+          "title": "1 · Choose the first investment: fleet or landing",
+          "body": "Naval opening: three or four fish and a second dock during the age-up. A landing needs transport/land-production wood instead. Fund a coherent first attack."
         },
         {
-          "title": "2 · Choose navy or landing investments",
-          "body": "Start around 3–4 fish for an early Feudal plan. Navy needs dock #2 during the transition; a landing needs transport and land-building wood. Avoid funding everything at once."
+          "title": "2 · A rear landing needs a land response",
+          "body": "Transports can bypass the fleet. Deal with landed builders and the first production building before a protected range/stable forces a costly land transition."
         },
         {
-          "title": "3 · Keep shoreline vision",
-          "body": "React to transports or landed villagers before their military buildings finish."
-        },
-        {
-          "title": "4 · Team games: watch rear shores too",
-          "body": "Combine fleets while someone watches the rear. Share landing information immediately."
+          "title": "3 · Use actual sailing distance for the age-up",
+          "body": "Close docks favor fast Feudal; distant back docks allow more fish. Reserve fleet resources near enemy docks and shelter threatened fish; Dark Age docks fire no arrows."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/northern-isles/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "Naval mechanics",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "gold-rush",
       "title": "Gold Rush · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Central hill gold; establish position before mining",
       "aliases": [
         "Gold Rush",
         "Gold_Rush",
@@ -1011,38 +917,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Scout central predators",
-          "body": "The central gold hill also has dangerous wildlife. Scout or take side routes with infantry and forward villagers."
+          "title": "1 · Keep early foot units out of the central predators",
+          "body": "Predators occupy the central hill. Route militia and forward builders around it, preserving health and arrival timing."
         },
         {
-          "title": "2 · Contest the center before greedy TCs",
-          "body": "Use home gold for the first army. In a contested center, 1–2 TCs can leave more resources for units and a castle."
+          "title": "2 · Castle Age army secures the hill",
+          "body": "Use home gold for the first army. One or two TCs preserve military spending; secure the hill before moving miners."
         },
         {
-          "title": "3 · Secure the hill before building",
-          "body": "If choosing a castle and military spending is covered, start roughly 6–8 stone miners. Near 650 stone, prepare builders; secure the hill first, then build and move gold miners."
-        },
-        {
-          "title": "4 · Lost center: hold a useful flank",
-          "body": "A side castle that secures some gold still has value. In a stalemate, prepare Imperial trebuchets or raid to pull the opponent away."
+          "title": "3 · Prepare stone for a useful high-ground castle",
+          "body": "For a central castle, start roughly three or four stone miners on Castle arrival. Cover gold and uphill access; denied players can contest outer hills or flank before trebuchets."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/gold-rush/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/gold-rush/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "golden-pit",
       "title": "Golden Pit · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Central low-ground gold; defend from the rim",
       "aliases": [
         "Golden Pit",
         "goldenpit",
@@ -1053,42 +956,35 @@
       ],
       "cards": [
         {
-          "title": "1 · Take early opportunities",
-          "body": "You need not wait for the center or Imperial. Keep worthwhile pressure going. Watch central gold, but home or side gold can support the plan first."
+          "title": "1 · Use home gold for the opening",
+          "body": "Use a standard land opening and pressure home resources when possible. Plan pit access as home gold declines; center rushes and fast Imperial are options, not defaults."
         },
         {
-          "title": "2 · For a castle plan, start stone in Castle",
-          "body": "Around 3–4 early stone miners can prepare a midgame castle; add more when military funds allow. Cover gold and retreat routes, not necessarily the exact center. Bring escorts."
+          "title": "2 · A castle plan starts with gradual stone income",
+          "body": "A castle plan can start with three or four stone miners on arrival. A rim castle covering gold/access need not stand in the deepest center."
         },
         {
-          "title": "3 · Watch the pit rim",
-          "body": "Consider elevation for both miners and fights. Avoid chasing downhill into an encirclement; preserve villager retreat routes."
-        },
-        {
-          "title": "4 · Imperial for a stalemate, not by rule",
-          "body": "If castles stop Castle Age pressure, save for trebuchets. If pressure is still working, keep investing rather than forcing Fast Imperial."
+          "title": "3 · Protect the uphill route out of the pit",
+          "body": "Keep the army on the rim and protect miners’ exit. If a castle denies gold, cover another section or prepare trebuchets rather than repeatedly attacking uphill."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/golden-pit/details"
         },
         {
-          "title": "Map reference",
+          "title": "Strategy",
           "url": "https://sitaux.com/golden-pit/"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://sitaux.com/close-maps/"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "yucatan",
       "title": "Yucatan · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Extra hunt and berries; plan the next natural-food source",
       "aliases": [
         "Yucatan",
         "猶加敦"
@@ -1098,38 +994,31 @@
       ],
       "cards": [
         {
-          "title": "1 · Find the extra food",
-          "body": "Do not stop scouting after the standard sheep/boars. Extra hunt and berries change the farm transition."
+          "title": "1 · Extra natural food changes the wood budget",
+          "body": "Extra hunt/berries can delay farms and free wood for military buildings or another lumber camp while safe food sustains production."
         },
         {
-          "title": "2 · Use safe food before mass farms",
-          "body": "Before the last TC food runs out, send 1 villager to mill safe outside food, then roughly 4–6 gatherers. Farm instead if the food is distant or pressured."
+          "title": "2 · Move to a prepared food source",
+          "body": "Prepare a safe mill before TC food runs out, then move roughly four to six workers. Enemy scouts on outside routes can make farms preferable."
         },
         {
-          "title": "3 · Forests do not guarantee safety",
-          "body": "Scout passages and watch cavalry/towers near outside food. Dense trees are not a complete wall."
-        },
-        {
-          "title": "4 · Team games: share food and routes",
-          "body": "Mark extra food for allies and cover the directions used for outside gathering."
+          "title": "3 · Check the walking route before choosing early aggression",
+          "body": "Forest can turn a short straight-line distance into a long march. Scout the route before choosing Men-at-Arms; a detour gives opponents time to wall."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+          "title": "Map resources",
+          "url": "https://aoebuddy.com/maps/yucatan/details"
         }
-      ]
+      ],
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "arabian-desert",
       "title": "Arabian Desert · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Sparse woodlines; deer and small-animal variants",
       "aliases": [
         "Arabian Desert",
         "阿拉伯沙漠"
@@ -1137,43 +1026,31 @@
       "map_ids": [],
       "cards": [
         {
-          "title": "1 · Standard land opening, actual animals",
-          "body": "Count this game's herdables, boars and deer. Adjust food gathering and boar timing rather than insisting on a fixed sheep count or Feudal minute."
+          "title": "1 · Budget a mill for small-animal variants",
+          "body": "Fewer deer or small-animal variants may need a 100-wood mill. Budget it before mill, barracks and mining camp compete for the final Dark Age wood."
         },
         {
-          "title": "2 · Plan a second woodline on the way up",
-          "body": "Sparse forests leave resources exposed. Choose a defensible first camp; reserve 100 wood for another if crowded, depleted or threatened."
+          "title": "2 · Choose a second woodline during the age-up",
+          "body": "For small/exposed forests, scout a second woodline and reserve 100 wood during the age-up. Prefer a different approach so one archer group cannot deny both."
         },
         {
-          "title": "3 · Short walls and a woodline retreat",
-          "body": "Use 1–2 villagers to protect wood/gold with houses and short walls. Avoid a huge perimeter that delays units. Against archers, leave space behind walls and a fallback gathering point."
-        },
-        {
-          "title": "4 · Team games: protect flank wood",
-          "body": "Meet where cavalry and archers can support exposed resources. Pockets should check whether the flank can keep gathering wood before adding more economy."
+          "title": "3 · Thin woodlines need a response to archers",
+          "body": "Small walls stop melee. Archers hitting thin woodlines call for skirmishers or a move; longer walls can simply delay the first defensive units."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
-          "url": "https://aoebuddy.com/maps"
-        },
-        {
-          "title": "Map reference",
-          "url": "https://sitaux.com/arabia/"
-        },
-        {
-          "title": "Map reference",
+          "title": "Map resources",
           "url": "https://aoebuddy.com/maps/arabian-desert/details"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     },
     {
       "id": "haboob",
       "title": "Haboob · Map tips",
       "civ": "",
-      "subtitle": "Opening and economy adjustments. Counts are practice starting points; adapt to your civilization, resources and pressure.",
+      "subtitle": "Distant exposed wood; defend it with army",
       "aliases": [
         "Haboob",
         "哈布風"
@@ -1183,29 +1060,25 @@
       ],
       "cards": [
         {
-          "title": "1 · Scout a reachable woodline",
-          "body": "Use a standard land start, but locate a nearby forest with a retreat route. Do not rely on TC stragglers until wood runs out. Lure large hunt under the TC."
+          "title": "1 · Locate the first usable forest early",
+          "body": "Substantial forests are far from the TC’s straggler trees. Scout a usable line before sending woodcutters or exhausting the stragglers."
         },
         {
-          "title": "2 · Find backup wood before Feudal",
-          "body": "Sparse forests are hard to enclose. Scout a second woodline during the transition. If the first is denied or inefficient, use 1–2 villagers to build a new camp, then move workers in stages; reserve 100 wood."
+          "title": "2 · Army takes priority over an expensive full wall",
+          "body": "Full walls are costly. For Men-at-Arms into skirmishers, prioritize the range and first skirmishers over long outer walls; small walls only stop melee."
         },
         {
-          "title": "3 · Army protects wood; walls buy time",
-          "body": "Small walls stop melee, but archers need defenders or relocation. Budget blacksmith, range and reinforcement wood before spending heavily on long walls."
-        },
-        {
-          "title": "4 · Team games: hold production resources",
-          "body": "Report woodlines and enemy approach routes. Combine cavalry/archers to secure gathering. Stabilize one woodline before expanding so the whole team does not lose production while relocating."
+          "title": "3 · Have a second woodline ready before archers arrive",
+          "body": "Reserve 100 wood and scout another forest during the age-up. If archers deny the first, open the next camp with one builder; a second TC can secure it in Castle."
         }
       ],
       "sources": [
         {
-          "title": "Map reference",
+          "title": "Map resources",
           "url": "https://aoebuddy.com/maps/haboob/details"
         }
       ],
-      "reviewed_on": "2026-10-30"
+      "reviewed_on": "2026-11-13"
     }
   ]
 }

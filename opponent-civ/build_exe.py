@@ -45,8 +45,8 @@ def main():
         str(HERE / 'dashboard.py'),
     ], check=True)
     exe = (destination / f'{EXE_NAME}.exe').resolve()
-    # Validate both language catalogs inside the actual one-file EXE.
-    for lang in ('tw', 'en'):
+    # Validate every language catalog inside the actual one-file EXE.
+    for lang in ('tw', 'en', 'zh'):
         with tempfile.TemporaryDirectory() as folder:
             report = Path(folder) / 'catalog-check.json'
             subprocess.run([str(exe), '--lang', lang, '--check-bundled-data', str(report)],

@@ -13,7 +13,7 @@ def normalized(value):
 
 
 def load_map_notes(path=None, *, lang=None):
-    data = json.loads(Path(path or (catalog_path("map-notes", lang) if (lang or language()) == "en" else DATA_PATH)).read_text(encoding='utf-8'))
+    data = json.loads(Path(path or (DATA_PATH if (lang or language()) == 'tw' else catalog_path('map-notes', lang))).read_text(encoding='utf-8'))
     if data.get('schema_version') != 1 or not isinstance(data.get('maps'), list):
         raise ValueError('invalid map notes catalog')
     seen_ids, seen_aliases, seen_maps = set(), set(), set()

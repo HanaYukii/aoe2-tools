@@ -1,0 +1,1110 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-11-13",
+  "maps": [
+    {
+      "id": "arabia",
+      "title": "阿拉伯半岛 · 地图注意",
+      "civ": "",
+      "subtitle": "一般陆图流程｜依木金位置调整",
+      "aliases": [
+        "Arabia",
+        "阿拉伯",
+        "阿拉伯半岛"
+      ],
+      "map_ids": [
+        9
+      ],
+      "cards": [
+        {
+          "title": "① 前木、前金：先留防守木",
+          "body": "• 木金都在前方时，封建先留靶场／马厩与防守兵费，再存城堡。小围只挡近战，对小弓要补兵或换木。"
+        },
+        {
+          "title": "② 推鹿与探兵别撞时间",
+          "body": "• 升封途中斥候去看敌军事建筑与首批兵；若仍在推鹿，首座靶场可能来不及接对手小弓。转兵看文明速查。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/arabia/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/arabia/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "arena",
+      "title": "竞技场 · 地图注意",
+      "civ": "",
+      "subtitle": "石墙直城｜先决定遗迹投资",
+      "aliases": [
+        "Arena",
+        "競技場",
+        "竞技场"
+      ],
+      "map_ids": [
+        29
+      ],
+      "cards": [
+        {
+          "title": "① 抢遗迹：马厩上城、先留修道院",
+          "body": "• 肉马抢遗迹用马厩＋铁匠铺上城；升城中备肉马，上城留 175 木修道院＋首僧 100 金，再接额外 TC。"
+        },
+        {
+          "title": "② 看到前置村：保直城、延后连开 TC",
+          "body": "• 看到前置塔／城堡，就先保内部木金通路，延后连开 TC。防塔攻、防压堡的配工与出兵看专页。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/arena/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/close-maps/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "socotra",
+      "title": "索科特拉岛 · 地图注意",
+      "civ": "",
+      "subtitle": "近距离｜六羊系、一象、五小猎物",
+      "aliases": [
+        "Socotra",
+        "索科特拉島",
+        "索科特拉岛"
+      ],
+      "map_ids": [
+        87
+      ],
+      "cards": [
+        {
+          "title": "① 唯一一象：先找到、早拉回 TC",
+          "body": "• 常见为 6 羊系、1 象、5 小猎物。先找到象、提早拉回 TC，推鹿前先防偷象；没有第二只猪。"
+        },
+        {
+          "title": "② 少两羊、少一猪：外食要提早接",
+          "body": "• 象快吃完就选鹿／果的磨坊位；被偷象时，先接果与田，延后极限武士人口，不硬套一般陆图羊猪流程。"
+        },
+        {
+          "title": "③ 接敌快：升封前就备防守",
+          "body": "• 敌村、民兵可能黑暗就到；要村民对打先织布。升封中完成木金短围与兵营，别照远距离图等上封才备防守。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/socotra/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/chaotic-playstyle/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "scandinavia",
+      "title": "斯堪地那维亚 · 地图注意",
+      "civ": "",
+      "subtitle": "三只大型猎物｜陆战与分离水域",
+      "aliases": [
+        "Scandanavia",
+        "Scandinavia",
+        "斯堪地那維亞",
+        "斯堪的納維亞",
+        "斯堪地那维亚",
+        "斯堪的纳维亚"
+      ],
+      "map_ids": [
+        25
+      ],
+      "cards": [
+        {
+          "title": "① 第三只大猎物也要找",
+          "body": "• 有 3 只大型猎物，另有鹿与小鸡系食物；安全野味先吃、羊留衔接。食物接得上就晚撒田，木先给港与兵。"
+        },
+        {
+          "title": "② 单港起点：第 11–13 村、3–4 艘鱼",
+          "body": "• 练习可第 11–13 村开港、黑暗 3–4 艘鱼；约 5–6 木村续鱼，建筑另留木。点封后鱼接住食物，再转村到木。"
+        },
+        {
+          "title": "③ 偷港要走陆路，封建就能做",
+          "body": "• 要打对手鱼，派村走陆路到另一片水域下港。自己捕鱼船可退船坞；黑暗不射箭，封建才有火力，仍要留军船费。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/scandinavia/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/scandinavia/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "nomad",
+      "title": "游牧 · 地图注意",
+      "civ": "",
+      "subtitle": "两村 TC、一村港｜先看邻居距离",
+      "aliases": [
+        "Nomad",
+        "nomad",
+        "游牧",
+        "遊牧"
+      ],
+      "map_ids": [
+        33
+      ],
+      "cards": [
+        {
+          "title": "① 相近两村落 TC，另一村开港",
+          "body": "• 相近两村找木＋食物落 TC；第三村下港后采岸鱼。先留港 150 木＋首船 75 木，不为凑齐木金石拖 TC。"
+        },
+        {
+          "title": "② 鱼量跟上封、军费一起决定",
+          "body": "• 近敌港想快封争海，可先 3–4 艘鱼；安全后港、晚封直城才续加。单港约 5–6 木村，军船与第二港另算。"
+        },
+        {
+          "title": "③ 近邻先军、远邻再考虑直城堡兵",
+          "body": "• 羊先找邻居与敌港。近敌 TC、木金受塔位控制就先打封建；有安全采集空间，才走直城堡兵。"
+        },
+        {
+          "title": "④ 船坞是捕鱼船退路",
+          "body": "• 一般船坞容纳 5 艘捕鱼船；黑暗不射箭，封建最多 3 箭。前港争位置、后港保鱼，落点兼顾近鱼与退港路线。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/nomad/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/nomad/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "land-nomad",
+      "title": "陆地游牧 · 地图注意",
+      "civ": "",
+      "subtitle": "无起始 TC、无渔业｜野味接直城",
+      "aliases": [
+        "Land Nomad",
+        "LandNomad",
+        "陸地游牧",
+        "陸地遊牧",
+        "陆地游牧"
+      ],
+      "map_ids": [
+        141
+      ],
+      "cards": [
+        {
+          "title": "① TC 靠木与野味，不先找完美金石",
+          "body": "• 相近 2–3 村靠木与野味落 TC，没有海游牧的捕鱼船经济。羊先探更多猎物、敌 TC，近果也可衔接。"
+        },
+        {
+          "title": "② 野味可省田，外食快空先换点",
+          "body": "• 下一批猎物连磨坊一起规划；近敌就把田接回 TC。外食被卡时，省下的田木不值得换整群猎人的安全。"
+        },
+        {
+          "title": "③ 出生位置决定先军还是直城",
+          "body": "• 敌远可偏直城；敌 TC 贴木区就先留封建军费。第二 TC 优先接下一处野味与木金，别只往家后堆。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/land-nomad/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/chaotic-playstyle/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "african-clearing",
+      "title": "非洲林中空地 · 地图注意",
+      "civ": "",
+      "subtitle": "岸鱼经济｜不用照海游牧开港",
+      "aliases": [
+        "African Clearing",
+        "AfricanClearing",
+        "非洲林中空地"
+      ],
+      "map_ids": [
+        149
+      ],
+      "cards": [
+        {
+          "title": "① TC 靠鱼池与外圈木",
+          "body": "• 找到靠木鱼池就落 TC；村民直接采岸鱼，不用开港、造鱼船。省下的木先接磨坊与军事建筑。"
+        },
+        {
+          "title": "② 下一池先下磨坊，再移采鱼村",
+          "body": "• 第一池快空，1 村先下下一个磨坊，再移约 4–6 村。外池被敌军卡住就接田，不把食物全押在远采。"
+        },
+        {
+          "title": "③ 肉马、骑士能同时抢食物空间",
+          "body": "• 分散鱼池适合肉马探路、压采鱼村，城堡可接骑士／骆驼；选直城堡兵，也要留保护外食的军费。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/african-clearing/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/african-clearing/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "steppe",
+      "title": "干草原 · 地图注意",
+      "civ": "",
+      "subtitle": "六村、无 TC｜帐篷提供人口",
+      "aliases": [
+        "Steppe",
+        "steppe",
+        "乾草原",
+        "干草原"
+      ],
+      "map_ids": [
+        75
+      ],
+      "cards": [
+        {
+          "title": "① 六村先落 TC，不先两房",
+          "body": "• 一般文明 6 村、无 TC，已有帐篷供人口。六村先就近盖 TC，斥候找食物；不用先重做两房开局。"
+        },
+        {
+          "title": "② 完工先接食物，再补 3–4 木村",
+          "body": "• TC 完工约 6 村采近食，新村逐步补到 3–4 木村。没羊就接果／野味，食物接上再回原打法。"
+        },
+        {
+          "title": "③ 点封看实际人口，时间另抓",
+          "body": "• 19P 仍看实际 19 人口，不因多三村改成 22P；TC 施工会改变时间。升封前另外检查兵营与采金场的木。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/steppe/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "megarandom",
+      "title": "超级随机 · 地图注意",
+      "civ": "",
+      "subtitle": "开局与运营调整｜数字是练习起点，依文明、资源与战况调整。",
+      "aliases": [
+        "MegaRandom",
+        "megarandom",
+        "超級隨機",
+        "超级随机"
+      ],
+      "map_ids": [
+        77
+      ],
+      "cards": [
+        {
+          "title": "① 先盘点起始条件",
+          "body": "• 开局约前 30 秒先盘点村、兵、建筑、库存与人口上限；缺什么先补什么，不直接照固定人口流程。"
+        },
+        {
+          "title": "② 食物决定开局调整",
+          "body": "• 多猎物先利用；有安全鱼考虑船坞、加木村；缺猎物就早接果／田。"
+        },
+        {
+          "title": "③ 确认水陆是否相通",
+          "body": "• 先找浅滩、缺口与特殊建筑，不靠外观猜能否直城。"
+        },
+        {
+          "title": "④ 团战：先交换情报",
+          "body": "• 起始与地形差异先报；依距离分海陆工作，不硬套边内家。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图盘点",
+          "url": "https://aoebuddy.com/maps"
+        },
+        {
+          "title": "侦查与资源原则",
+          "url": "https://www.ageofempires.com/learn-to-play/expanding-your-empire-aoe2/"
+        }
+      ]
+    },
+    {
+      "id": "glade",
+      "title": "林间空地 · 地图注意",
+      "civ": "",
+      "subtitle": "家金通常仅四格｜出口外才有扩张空间",
+      "aliases": [
+        "Glade",
+        "林間空地",
+        "林间空地"
+      ],
+      "map_ids": [
+        188
+      ],
+      "cards": [
+        {
+          "title": "① 先封窄口，家里不是现成石墙",
+          "body": "• 补短墙可直城；家金通常仅 4 格、约 3,200 金。升城途中先选出口外的下一矿，不等家金空才出门。"
+        },
+        {
+          "title": "② 先争出口，再加 TC 或前置堡",
+          "body": "• 上城先兵／僧侣争出口；被封口就先投军费。堡兵控图、单 TC 快帝也可选，有外矿与空间再加 TC。"
+        },
+        {
+          "title": "③ 前堡保外金，帝王用巨投解封",
+          "body": "• 首堡保出口、外金与前进高地。双方城堡锁住时，接帝王巨投解口，不一直添城堡兵撞堡。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/glade/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/glade/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "enclosed",
+      "title": "与世隔绝 · 地图注意",
+      "civ": "",
+      "subtitle": "不可建造岩路｜家石通常仅两格",
+      "aliases": [
+        "Enclosed",
+        "與世隔絕",
+        "与世隔绝"
+      ],
+      "map_ids": [
+        169
+      ],
+      "cards": [
+        {
+          "title": "① 岩路不能靠塔、墙临时救场",
+          "body": "• 外圈岩路不能盖墙塔；外矿要先找可落采矿场、TC 的地面，再移村。内墙接树线，不靠岩路临时反塔。"
+        },
+        {
+          "title": "② 家石两格，第二堡要找外石",
+          "body": "• 家里通常 7 格金、2 格石（约 700 石）。先算首堡与 TC 用石；要接第二堡，提早探外石。"
+        },
+        {
+          "title": "③ 树多但侧路短，军事建筑往出口",
+          "body": "• 敌军可沿外圈绕路；军事建筑靠出口，才接得到外矿。外矿通路被切时先解路，不继续送村进去。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/enclosed/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "fortified-clearing",
+      "title": "强化空地 · 地图注意",
+      "civ": "",
+      "subtitle": "前方起始防线｜后路与外矿",
+      "aliases": [
+        "Fortified Clearing",
+        "fortified_clearing",
+        "強化空地",
+        "强化空地"
+      ],
+      "map_ids": [
+        189
+      ],
+      "cards": [
+        {
+          "title": "① 前方有墙，后路仍要补",
+          "body": "• 起始墙只挡部分方向；先探树线后方绕路，再决定直城。施工木留给后方缺口，不重拉已有防线。"
+        },
+        {
+          "title": "② 第一波外置建筑保次金",
+          "body": "• 次金、次石不一定在防线内；升城途中先探。第二 TC／城堡优先接外矿与木区，不全塞起始墙后。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/fortified-clearing/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "hideout",
+      "title": "藏身之处 · 地图注意",
+      "civ": "",
+      "subtitle": "木墙开局｜双侧出口与外圈",
+      "aliases": [
+        "Hideout",
+        "hideout",
+        "藏身之處",
+        "藏身之处"
+      ],
+      "map_ids": [
+        72
+      ],
+      "cards": [
+        {
+          "title": "① 黑暗就看出口，别等上城才防封",
+          "body": "• 升封前巡出口，防敌村先封路。有民兵就先打施工村；若墙已成、又有弓塔，改从另一侧展开。"
+        },
+        {
+          "title": "② 木墙挡不住弓塔，保内部转采",
+          "body": "• 弓塔封前木金，就在射程外内墙、换采或反塔保路，先保直城。上城出兵与配工沿用防塔攻页。"
+        },
+        {
+          "title": "③ 城堡后向外置，晚城封一侧",
+          "body": "• 修道院、军事建筑与新 TC 可向出口外置。晚城准备推进时，可石墙封一侧，主力集中另一侧。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/hideout/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/hideout/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "fortress",
+      "title": "堡垒 · 地图注意",
+      "civ": "",
+      "subtitle": "十村、城堡与现成田｜重排黑暗开局",
+      "aliases": [
+        "Fortress",
+        "堡壘",
+        "要塞",
+        "堡垒"
+      ],
+      "map_ids": [
+        16
+      ],
+      "cards": [
+        {
+          "title": "① 十村起手，先把现成田采起来",
+          "body": "• 一般随机地图有 10 村、起始城堡、5 田。先采田、拉猪与补木；村数较多，上封节奏也要重排。"
+        },
+        {
+          "title": "② 上城可直接出堡兵，先补食金",
+          "body": "• 首堡不用挖 650 石；选堡兵开就先备兵费与升级。走农则用起始城堡保家，第二 TC 接外侧木金。"
+        },
+        {
+          "title": "③ 快帝利用已有城堡，仍要补时代建筑",
+          "body": "• 起始城堡能满足升帝建筑条件；上城仍要两座封建建筑。先查已有设施再补，快帝后可立刻出巨投。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/fortress/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "black-forest",
+      "title": "黑森林 · 地图注意",
+      "civ": "",
+      "subtitle": "窄口抢墙｜安全野味与选用鱼塘",
+      "aliases": [
+        "Black Forest",
+        "Black_Forest",
+        "黑森林"
+      ],
+      "map_ids": [
+        12
+      ],
+      "cards": [
+        {
+          "title": "① 抢前墙才提早织布、拉两村",
+          "body": "• 抢前墙才提早织布、用约 2 村＋斥候；无人争口就封安全窄处。早墙留第二层空间，防敌村贴墙抢盖。"
+        },
+        {
+          "title": "② 鱼塘够近、鱼够多才开港",
+          "body": "• 船坞＋3 艘鱼共 375 木。鱼塘远、鱼少就用野味接田；选捕鱼船农，才提早多分木村，别把港硬插原直城。"
+        },
+        {
+          "title": "③ 窄口锁住：帝王巨投或另开树路",
+          "body": "• 堡卡窄口可接帝王巨投；投车线到中型投石车才可砍树。高棉城堡重弩战象就能开路，要提早防侧树。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/black-forest/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/black-forest/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "michi",
+      "title": "开道 · 地图注意",
+      "civ": "",
+      "subtitle": "森林隔开｜先订开路时间与配兵",
+      "aliases": [
+        "Michi",
+        "開道",
+        "开道"
+      ],
+      "map_ids": [
+        154
+      ],
+      "cards": [
+        {
+          "title": "① 开路科技决定何时接敌",
+          "body": "• 一般靠帝王中型投石车砍树；高棉城堡重弩战象就能开。对高棉提早备军，不缺省帝王才接敌。"
+        },
+        {
+          "title": "② 点帝就补主力建筑，开路前完成配兵",
+          "body": "• 点帝就补主力建筑与攻防，成军再开洞。若走火炮，升帝中先学院＋BK，帝王立刻化学。"
+        },
+        {
+          "title": "③ 贸易先放后线，别卡未来信道",
+          "body": "• 先留后方两端市场与商队通路；预定砍树、进兵的位置也要留空，别被房子、市场卡住。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/michi/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/close-maps/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "amazon-tunnel",
+      "title": "亚马逊隧道 · 地图注意",
+      "civ": "",
+      "subtitle": "一条主信道｜森林仍可被开路",
+      "aliases": [
+        "Amazon Tunnel",
+        "AmazonTunnel",
+        "亞馬遜隧道",
+        "亚马逊隧道"
+      ],
+      "map_ids": [
+        147
+      ],
+      "cards": [
+        {
+          "title": "① 封主信道就能农，先对齐队友墙线",
+          "body": "• 先认通敌方的主信道，在窄处共用墙线，不必每家各围。受塔攻往后补，保住后方采集空间。"
+        },
+        {
+          "title": "② 主信道僵持，准备帝王或树路",
+          "body": "• 堡卡主口就接帝王巨投／火炮，或中型投石车砍侧路。对高棉提早防城堡重弩战象开洞。"
+        },
+        {
+          "title": "③ 团战先留贸易线与攻城分工",
+          "body": "• 后场留直通市场的商队线；前口站位少，分工前排、远程、BK，别全队用同种近战挤信道。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/amazon-tunnel/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/close-maps/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "oasis",
+      "title": "绿洲 · 地图注意",
+      "civ": "",
+      "subtitle": "木在中央｜外圈两侧都能通行",
+      "aliases": [
+        "Oasis",
+        "綠洲",
+        "绿洲"
+      ],
+      "map_ids": [
+        31
+      ],
+      "cards": [
+        {
+          "title": "① 第二 TC 可保中央木，侧面仍会被绕",
+          "body": "• 第二 TC 可接中央木与矿；外圈左右都通敌方，墙要接边缘、补两侧，不能只封正面。"
+        },
+        {
+          "title": "② 前线可单侧推，另一侧先用墙缩线",
+          "body": "• 集中打一侧前，先封另一侧绕家路。团战两边各守一端，商队放后方，避免空侧直接通贸易。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/oasis/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "four-lakes",
+      "title": "四片湖泊 · 地图注意",
+      "civ": "",
+      "subtitle": "单湖渔业开局｜偷港与第二湖",
+      "aliases": [
+        "Four Lakes",
+        "FourLakes",
+        "四座湖泊",
+        "四片湖泊"
+      ],
+      "map_ids": [
+        140
+      ],
+      "cards": [
+        {
+          "title": "① 开港基准：第 11–13 村、3–4 艘鱼",
+          "body": "• 一般文明可第 11–13 村开港、黑暗 3–4 鱼；港＋3 鱼共 375 木。约 5–6 木村续鱼，建筑另算；立陶宛早港另有流程。"
+        },
+        {
+          "title": "② 点封后转部分食物村到木",
+          "body": "• 鱼接住食物后，部分食村转木、少撒田。直城缺木就先停新鱼，留市场＋铁匠铺 325 木；现有鱼照采。"
+        },
+        {
+          "title": "③ 四湖不相通，敌村下港才会进船",
+          "body": "• 跨湖要派村走陆路下港，先看自己湖岸敌村。捕鱼船可退港；黑暗不射箭，封建最多 3 箭。"
+        },
+        {
+          "title": "④ 第二湖跟主力军费一起排",
+          "body": "• 第一湖还能采、陆军正接战就先续兵；有余裕再 1 村下第二港，少量鱼起步，不同时全投多湖与上城。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/four-lakes/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/four-lakes/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "islands",
+      "title": "岛屿 · 地图注意",
+      "civ": "",
+      "subtitle": "前港距离决定快封｜后港保鱼",
+      "aliases": [
+        "Islands",
+        "島嶼",
+        "岛屿"
+      ],
+      "map_ids": [
+        19
+      ],
+      "cards": [
+        {
+          "title": "① 前港近：快封军费优先",
+          "body": "• 黑暗 3–4 鱼可作快封起点；升封中留第二港 150 木与军船木金。前港近先军，远后港才多鱼。"
+        },
+        {
+          "title": "② 新版海战别只照旧喷火船流程",
+          "body": "• 敌火船多可补趸船（Hulk），但趸船怕箭船。捕鱼船可退港；封建船坞最多 3 箭，别追到港下硬换。"
+        },
+        {
+          "title": "③ 赢海后要选封港或登陆",
+          "body": "• 船优势先压港、断鱼，再选上城续海或登陆。走登陆要另留运输与军事建筑木，不能只一直加船。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/islands/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        },
+        {
+          "title": "船种克制",
+          "url": "https://www.ageofempires.com/news/a-new-naval-warfare-in-age-of-empires-ii-definitive-edition/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "team-islands",
+      "title": "团队岛屿 · 地图注意",
+      "civ": "",
+      "subtitle": "队友共岛｜前后港可分工",
+      "aliases": [
+        "Team Islands",
+        "Team_Islands",
+        "團隊島嶼",
+        "团队岛屿"
+      ],
+      "map_ids": [
+        23
+      ],
+      "cards": [
+        {
+          "title": "① 前港接战，后港才偏渔业",
+          "body": "• 前侧快封、备第二港接战；远后港可多鱼。先分谁出第一波船，不能全队都照后港晚封。"
+        },
+        {
+          "title": "② 海军科技与补港，别只存上城",
+          "body": "• 前海续船，不只存上城。城堡的中型战船科技同时升级箭船、火船、趸船线，混合船队可共用升级时机。"
+        },
+        {
+          "title": "③ 登陆会绕过整条海战线",
+          "body": "• 敌村登陆就由一人接陆军、先拆产兵建筑，其余维持海线；别全队回头，让对手连海面一起拿走。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/team-islands/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-169123/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "migration",
+      "title": "迁徙 · 地图注意",
+      "civ": "",
+      "subtitle": "小岛开局｜运村与中央落地",
+      "aliases": [
+        "Migration",
+        "遷徙",
+        "遷移",
+        "迁徙",
+        "迁移"
+      ],
+      "map_ids": [
+        21
+      ],
+      "cards": [
+        {
+          "title": "① 船程远：渔业接直城是一条路",
+          "body": "• 家岛木矿有限，先探中央。船程远、后港安全可多鱼接直城；对手早登陆时才改留陆军费。"
+        },
+        {
+          "title": "② 落地费先留：运输＋TC 共 400 木、100 石",
+          "body": "• 一般运输 125 木＋TC 275 木、100 石。封建探落点，安全时先运约 4–6 村，上城盖 TC；缺木先停新鱼。"
+        },
+        {
+          "title": "③ 首 TC 要接木金，不只抢滩头",
+          "body": "• 中央首 TC 优先接木金与军事建筑空间；只落无矿海滩还得再搬。敌军封岸就换落点。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/migration/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "northern-isles",
+      "title": "北方岛屿 · 地图注意",
+      "civ": "",
+      "subtitle": "海战与早登陆｜不能只看鱼船",
+      "aliases": [
+        "Northern Isles",
+        "NorthernIsles",
+        "北方島嶼",
+        "北方群島",
+        "北方岛屿",
+        "北方群岛"
+      ],
+      "map_ids": [
+        165
+      ],
+      "cards": [
+        {
+          "title": "① 先选争海，或运村偷登陆",
+          "body": "• 争海可黑暗 3–4 鱼、升封备第二港；登陆则先留运输与陆军建筑木。第一波先完成一套投入。"
+        },
+        {
+          "title": "② 看到早运输，就留兵处理岸上建筑",
+          "body": "• 敌运输能绕后岸；发现敌村就处理首座产兵建筑，别等靶场／马厩围好，才从纯海经济转陆军。"
+        },
+        {
+          "title": "③ 前港近才压快封，远港可多鱼",
+          "body": "• 前港近才抢快封；远后港可多鱼。近敌港留军船费，捕鱼船受打退港，黑暗船坞不射箭。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/northern-isles/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/water-maps/"
+        },
+        {
+          "title": "海战机制",
+          "url": "https://www.ageofempires.com/news/age-of-empires-ii-definitive-edition-update-177723/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "gold-rush",
+      "title": "淘金潮 · 地图注意",
+      "civ": "",
+      "subtitle": "中央高地金矿｜先站高再移采",
+      "aliases": [
+        "Gold Rush",
+        "Gold_Rush",
+        "淘金潮"
+      ],
+      "map_ids": [
+        17
+      ],
+      "cards": [
+        {
+          "title": "① 民兵与前置村绕开中央野兽",
+          "body": "• 中央高地有野兽；黑暗民兵与前置村走侧路，先探实际进场路线，别把首波血量丢在中央。"
+        },
+        {
+          "title": "② 上城先军控高地，可先 1–2 TC",
+          "body": "• 家金出首波兵；争中央可先 1–2 TC，第二 TC 接木。主力站住高地再移金村，不先裸矿。"
+        },
+        {
+          "title": "③ 要堡抢金：上城分石，堡放高地",
+          "body": "• 若要靠堡抢金，上城先约 3–4 村慢挖石。堡保金与上坡口；失中可先站外圈高地或侧袭，再接巨投。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/gold-rush/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/gold-rush/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "golden-pit",
+      "title": "金矿谷 · 地图注意",
+      "civ": "",
+      "subtitle": "中央低地金矿｜坑缘比坑底好守",
+      "aliases": [
+        "Golden Pit",
+        "goldenpit",
+        "黃金谷",
+        "金矿谷"
+      ],
+      "map_ids": [
+        71
+      ],
+      "cards": [
+        {
+          "title": "① 家金打第一波，不必先抢坑",
+          "body": "• 一般陆图流程可用，有机会先打家。家金明显减少时，再规划中央采金与堡位，不固定缺省抢中或快帝。"
+        },
+        {
+          "title": "② 要争堡：上城先 3–4 村慢采石",
+          "body": "• 选堡保金才上城先分约 3–4 村慢挖石。堡放坑缘、保到金与入口即可，不必抢最低最中心。"
+        },
+        {
+          "title": "③ 坑底交战吃亏，先保住上坡路",
+          "body": "• 矿在低地，主力站坑缘、保采金退路。被堡压就换坑缘保部分金，或接帝王巨投，不往坡上硬送。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/golden-pit/details"
+        },
+        {
+          "title": "打法参考",
+          "url": "https://sitaux.com/golden-pit/"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "yucatan",
+      "title": "尤卡坦 · 地图注意",
+      "civ": "",
+      "subtitle": "额外猎物与果｜延后田、提早找下一食物",
+      "aliases": [
+        "Yucatan",
+        "猶加敦",
+        "尤卡坦"
+      ],
+      "map_ids": [
+        27
+      ],
+      "cards": [
+        {
+          "title": "① 安全野味还多，就不用照陆图急撒田",
+          "body": "• 标准羊猪之外还有野味与果；安全食物接得上，田木可先给军事建筑、第二木场，不用照一般陆图急撒田。"
+        },
+        {
+          "title": "② 外食分批磨坊，不整群到处走",
+          "body": "• TC 食物快空前，先下安全磨坊，再移约 4–6 村；对手肉马已到外侧就接田，避免全靠远采。"
+        },
+        {
+          "title": "③ 森林挡直路，先确定军队怎么走",
+          "body": "• 森林让直线近、走路远；先探通路再选武士早攻。绕路时间太长，对手通常更有余裕围好。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/yucatan/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "arabian-desert",
+      "title": "阿拉伯沙漠 · 地图注意",
+      "civ": "",
+      "subtitle": "稀疏木区｜鹿与小鸡配置会变",
+      "aliases": [
+        "Arabian Desert",
+        "阿拉伯沙漠"
+      ],
+      "map_ids": [],
+      "cards": [
+        {
+          "title": "① 先看鹿或小鸡，磨坊木别晚留",
+          "body": "• 鹿少或换小鸡时，要远采就早留 100 木磨坊；别让磨坊、兵营、采金场同挤升封前最后一笔木。"
+        },
+        {
+          "title": "② 第一木线小，升封中就选第二木",
+          "body": "• 首片森林较小、外露时，升封中找第二木、留 100 木木场。选不同受攻方向，避免同批小弓封住两片。"
+        },
+        {
+          "title": "③ 小围保近战，对弓要兵或换木",
+          "body": "• 短墙挡近战；小弓射到薄木区时，先补靶场掷矛手或换木。一直延长外墙，可能只拖掉首批防守兵。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/arabian-desert/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    },
+    {
+      "id": "haboob",
+      "title": "哈布风暴 · 地图注意",
+      "civ": "",
+      "subtitle": "木远、难围｜先军保木再谈全围",
+      "aliases": [
+        "Haboob",
+        "哈布風",
+        "哈布风暴"
+      ],
+      "map_ids": [
+        170
+      ],
+      "cards": [
+        {
+          "title": "① 先探远木，再派第一批木村",
+          "body": "• TC 旁多零散树、完整森林远；斥候先找可采木线，再派第一批木村，不等零散树光才长途搬木。"
+        },
+        {
+          "title": "② 远木工时长，军事木别全花长墙",
+          "body": "• 全围很贵，升封先留军事建筑木；武士接掷矛手时，靶场与首批掷矛手优先于长外墙，小围只挡近战。"
+        },
+        {
+          "title": "③ 首木被小弓卡住，直接激活第二木",
+          "body": "• 升封中找备用森林、备 100 木。首木被小弓封时，1 村先下新场、分批转采；上城可用第二 TC 保新木线。"
+        }
+      ],
+      "sources": [
+        {
+          "title": "地图配置",
+          "url": "https://aoebuddy.com/maps/haboob/details"
+        }
+      ],
+      "reviewed_on": "2026-11-13"
+    }
+  ]
+}

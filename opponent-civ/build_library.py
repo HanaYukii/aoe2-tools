@@ -19,11 +19,12 @@ def key(value):
 
 def map_kind(label):
     label = label.lower()
-    if any(s in label for s in ('競技場', 'arena', '黑森林', 'black forest', '避難所', 'hideout')):
+    # Map names as each game language spells them: Hideout is 藏身之處／藏身之处, Fortress 要塞／堡垒.
+    if any(s in label for s in ('競技場', '竞技场', 'arena', '黑森林', 'black forest', '避難所', '藏身之處', '藏身之处', 'hideout')):
         return 'closed'
-    if any(s in label for s in ('阿拉伯', 'arabia', '陸地', 'land')):
+    if any(s in label for s in ('阿拉伯', 'arabia', '陸地', '陆地', 'land')):
         return 'open'
-    if any(s in label for s in ('堡壘', 'fortress')):
+    if any(s in label for s in ('堡壘', '堡垒', '要塞', 'fortress')):
         return 'fortress'
     return None  # Unknown/custom maps must not silently exclude builds.
 
@@ -60,6 +61,8 @@ class Build:
     video_filename: str = ''
     recommended_civs: str = ''
     arrival: str = ''
+    aliases: tuple[str, ...] = ()
+    recommended_for: tuple[str, ...] = ()
 
     def compatibility(self, civ_key):
         civ_key = key(civ_key)
@@ -80,7 +83,7 @@ class LibraryError(ValueError):
 
 def read_catalog(data_path=None, *, lang=None):
     try:
-        data = json.loads(Path(data_path or (catalog_path("builds", lang) if (lang or language()) == "en" else DATA_PATH)).read_text(encoding='utf-8'))
+        data = json.loads(Path(data_path or (DATA_PATH if (lang or language()) == 'tw' else catalog_path('builds', lang))).read_text(encoding='utf-8'))
         if data.get('schema_version') != 1 or not isinstance(data.get('builds'), list):
             raise ValueError('unsupported catalog')
         sheet_ids = set()
@@ -146,6 +149,10 @@ def load_library(media_dir=None, *, data_path=None, lang=None):
                     raise ValueError('missing text')
             if not isinstance(item['notes'], str):
                 raise ValueError('invalid notes')
+            for field in ('aliases', 'recommended_for'):
+                values = item.get(field, [])
+                if not isinstance(values, list) or any(not isinstance(s, str) or not s.strip() for s in values):
+                    raise ValueError(f'invalid {field}')
             if item['map_type'] not in {'open', 'closed', 'water', 'fortress'}:
                 raise ValueError('invalid map')
             if not isinstance(item['civs'], list) or not all(isinstance(c, str) for c in item['civs']):
@@ -161,9 +168,11 @@ def load_library(media_dir=None, *, data_path=None, lang=None):
                 index=item['index'], id=item['id'], title=item['title'], population=item['population'],
                 civs=tuple(item['civs']), map_type=item['map_type'], advanced=item['advanced'],
                 steps=steps, notes=item['notes'], page=item['page'],
-                video=media_file(media_dir, filename), pdf=media_file(media_dir, PDF_NAME),
+                video=media_file(media_dir, filename),
+                pdf=media_file(media_dir, PDF_NAME) if item['page'] > 0 else None,
                 starter=item['starter'], requires_cavalry=item['requires_cavalry'], video_filename=filename,
-                recommended_civs=item.get('recommended_civs', ''), arrival=item.get('arrival', '')))
+                recommended_civs=item.get('recommended_civs', ''), arrival=item.get('arrival', ''),
+                aliases=tuple(item.get('aliases', [])), recommended_for=tuple(item.get('recommended_for', []))))
         if not builds:
             raise ValueError('empty catalog')
     except (KeyError, TypeError, ValueError, AttributeError) as exc:
@@ -175,24 +184,28 @@ def default_order(builds, civ_key='', favorites=()):
     """A civilization's recommendations before the user orders them: old favorites, its own
     builds, then the general starters. Advanced and adjusted openings wait in the full list."""
     result = []
+
+    def preferred(build):
+        return bool(build.civs and civ_key) or key(civ_key) in build.recommended_for
+
     for b in builds:
         compatibility = b.compatibility(civ_key)
         if compatibility in {'other', 'unavailable'}:
             continue
-        if b.id not in favorites and (compatibility == 'adjust' or b.advanced or not (b.starter or (b.civs and civ_key))):
+        if b.id not in favorites and (compatibility == 'adjust' or b.advanced or not (b.starter or preferred(b))):
             continue
         result.append(b)
-    return sorted(result, key=lambda b: (b.id not in favorites, not bool(b.civs), not b.starter, b.index))
+    return sorted(result, key=lambda b: (b.id not in favorites, not preferred(b), not b.starter, b.index))
 
 
 def search_builds(builds, civ_key='', query=''):
-    """Every build whose title or population matches; ones the civilization can play come first."""
+    """Search titles, population and common names without adding duplicate library rows."""
     terms = query.casefold().replace('＋', '+').strip()
     if language() == 'en':
         terms = terms.replace('maa', 'men-at-arms').replace('fc', 'fast castle')
-    else:
-        terms = terms.replace('maa', '裝甲').replace('fc', '直城')
-    found = [b for b in builds if terms in (b.title+' '+b.population).casefold().replace('＋', '+')]
+    else:  # the Simplified guides use the mainland name of the Man-at-Arms
+        terms = terms.replace('maa', '武士' if language() == 'zh' else '裝甲').replace('fc', '直城')
+    found = [b for b in builds if terms in ' '.join((b.title, b.population, *b.aliases)).casefold().replace('＋', '+')]
     return sorted(found, key=lambda b: (b.compatibility(civ_key) in {'other', 'unavailable'}, b.index))
 
 
@@ -217,7 +230,7 @@ def opening_for(builds, map_label=''):
     Explicit per-match picks are handled by the caller before this fallback.
     """
     kind = map_kind(map_label)
-    if any(word in map_label.casefold() for word in ('arena', '競技場')):
+    if any(word in map_label.casefold() for word in ('arena', '競技場', '竞技场')):
         relics = next((b for b in builds if b.id == 'burgundians-arena-relics'), None)
         if relics is not None:
             return relics

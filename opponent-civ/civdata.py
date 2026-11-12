@@ -118,6 +118,7 @@ def load_civs(game_dir=None, lang='tw'):
             name=text(entry['name_string_id']) or entry['internal_name'],
             description=(text(description_id).replace('<b>', '').strip()
                          or ('Civilization description unavailable; check your game data version.'
-                             if lang == 'en' else '此文明尚無說明，請確認遊戲資料版本。')),
+                             if lang == 'en' else '此文明尚无说明，请确认游戏数据版本。'
+                             if lang == 'zh' else '此文明尚無說明，請確認遊戲資料版本。')),
         )
     return civs

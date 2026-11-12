@@ -1,6 +1,6 @@
 # AoE2 Match Notes
 
-English | [繁體中文](README.zh-TW.md)
+English | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md)
 
 **See your opponents' Elo and civilization bonuses on a second screen while you play.**
 
@@ -25,7 +25,7 @@ In team games a **Team bonuses** tab opens first: your team and the opponents si
 ## Get started
 
 1. Open the app, confirm your game and recording folders, and select your player identity.
-2. Choose `en` for English or `tw` for Traditional Chinese in Settings, then restart. Existing users keep their saved language; first-time users default to their system language where supported.
+2. Choose `en` for English, `tw` for Traditional Chinese or `zh` for Simplified Chinese in Settings, then restart. Existing users keep their saved language; first-time users default to their system language where supported.
 3. Start a recorded game. The app detects the new replay and displays the match.
 4. Switch between **Match, Opening, Tactics, Map tips and Build library**.
 
@@ -33,7 +33,7 @@ The window prefers a secondary display and remembers its position. You can keep 
 
 ## Build orders and quick references
 
-- **40 build orders**, recommended by civilization and map. Change builds at any time and click a step to mark your place.
+- **45 build orders** in English, Traditional Chinese and Simplified Chinese, with civilization and map recommendations. Search common strategy names, switch builds and click a step to mark your place.
 - **Tactical cards** for worker allocation, upgrades, army transitions and extra TCs. Roman guides separate Feudal, Castle and Imperial play, with branches against archers, cavalry archers and knights.
 - **Arena defense guides** for castle drops and tower rushes, plus a Burgundian economy reference.
 - **28 map guides** covering unusual starts, food sources, fishing, defensive adjustments and team-game coordination.

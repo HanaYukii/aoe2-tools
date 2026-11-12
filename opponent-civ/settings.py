@@ -99,7 +99,7 @@ class SetupDialog:
         label(tr('04  語言與連線'), color='#e8edf7')
         self.lang = tk.StringVar(value=initial.get('lang', language()))
         ttk.Combobox(area, textvariable=self.lang, values=('tw', 'en', 'zh'), state='readonly', width=8).pack(anchor='w')
-        label('en — English / tw — 繁體中文\n' + tr('語言套用介面與指南；儲存後重新開啟。zh 僅切換遊戲資料為簡中。'), 9)
+        label('en — English / tw — 繁體中文 / zh — 简体中文\n' + tr('語言套用介面與指南；儲存後重新開啟。'), 9)
         self.elo = tk.BooleanVar(value=not initial.get('no_elo', False))
         tk.Checkbutton(area, text=tr('查詢目前積分（會將對局中玩家的 profile ID 傳給官方排行榜 API）'), variable=self.elo, bg='#10141e', fg='#e8edf7', selectcolor='#242e42', activebackground='#10141e', activeforeground='white', wraplength=720, justify='left').pack(anchor='w')
         ttk.Button(area, text=tr('儲存並開始') if first_run else tr('儲存（重新開啟程式後生效）'), command=self.save).pack(anchor='e', pady=16)

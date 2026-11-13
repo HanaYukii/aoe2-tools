@@ -19,7 +19,7 @@ class OpeningCatalogTests(unittest.TestCase):
         set_language('tw')
 
     def test_every_audited_guide_has_one_retained_destination(self):
-        audit = json.loads((ROOT / 'docs/build-order-coverage.json').read_text())
+        audit = json.loads((ROOT / 'docs/build-order-coverage.json').read_text(encoding='utf-8'))
         self.assertEqual(len(audit['entries']), 39)
         self.assertEqual(len({e['source_id'] for e in audit['entries']}), 39)
         added = {e['build_id'] for e in audit['entries'] if e['relation'] == 'new'}
@@ -86,7 +86,7 @@ class OpeningCatalogTests(unittest.TestCase):
     def test_simplified_search_and_compound_map_names(self):
         set_language('zh')
         self.assertEqual([b.index for b in search_builds(load_library(), query='蔷琵')], [6])
-        maps = json.loads((DATA_PATH.parent/'map-notes.zh-CN.json').read_text())
+        maps = json.loads((DATA_PATH.parent/'map-notes.zh-CN.json').read_text(encoding='utf-8'))
         desert = next(n for n in maps['maps'] if n['id'] == 'arabian-desert')
         self.assertTrue(desert['title'].startswith('阿拉伯沙漠'))
         self.assertNotIn('阿拉伯半岛沙漠', desert['aliases'])
@@ -114,9 +114,9 @@ class OpeningCatalogTests(unittest.TestCase):
         for field, value in (('aliases', 'not a list'), ('aliases', [None]),
                              ('recommended_for', {'Britons': True})):
             with tempfile.TemporaryDirectory() as folder:
-                data = json.loads(DATA_PATH.read_text())
+                data = json.loads(DATA_PATH.read_text(encoding='utf-8'))
                 data['builds'][0][field] = value
                 path = Path(folder)/'builds.json'
-                path.write_text(json.dumps(data))
+                path.write_text(json.dumps(data), encoding='utf-8')
                 with self.assertRaises(LibraryError):
                     load_library(data_path=path)
